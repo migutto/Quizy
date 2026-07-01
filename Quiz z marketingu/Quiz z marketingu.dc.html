@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+body{margin:0;-webkit-font-smoothing:antialiased;}
+@keyframes qfade{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+@keyframes popIn{0%{transform:scale(1);}40%{transform:scale(1.035);}100%{transform:scale(1);}}
+@keyframes shakeX{0%,100%{transform:translateX(0);}20%{transform:translateX(-5px);}40%{transform:translateX(5px);}60%{transform:translateX(-3px);}80%{transform:translateX(3px);}}
+button{font-family:inherit;}
+</style>
+</helmet>
+<div style="min-height:100vh;background:#F4F0E6;color:#262019;font-family:'Public Sans',sans-serif;display:flex;justify-content:center;padding:40px 18px;">
+ <div style="width:100%;max-width:720px;">
+
+  <sc-if value="{{ isStart }}" hint-placeholder-val="{{ true }}">
+   <div style="animation:qfade .4s ease;">
+    <div style="text-align:center;margin-bottom:26px;">
+     <div style="font:600 12px/1 'Public Sans';letter-spacing:.18em;text-transform:uppercase;color:#9C7A3C;margin-bottom:14px;">Marketing · baza pytań</div>
+     <h1 style="font:700 42px/1.05 'Spectral',serif;margin:0 0 12px;letter-spacing:-.01em;">Quiz z marketingu</h1>
+     <p style="font-size:15.5px;color:#7A6F5D;margin:0 auto;max-width:530px;line-height:1.55;">Powtórka z całego kursu. Zaznacz odpowiedź — od razu zobaczysz, czy dobrze, wraz z krótkim wyjaśnieniem.</p>
+    </div>
+    <div style="background:#FBF9F3;border:1px solid #E4DCCB;border-radius:18px;padding:24px;box-shadow:0 22px 44px -34px rgba(38,32,25,.55);">
+     <div style="font:600 12px 'Public Sans';color:#8A7F6D;text-transform:uppercase;letter-spacing:.11em;margin-bottom:12px;">Zakres materiału</div>
+     <div style="display:flex;flex-wrap:wrap;gap:9px;margin-bottom:22px;">
+      <sc-for list="{{ dzialChips }}" as="c" hint-placeholder-count="6">
+       <button onClick="{{ c.onClick }}" style="{{ c.style }}"><span>{{ c.label }}</span><span style="{{ c.countStyle }}">{{ c.count }}</span></button>
+      </sc-for>
+     </div>
+     <div style="font:600 12px 'Public Sans';color:#8A7F6D;text-transform:uppercase;letter-spacing:.11em;margin-bottom:12px;">Liczba pytań w sesji</div>
+     <div style="display:flex;flex-wrap:wrap;gap:9px;margin-bottom:24px;">
+      <sc-for list="{{ lengthChips }}" as="c" hint-placeholder-count="4">
+       <button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button>
+      </sc-for>
+     </div>
+     <button onClick="{{ onStart }}" style="width:100%;padding:16px;border:none;border-radius:13px;background:#2E5A8F;color:#fff;font:700 16px 'Public Sans';cursor:pointer;box-shadow:0 14px 26px -14px rgba(46,90,143,.8);">{{ startLabel }}</button>
+     <sc-if value="{{ hasResume }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ onResume }}" style="width:100%;margin-top:10px;padding:14px;border:1.5px solid #2E5A8F;border-radius:13px;background:#EEF3FA;color:#22406A;font:600 15px 'Public Sans';cursor:pointer;">{{ resumeLabel }}</button>
+     </sc-if>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding:0 6px;gap:12px;">
+     <span style="font-size:13.5px;color:#8A7F6D;">{{ poolLabel }}</span>
+     <sc-if value="{{ hasBest }}" hint-placeholder-val="{{ false }}"><span style="font-size:13.5px;color:#8A7F6D;font-weight:600;">{{ bestLabel }}</span></sc-if>
+    </div>
+    <sc-if value="{{ hasMastery }}" hint-placeholder-val="{{ false }}">
+     <div style="margin-top:16px;background:#FBF9F3;border:1px solid #E4DCCB;border-radius:16px;padding:19px 21px;">
+      <div style="font:600 12px 'Public Sans';letter-spacing:.1em;text-transform:uppercase;color:#8A7F6D;margin-bottom:15px;">Twoje opanowanie materiału</div>
+      <sc-for list="{{ mastery }}" as="m" hint-placeholder-count="3">
+       <div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;font:600 13px 'Public Sans';margin-bottom:5px;"><span>{{ m.label }}</span><span style="{{ m.pctStyle }}">{{ m.pct }}</span></div>
+        <div style="height:7px;background:#E7DFCE;border-radius:5px;overflow:hidden;"><div style="{{ m.barStyle }}"></div></div>
+       </div>
+      </sc-for>
+     </div>
+    </sc-if>
+    <div style="text-align:center;margin-top:14px;"><button onClick="{{ onClear }}" style="background:none;border:none;color:#B0A594;font-size:12.5px;cursor:pointer;text-decoration:underline;">Wyczyść zapisany postęp</button></div>
+   </div>
+  </sc-if>
+
+  <sc-if value="{{ isQuiz }}" hint-placeholder-val="{{ false }}">
+   <div style="animation:qfade .3s ease;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:10px;">
+     <button onClick="{{ onQuit }}" style="background:none;border:none;color:#8A7F6D;font:600 14px 'Public Sans';cursor:pointer;padding:6px 0;">‹ Zakończ</button>
+     <div style="display:flex;gap:8px;align-items:center;">
+      <span style="padding:5px 11px;border-radius:8px;background:#EDE6D6;color:#6C6250;font:600 12px 'Public Sans';">{{ dzialLabel }}</span>
+      <span style="{{ poziomBadgeStyle }}">{{ poziomLabel }}</span>
+     </div>
+    </div>
+    <sc-if value="{{ showProgress }}" hint-placeholder-val="{{ true }}">
+     <div style="display:flex;justify-content:space-between;align-items:center;font:600 13px 'Public Sans';color:#7A6F5D;margin-bottom:8px;"><span>{{ counterLabel }}</span><span style="display:flex;gap:8px;align-items:center;"><sc-if value="{{ showStreak }}" hint-placeholder-val="{{ false }}"><span style="{{ streakStyle }}">{{ streakLabel }}</span></sc-if><span>{{ scoreLabel }}</span></span></div>
+     <div style="height:8px;background:#E7DFCE;border-radius:6px;overflow:hidden;margin-bottom:24px;"><div style="{{ progressStyle }}"></div></div>
+    </sc-if>
+    <div style="background:#FBF9F3;border:1px solid #E4DCCB;border-radius:18px;padding:26px 26px 24px;box-shadow:0 22px 44px -34px rgba(38,32,25,.55);">
+     <div style="font:600 12px 'Public Sans';letter-spacing:.08em;text-transform:uppercase;color:#9C7A3C;margin-bottom:12px;">{{ typLabel }}</div>
+     <h2 style="font:600 22px/1.38 'Spectral',serif;margin:0 0 20px;">{{ qText }}</h2>
+     <div style="display:flex;flex-direction:column;gap:10px;">
+      <sc-for list="{{ opts }}" as="o" hint-placeholder-count="4">
+       <button onClick="{{ o.onClick }}" style="{{ o.style }}"><span style="{{ o.markStyle }}">{{ o.mark }}</span><span style="flex:1;">{{ o.text }}</span></button>
+      </sc-for>
+     </div>
+     <sc-if value="{{ showKbdHint }}" hint-placeholder-val="{{ true }}"><div style="margin-top:14px;font-size:12px;color:#B0A594;text-align:center;">Klawisze 1–4 wybierają odpowiedź · Enter przechodzi dalej</div></sc-if>
+     <sc-if value="{{ showCheck }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ onCheck }}" style="margin-top:16px;width:100%;padding:14px;border:none;border-radius:12px;background:#22406A;color:#fff;font:700 15px 'Public Sans';cursor:pointer;">Sprawdź odpowiedź</button>
+     </sc-if>
+     <sc-if value="{{ answered }}" hint-placeholder-val="{{ false }}">
+      <div style="{{ feedbackStyle }}">
+       <div style="{{ feedbackTitleStyle }}">{{ feedbackTitle }}</div>
+       <sc-if value="{{ showExpl }}" hint-placeholder-val="{{ true }}"><div style="font-size:14.5px;line-height:1.55;color:#4A4132;">{{ explanation }}</div></sc-if>
+      </div>
+      <button onClick="{{ onNext }}" style="margin-top:16px;width:100%;padding:15px;border:none;border-radius:12px;background:#2E5A8F;color:#fff;font:700 15px 'Public Sans';cursor:pointer;">{{ nextLabel }}</button>
+     </sc-if>
+    </div>
+   </div>
+  </sc-if>
+
+  <sc-if value="{{ isEnd }}" hint-placeholder-val="{{ false }}">
+   <div style="text-align:center;animation:qfade .4s ease;padding-top:16px;">
+    <div style="font:600 12px 'Public Sans';letter-spacing:.18em;text-transform:uppercase;color:#9C7A3C;margin-bottom:20px;">Wynik sesji</div>
+    <div style="{{ endRingStyle }}">
+     <div style="{{ endNumStyle }}">{{ endPct }}</div>
+     <div style="font-size:13px;color:#7A6F5D;margin-top:6px;">{{ endScoreLabel }}</div>
+    </div>
+    <h2 style="font:600 27px 'Spectral',serif;margin:0 0 8px;">{{ endTitle }}</h2>
+    <p style="color:#7A6F5D;max-width:450px;margin:0 auto 22px;line-height:1.55;">{{ endMsg }}</p>
+    <sc-if value="{{ hasBreakdown }}" hint-placeholder-val="{{ false }}">
+     <div style="max-width:430px;margin:0 auto 26px;text-align:left;background:#FBF9F3;border:1px solid #E4DCCB;border-radius:15px;padding:19px 21px;">
+      <div style="font:600 12px 'Public Sans';letter-spacing:.1em;text-transform:uppercase;color:#8A7F6D;margin-bottom:15px;">Wyniki według działów</div>
+      <sc-for list="{{ breakdown }}" as="b" hint-placeholder-count="3">
+       <div style="margin-bottom:13px;">
+        <div style="display:flex;justify-content:space-between;font:600 13.5px 'Public Sans';margin-bottom:5px;"><span>{{ b.label }}</span><span style="{{ b.pctStyle }}">{{ b.scoreLabel }}</span></div>
+        <div style="height:7px;background:#E7DFCE;border-radius:5px;overflow:hidden;"><div style="{{ b.barStyle }}"></div></div>
+       </div>
+      </sc-for>
+     </div>
+    </sc-if>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+     <sc-if value="{{ hasWrong }}" hint-placeholder-val="{{ false }}"><button onClick="{{ onRetryWrong }}" style="padding:14px 22px;border:none;border-radius:12px;background:#2E5A8F;color:#fff;font:700 15px 'Public Sans';cursor:pointer;">{{ retryLabel }}</button></sc-if>
+     <button onClick="{{ onRestart }}" style="padding:14px 22px;border:1.5px solid #2E5A8F;border-radius:12px;background:#fff;color:#22406A;font:700 15px 'Public Sans';cursor:pointer;">Do menu</button>
+    </div>
+   </div>
+  </sc-if>
+
+ </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:780},&quot;shuffleAnswers&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Zachowanie quizu&quot;},&quot;showExplanations&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Zachowanie quizu&quot;},&quot;showProgressBar&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Wygląd&quot;}}">
+class Component extends DCLogic {
+  state = { screen:'start', scope:'all', length:'20', order:[], pos:0, score:0, selected:[], answered:false, wrongIdx:[], resumable:null, streak:0, bestStreak:0, results:[] };
+
+  componentDidMount(){
+    try{ const s=JSON.parse(localStorage.getItem('quizmkt_session')||'null'); if(s&&s.order&&s.order.length&&s.pos<s.order.length){ this.setState({resumable:s}); } }catch(e){}
+    this._onKey=(e)=>this.handleKey(e); window.addEventListener('keydown',this._onKey);
+  }
+  componentWillUnmount(){ if(this._onKey) window.removeEventListener('keydown',this._onKey); }
+
+  handleKey(e){
+    if(this.state.screen!=='quiz') return; const q=this.curQ(); if(!q) return;
+    const order=this._optOrder&&this._optOrder.length?this._optOrder:q.a.map((_,i)=>i);
+    if(e.key==='Enter'||e.key===' '){ if(this.state.answered){ e.preventDefault(); this.next(); } else if(q.t==='multi'){ e.preventDefault(); this.check(); } return; }
+    const n=parseInt(e.key,10); if(!isNaN(n)&&n>=1&&n<=order.length){ e.preventDefault(); this.pick(order[n-1]); }
+  }
+
+  C(){ return { ink:'#262019', muted:'#7A6F5D', line:'#E0D7C4', ok:'#2E7D57', okBg:'#E7F1EA', bad:'#C0492E', badBg:'#F6E7E1', brand:'#2E5A8F' }; }
+
+  bank(){ if(!this._b) this._b=this.buildBank(); return this._b; }
+
+  filtered(scope){ const b=this.bank(); const idx=[]; b.forEach((q,i)=>{ if(scope==='all'||q.d===scope) idx.push(i); }); return idx; }
+
+  shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+
+  optOrderFor(q){ if(!q) return []; if(q.t==='tf' || this.props.shuffleAnswers===false) return q.a.map((_,i)=>i); return this.shuffle(q.a.map((_,i)=>i)); }
+
+  dzialLabel(k){ return ({'W1-2':'Geneza i trendy','W3':'Zachowania nabywców','W4':'Badania','W5-6':'Produkt i cena','Promocja':'Promocja'})[k]||k; }
+  pozInfo(p){ return [null,{t:'łatwe',c:'#2E7D57',bg:'#E7F1EA'},{t:'średnie',c:'#9A6B1A',bg:'#F3EBD8'},{t:'trudne',c:'#C0492E',bg:'#F6E7E1'}][p]||{t:'',c:'#7A6F5D',bg:'#EDE6D6'}; }
+
+  chipStyle(active){ return {padding:'9px 14px',borderRadius:'10px',border:'1.5px solid '+(active?'#2E5A8F':'#E0D7C4'),background:active?'#2E5A8F':'#F1EBDD',color:active?'#fff':'#3A3226',font:'600 13.5px "Public Sans"',cursor:'pointer',display:'inline-flex',alignItems:'center',gap:'8px'}; }
+  countStyle(active){ return {fontSize:'11.5px',fontWeight:'700',padding:'1px 8px',borderRadius:'20px',background:active?'rgba(255,255,255,.25)':'#E4DCCB',color:active?'#fff':'#7A6F5D'}; }
+
+  start(scope,length){
+    let idx=this.shuffle(this.filtered(scope));
+    if(length!=='all'){ idx=idx.slice(0,parseInt(length,10)); }
+    this._optOrder=this.optOrderFor(this.bank()[idx[0]]);
+    this.setState({screen:'quiz',scope,length,order:idx,pos:0,score:0,selected:[],answered:false,wrongIdx:[],streak:0,bestStreak:0,results:[]}, ()=>this.save());
+  }
+  resume(){ const s=this.state.resumable; if(!s)return; this._optOrder=this.optOrderFor(this.bank()[s.order[s.pos]]); this.setState({screen:'quiz',scope:s.scope,length:s.length,order:s.order,pos:s.pos,score:s.score,selected:[],answered:false,wrongIdx:s.wrongIdx||[],streak:0,bestStreak:0,results:[]}); }
+  save(){ const {order,pos,score,scope,length,wrongIdx}=this.state; try{ localStorage.setItem('quizmkt_session',JSON.stringify({order,pos,score,scope,length,wrongIdx})); }catch(e){} }
+
+  curQ(){ return this.bank()[this.state.order[this.state.pos]]; }
+
+  pick(i){
+    const q=this.curQ();
+    if(q.t==='multi'){ if(this.state.answered)return; const sel=this.state.selected.slice(); const k=sel.indexOf(i); if(k>=0)sel.splice(k,1); else sel.push(i); this.setState({selected:sel}); return; }
+    if(this.state.answered) return;
+    const correct=q.a[i][1]===1; const wrong=this.state.wrongIdx.slice(); if(!correct) wrong.push(this.state.order[this.state.pos]);
+    const ns=correct?this.state.streak+1:0;
+    this.setState({selected:[i],answered:true,score:this.state.score+(correct?1:0),wrongIdx:wrong,streak:ns,bestStreak:Math.max(this.state.bestStreak,ns),results:this.state.results.concat([{d:q.d,ok:correct}])});
+  }
+  check(){ const q=this.curQ(); if(q.t!=='multi'||this.state.answered)return; const sel=this.state.selected; let ok=true; q.a.forEach((o,i)=>{ const should=o[1]===1; const has=sel.indexOf(i)>=0; if(should!==has) ok=false; }); const wrong=this.state.wrongIdx.slice(); if(!ok) wrong.push(this.state.order[this.state.pos]); const ns=ok?this.state.streak+1:0; this.setState({answered:true,score:this.state.score+(ok?1:0),wrongIdx:wrong,streak:ns,bestStreak:Math.max(this.state.bestStreak,ns),results:this.state.results.concat([{d:q.d,ok:ok}])}); }
+  wasCorrect(){ const q=this.curQ(); const sel=this.state.selected; if(q.t==='multi'){ let ok=true; q.a.forEach((o,i)=>{ const s=o[1]===1; const h=sel.indexOf(i)>=0; if(s!==h)ok=false; }); return ok; } return sel.length>0 && q.a[sel[0]][1]===1; }
+
+  next(){ const np=this.state.pos+1; if(np>=this.state.order.length){ this.finish(); return; } this._optOrder=this.optOrderFor(this.bank()[this.state.order[np]]); this.setState({pos:np,selected:[],answered:false}, ()=>this.save()); }
+
+  finish(){ const total=this.state.order.length; const pct=Math.round(this.state.score/total*100); const results=this.state.results;
+    try{ const prev=JSON.parse(localStorage.getItem('quizmkt_best')||'null'); const best=(prev&&prev.pct>pct)?prev:{pct,score:this.state.score,total}; localStorage.setItem('quizmkt_best',JSON.stringify(best)); localStorage.setItem('quizmkt_last',JSON.stringify({pct,score:this.state.score,total}));
+      const byD={}; results.forEach(r=>{ (byD[r.d]=byD[r.d]||{c:0,t:0}); byD[r.d].t++; if(r.ok)byD[r.d].c++; });
+      const m=JSON.parse(localStorage.getItem('quizmkt_mastery')||'{}'); Object.keys(byD).forEach(d=>{ const p=Math.round(byD[d].c/byD[d].t*100); m[d]=Math.max(m[d]||0,p); }); localStorage.setItem('quizmkt_mastery',JSON.stringify(m));
+      localStorage.removeItem('quizmkt_session'); }catch(e){}
+    this.setState({screen:'end',resumable:null}); }
+
+  retryWrong(){ const order=this.shuffle(this.state.wrongIdx.slice()); if(!order.length){ this.toStart(); return; } this._optOrder=this.optOrderFor(this.bank()[order[0]]); this.setState({screen:'quiz',order,pos:0,score:0,selected:[],answered:false,wrongIdx:[],streak:0,bestStreak:0,results:[]}); }
+  toStart(){ this.setState({screen:'start'}); }
+  clearProgress(){ try{ localStorage.removeItem('quizmkt_session'); localStorage.removeItem('quizmkt_best'); localStorage.removeItem('quizmkt_last'); localStorage.removeItem('quizmkt_mastery'); }catch(e){} this.setState({resumable:null}); }
+  pctColor(p){ return p>=80?'#2E7D57':(p>=50?'#9A6B1A':'#C0492E'); }
+
+  optView(){
+    const C=this.C(); const q=this.curQ(); const order=this._optOrder&&this._optOrder.length?this._optOrder:q.a.map((_,i)=>i);
+    const ans=this.state.answered; const sel=this.state.selected; const isMulti=q.t==='multi'; const letters=['A','B','C','D','E','F','G'];
+    return order.map((oi,pos)=>{
+      const o=q.a[oi]; const chosen=sel.indexOf(oi)>=0; const correct=o[1]===1;
+      let bd='#E0D7C4', bg='#FFFFFF', col=C.ink, mbg='#EFE9DA', mcol='#8A7F6D', mark=letters[pos];
+      if(!ans){ if(chosen){ bd=C.brand; bg='#EEF3FA'; mbg=C.brand; mcol='#fff'; } }
+      else { if(correct){ bd=C.ok; bg=C.okBg; mbg=C.ok; mcol='#fff'; mark='✓'; } else if(chosen){ bd=C.bad; bg=C.badBg; mbg=C.bad; mcol='#fff'; mark='✗'; col='#6b5f50'; } else { col='#9c9384'; bd='#E7E0D0'; } }
+      const style={display:'flex',alignItems:'center',gap:'13px',width:'100%',textAlign:'left',padding:'15px 16px',borderRadius:'13px',border:'1.5px solid '+bd,background:bg,color:col,font:'500 15.5px/1.45 "Public Sans"',cursor:(ans&&!isMulti)?'default':'pointer',transition:'all .12s',boxShadow:(!ans&&chosen)?'0 3px 12px -7px rgba(46,90,143,.6)':'none'};
+      if(ans && correct) style.animation='popIn .32s ease'; else if(ans && chosen && !correct) style.animation='shakeX .35s ease';
+      const markStyle={flex:'0 0 auto',width:'27px',height:'27px',borderRadius:(isMulti&&!ans)?'7px':'50%',background:mbg,color:mcol,display:'flex',alignItems:'center',justifyContent:'center',font:'700 13px "Public Sans"'};
+      return {text:o[0],mark,style,markStyle,onClick:()=>this.pick(oi)};
+    });
+  }
+
+  renderVals(){
+    const C=this.C(); const s=this.state; const scr=s.screen;
+    const base={ isStart:scr==='start', isQuiz:scr==='quiz', isEnd:scr==='end' };
+    if(scr==='start'){
+      const scopes=[['all','Wszystkie'],['W1-2','Geneza i trendy'],['W3','Zachowania nabywców'],['W4','Badania'],['W5-6','Produkt i cena'],['Promocja','Promocja']];
+      const dzialChips=scopes.map(x=>({label:x[1],count:this.filtered(x[0]).length,style:this.chipStyle(s.scope===x[0]),countStyle:this.countStyle(s.scope===x[0]),onClick:()=>this.setState({scope:x[0]})}));
+      const lens=[['10','10'],['20','20'],['40','40'],['all','Wszystkie']];
+      const lengthChips=lens.map(x=>({label:x[1],style:this.chipStyle(s.length===x[0]),onClick:()=>this.setState({length:x[0]})}));
+      const pool=this.filtered(s.scope).length;
+      let best=null; try{best=JSON.parse(localStorage.getItem('quizmkt_best')||'null');}catch(e){}
+      let mst={}; try{mst=JSON.parse(localStorage.getItem('quizmkt_mastery')||'{}');}catch(e){}
+      const mOrder=[['W1-2','Geneza i trendy'],['W3','Zachowania nabywców'],['W4','Badania'],['W5-6','Produkt i cena'],['Promocja','Promocja']];
+      const mastery=mOrder.filter(x=>mst[x[0]]!=null).map(x=>{ const p=mst[x[0]]; const col=this.pctColor(p); return {label:x[1],pct:p+'%',pctStyle:{color:col,fontWeight:'700'},barStyle:{height:'100%',width:p+'%',background:col,borderRadius:'5px',transition:'width .4s'}}; });
+      const hasResume=!!s.resumable;
+      return Object.assign(base,{
+        dzialChips, lengthChips,
+        poolLabel:'Pytań w wybranym zakresie: '+pool,
+        startLabel:'Rozpocznij quiz',
+        onStart:()=>this.start(s.scope,s.length),
+        hasResume, onResume:()=>this.resume(), resumeLabel: hasResume?('Kontynuuj sesję ('+(s.resumable.pos+1)+' / '+s.resumable.order.length+')'):'',
+        hasBest:!!best, bestLabel: best?('Najlepszy wynik: '+best.pct+'%'):'',
+        hasMastery:mastery.length>0, mastery,
+        onClear:()=>this.clearProgress()
+      });
+    }
+    if(scr==='quiz'){
+      const q=this.curQ(); const total=s.order.length; const pct=Math.round(s.pos/total*100);
+      const poz=this.pozInfo(q.p); const ok=s.answered?this.wasCorrect():false; const isLast=s.pos===total-1;
+      const typLabel=q.t==='single'?'Jedna poprawna odpowiedź':(q.t==='multi'?'Zaznacz wszystkie poprawne':'Prawda czy fałsz');
+      const st=s.streak; const streakStyle={padding:'2px 10px',borderRadius:'20px',font:'700 12px "Public Sans"',background: st>=5?'#F3E6C9':'#E7F1EA',color: st>=5?'#8A6516':'#2E7D57'};
+      return Object.assign(base,{
+        onQuit:()=>this.toStart(),
+        showProgress:this.props.showProgressBar!==false,
+        showStreak: st>=2, streakLabel:'Seria: '+st, streakStyle,
+        showKbdHint: !s.answered,
+        dzialLabel:this.dzialLabel(q.d),
+        poziomLabel:poz.t, poziomBadgeStyle:{padding:'5px 11px',borderRadius:'8px',background:poz.bg,color:poz.c,font:'600 12px "Public Sans"'},
+        counterLabel:'Pytanie '+(s.pos+1)+' / '+total, scoreLabel:'Punkty: '+s.score,
+        progressStyle:{height:'100%',width:pct+'%',background:C.brand,borderRadius:'6px',transition:'width .3s'},
+        typLabel, qText:q.q, opts:this.optView(),
+        showCheck: q.t==='multi' && !s.answered, onCheck:()=>this.check(),
+        answered:s.answered, showExpl:this.props.showExplanations!==false,
+        feedbackStyle:{marginTop:'18px',padding:'15px 17px',borderRadius:'13px',background: ok?C.okBg:C.badBg,border:'1px solid '+(ok?C.ok:C.bad)},
+        feedbackTitleStyle:{font:'700 15px "Public Sans"',margin:'0 0 6px',color: ok?C.ok:C.bad},
+        feedbackTitle: ok?'Dobrze!':'Niepoprawnie', explanation:q.e,
+        onNext:()=>this.next(), nextLabel: isLast?'Zakończ i zobacz wynik':'Następne pytanie'
+      });
+    }
+    let last=null; try{last=JSON.parse(localStorage.getItem('quizmkt_last')||'null');}catch(e){}
+    const total=last?last.total:0, score=last?last.score:0, pct=last?last.pct:0;
+    const hasWrong=s.wrongIdx.length>0;
+    let title,msg; if(pct>=85){title='Świetnie!';msg='Rewelacyjny wynik — materiał opanowany bardzo dobrze.';} else if(pct>=60){title='Dobra robota';msg='Solidnie. Powtórz błędne pytania, żeby dopiąć resztę.';} else {title='Jeszcze chwila nauki';msg='Warto powtórzyć materiał i spróbować ponownie.';}
+    const ring= pct>=85?C.ok:(pct>=60?'#9A6B1A':C.bad);
+    const byD={}; s.results.forEach(r=>{ (byD[r.d]=byD[r.d]||{c:0,t:0}); byD[r.d].t++; if(r.ok)byD[r.d].c++; });
+    const bOrder=[['W1-2','Geneza i trendy'],['W3','Zachowania nabywców'],['W4','Badania'],['W5-6','Produkt i cena'],['Promocja','Promocja']];
+    const breakdown=bOrder.filter(x=>byD[x[0]]).map(x=>{ const o=byD[x[0]]; const p=Math.round(o.c/o.t*100); const col=this.pctColor(p); return {label:x[1],scoreLabel:o.c+'/'+o.t+' · '+p+'%',pctStyle:{color:col,fontWeight:'700'},barStyle:{height:'100%',width:p+'%',background:col,borderRadius:'5px',transition:'width .4s'}}; });
+    return Object.assign(base,{
+      hasBreakdown: breakdown.length>0, breakdown,
+      endPct:pct+'%', endScoreLabel:score+' / '+total+' poprawnych',
+      endRingStyle:{width:'184px',height:'184px',margin:'0 auto 24px',borderRadius:'50%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',border:'4px solid '+ring,background:'#FBF9F3',boxShadow:'0 20px 40px -30px rgba(38,32,25,.5)'},
+      endNumStyle:{font:'700 54px "Spectral",serif',color:ring,lineHeight:'1'},
+      endTitle:title, endMsg:msg,
+      hasWrong, retryLabel:'Powtórz błędne ('+s.wrongIdx.length+')', onRetryWrong:()=>this.retryWrong(), onRestart:()=>this.toStart()
+    });
+  }
+
+  buildBank(){
+    const Q=[];
+    Q.push(
+     {d:'W1-2',p:1,t:'single',q:'Jaka jest poprawna kolejność ewolucji orientacji przedsiębiorstw?',a:[['Produkcyjna → produktowa → sprzedażowa → marketingowa → strategiczna',1],['Produktowa → produkcyjna → marketingowa → sprzedażowa',0],['Sprzedażowa → produkcyjna → produktowa → strategiczna',0],['Marketingowa → produkcyjna → sprzedażowa → produktowa',0]],e:'Orientacje pojawiały się kolejno: produkcyjna, produktowa, sprzedażowa, na klienta (marketingowa), a na końcu strategiczna.'},
+     {d:'W1-2',p:1,t:'single',q:'Co było głównym celem orientacji produkcyjnej?',a:[['Wytwarzać dużo i tanio, udostępnić produkt masowemu odbiorcy',1],['Odkrywać ukryte potrzeby konsumentów',0],['Budować długotrwałe relacje z klientem',0],['Wychwytywać sygnały wczesnego ostrzegania',0]],e:'To rynek sprzedawcy — liczyła się masowa, tania produkcja. Marketing praktycznie nie istniał (np. Ford T „Blaszana Elżunia”).'},
+     {d:'W1-2',p:2,t:'tf',q:'Orientacje produkcyjną, produktową i sprzedażową zalicza się do marketingu 1.0.',a:[['Prawda',1],['Fałsz',0]],e:'Zgodnie z wykładem te trzy wczesne orientacje odpowiadają koncepcji marketingu 1.0.'},
+     {d:'W1-2',p:2,t:'single',q:'Na czym polegał narastający problem orientacji produktowej?',a:[['Samo ulepszanie istniejącego produktu przestaje wystarczać — trzeba nowego sposobu zaspokojenia potrzeby',1],['Brak jakiejkolwiek reklamy',0],['Zbyt niskie ceny produktów',0],['Nadmiar kanałów dystrybucji',0]],e:'Przykład: nie „lepsza pułapka na myszy”, lecz zupełnie nowy sposób rozwiązania problemu (środki chemiczne, usługi deratyzacji).'},
+     {d:'W1-2',p:2,t:'single',q:'Co cechowało orientację sprzedażową?',a:[['Rosnące znaczenie środków aktywizacji sprzedaży (reklamy) i masowej dystrybucji',1],['Rezygnacja z reklamy',0],['Skupienie na relacjach z klientem',0],['Produkcja wyłącznie na zamówienie',0]],e:'Pojawia się problem konkurencji i substytutów; rozwijają się cash and carry, pierwszy supermarket (Kullen), sklepy dyskontowe.'},
+     {d:'W1-2',p:2,t:'single',q:'Orientacja marketingowa (na klienta) oznacza przede wszystkim:',a:[['Tworzenie oferty na podstawie rozpoznanych potrzeb nabywców',1],['Maksymalizację wielkości produkcji',0],['Sprzedaż tego, co już wyprodukowano',0],['Obniżanie kosztów za wszelką cenę',0]],e:'Podstawą oferty są aktualne i przyszłe potrzeby nabywców, które kształtują produkt, cenę, promocję i dystrybucję.'},
+     {d:'W1-2',p:3,t:'single',q:'„Najkrótsza definicja marketingu” przytoczona na wykładzie brzmi:',a:[['Zyskowne zaspokajanie potrzeb',1],['Maksymalizacja satysfakcji klienta',0],['Sprzedaż za wszelką cenę',0],['Dawanie klientom wszystkiego, czego pragną',0]],e:'Celem marketingu jest tworzenie wartości dla klienta w zamian za zysk — nie maksymalizacja satysfakcji ani oddawanie wszystkiego.'},
+     {d:'W1-2',p:1,t:'multi',q:'Które elementy tworzą klasyczny marketing-mix (4P)?',a:[['Produkt',1],['Cena',1],['Dystrybucja',1],['Promocja',1],['Personel',0],['Proces',0]],e:'Klasyczne 4P to: produkt, cena, dystrybucja i promocja. Personel i proces to elementy rozszerzenia 7P.'},
+     {d:'W1-2',p:2,t:'single',q:'Który element 4P odpowiada na pytanie: na jakich warunkach finansowych produkt przejdzie w posiadanie nabywcy (rabaty, kredyt, warunki płatności)?',a:[['Cena',1],['Produkt',0],['Dystrybucja',0],['Promocja',0]],e:'To definicja ceny w marketingu-mix — obejmuje cenę podstawową, rabaty, warunki płatności i kredyt.'},
+     {d:'W1-2',p:2,t:'multi',q:'O jakie elementy koncepcja 7P poszerza klasyczne 4P?',a:[['Świadectwo materialne',1],['Pracownicy (personel)',1],['Proces świadczenia usług',1],['Cena',0],['Promocja',0]],e:'7P dodaje: świadectwo materialne, pracowników oraz proces świadczenia usług.'},
+     {d:'W1-2',p:2,t:'single',q:'„Świadectwo materialne” w koncepcji 7P to:',a:[['Wzbudzanie pozytywnych odczuć nabywcy (otoczenie, wygląd personelu, wizualizacja firmy)',1],['Zestaw technik sprzedażowych personelu',0],['Standardy obsługi klienta',0],['System rabatów',0]],e:'Świadectwo materialne to dbałość o właściwe otoczenie, wygląd personelu i wizualizację firmy.'},
+     {d:'W1-2',p:1,t:'single',q:'Marketing relacji (partnerski) koncentruje się na:',a:[['Utrzymaniu klienta i budowaniu długofalowej relacji',1],['Pojedynczej, jednorazowej sprzedaży',0],['Wyłącznie na cechach produktu',0],['Minimalizacji kontaktu z klientem',0]],e:'W odróżnieniu od marketingu transakcji, marketing relacji stawia na długotrwałą współpracę i lojalność.'},
+     {d:'W1-2',p:2,t:'single',q:'Kto jest autorem definicji: „marketing relacji to tworzenie, utrzymywanie i wzbogacanie relacji z klientem”?',a:[['Leonard Berry',1],['Philip Kotler',0],['Frederick Herzberg',0],['Michael Porter',0]],e:'Tę definicję sformułował Leonard Berry.'},
+     {d:'W1-2',p:2,t:'multi',q:'Które cechy opisują marketing partnerski (a nie transakcji)?',a:[['Koncentracja na utrzymaniu klientów',1],['O jakość dbają wszyscy',1],['Stały kontakt z klientem',1],['Najważniejsze są cechy produktu, a nie korzyści',0]],e:'Marketing partnerski: utrzymanie klientów, stały kontakt, jakość jako sprawa wszystkich; „najważniejsze cechy produktu” to podejście transakcyjne.'},
+     {d:'W1-2',p:2,t:'single',q:'Wskaźnik CLV (Customer Lifetime Value) mierzy:',a:[['Wartość zysku netto możliwego do uzyskania z klienta w całym okresie jego zakupów',1],['Liczbę klientów pozyskanych w miesiącu',0],['Koszt jednej reklamy',0],['Udział firmy w rynku',0]],e:'CLV to wartość życiowa klienta — zysk netto z transakcji w całym okresie współpracy.'},
+     {d:'W1-2',p:2,t:'single',q:'Retention rate to wskaźnik:',a:[['Utrzymania klienta (powtórnych zakupów)',1],['Utraty nabywców',0],['Elastyczności cenowej popytu',0],['Rozpoznawalności marki',0]],e:'Retention rate mierzy utrzymanie klientów; jego przeciwieństwem jest defection rate (utrata nabywców).'},
+     {d:'W1-2',p:1,t:'tf',q:'Koszt utrzymania stałego klienta jest ponad 5-krotnie niższy niż koszt pozyskania nowego klienta.',a:[['Prawda',1],['Fałsz',0]],e:'To jeden z głównych argumentów za marketingiem relacji.'},
+     {d:'W1-2',p:3,t:'single',q:'Astroturfing to:',a:[['Sztuczne tworzenie komentarzy i opinii w sieci budujące fałszywy obraz',1],['Legalne badanie opinii klientów',0],['Program lojalnościowy',0],['Rodzaj rabatu ilościowego',0]],e:'Astroturfing to zagrożenie dla WOMM — nakręcanie fałszywego zainteresowania, np. przez farmy trolli.'},
+     {d:'W1-2',p:2,t:'single',q:'Marketing szeptany (WOM) opiera się na:',a:[['Nieformalnym przekazywaniu informacji między ludźmi',1],['Płatnych reklamach telewizyjnych',0],['Billboardach zewnętrznych',0],['Wyłącznie na e-mailach',0]],e:'Word-of-mouth to przekaz nieformalny; jego celem jest rozpowszechnianie pozytywnych treści o marce.'},
+     {d:'W1-2',p:2,t:'single',q:'Najbardziej znanym przykładem Real-Time Marketingu (RTM) jest:',a:[['Tweet Oreo podczas SuperBowl 2013 („po ciemku możesz nadal maczać”)',1],['Kampania Hotmaila z 1997 r.',0],['Reklama Forda T',0],['Kampania Eisenhowera',0]],e:'RTM to docieranie do odbiorców w konkretnym czasie i miejscu; przykład Oreo podczas blackoutu na SuperBowl.'},
+     {d:'W1-2',p:2,t:'single',q:'Pierwsza znana kampania marketingu wirusowego (1997) to:',a:[['Hotmail',1],['Oreo',0],['Allegro (dziadek)',0],['Volvo',0]],e:'Kampania Hotmaila (1997) sprawiła, że miliony użytkowników założyły konta — klasyczny viral marketing.'},
+     {d:'W1-2',p:3,t:'single',q:'Czym różni się marketing wirusowy (viral) od marketingu szeptanego?',a:[['Viral stawia na kontrowersję/humor/rozrywkę, a szeptany na użyteczność',1],['Viral jest zawsze płatny, a szeptany darmowy',0],['Nie różnią się niczym',0],['Viral działa tylko offline',0]],e:'Treść wirusowa rozprzestrzenia się dzięki emocjom i humorowi; marketing szeptany opiera się na użyteczności informacji.'},
+     {d:'W1-2',p:2,t:'single',q:'Mikromarketing (hipersegmentacja, one-to-one) polega na:',a:[['Dostosowaniu oferty do bardzo wąskich segmentów lub indywidualnego klienta',1],['Kierowaniu jednej reklamy do wszystkich',0],['Rezygnacji z badań rynku',0],['Sprzedaży wyłącznie hurtowej',0]],e:'To koncentracja na małych grupach lub jednym kliencie; przykłady: Nike ID, personalizacja M&M.'},
+     {d:'W1-2',p:2,t:'single',q:'Up-selling to technika polegająca na:',a:[['Proponowaniu klientowi droższego produktu o wyższym standardzie',1],['Sprzedaży produktów komplementarnych',0],['Zmniejszaniu masy produktu przy tej samej cenie',0],['Finansowaniu społecznościowym',0]],e:'Up-selling to oferowanie produktu droższego, „ekskluzywnego”, o podwyższonym standardzie.'},
+     {d:'W1-2',p:2,t:'single',q:'Cross-selling to:',a:[['Sprzedaż produktów powiązanych/komplementarnych z głównym',1],['Proponowanie droższej wersji produktu',0],['Obniżka ceny o 50%',0],['Badanie satysfakcji klienta',0]],e:'Przykład: kredyt powiązany z założeniem konta i ubezpieczeniem; laptop z torbą i myszką.'},
+     {d:'W1-2',p:2,t:'single',q:'Downsizing (w kontekście produktu) oznacza:',a:[['Zmniejszanie masy produktu przy utrzymaniu ceny',1],['Zwiększanie opakowania',0],['Obniżkę ceny przy tej samej masie',0],['Rezygnację z opakowania',0]],e:'Downsizing to „kreatywne opakowania” — mniej produktu za tę samą cenę.'},
+     {d:'W1-2',p:2,t:'single',q:'Crowdfunding to:',a:[['Społecznościowe finansowanie przedsięwzięcia lub produktu w internecie',1],['Zbieranie danych o klientach',0],['Rodzaj reklamy zewnętrznej',0],['Technika negocjacji ceny',0]],e:'Crowdfunding to zbieranie pieniędzy w sieci na rozwój firmy lub produkcję nowego produktu.'},
+     {d:'W1-2',p:1,t:'single',q:'SEO (Search Engine Optimization) to:',a:[['Optymalizacja strony pod kątem organicznych (bezpłatnych) wyników wyszukiwania',1],['Płatne reklamy w wyszukiwarce',0],['Marketing szeptany',0],['Wysyłka SMS-ów',0]],e:'SEO zwiększa widoczność w wynikach organicznych; płatne wyniki to domena SEM.'},
+     {d:'W1-2',p:2,t:'single',q:'Model reklamy, w którym reklamodawca płaci za każde kliknięcie, to:',a:[['PPC (Pay-Per-Click)',1],['SEO',0],['WOMM',0],['CRM',0]],e:'PPC to płatność za kliknięcie prowadzące na stronę; pozwala precyzyjnie kontrolować wydatki.'},
+     {d:'W1-2',p:2,t:'single',q:'Landing page to:',a:[['Pojedyncza strona po kliknięciu reklamy, nastawiona na konwersję',1],['Strona główna firmy',0],['Profil w mediach społecznościowych',0],['Baza danych klientów',0]],e:'Celem landing page jest skłonienie odwiedzającego do działania (konwersji), np. wypełnienia formularza.'},
+     {d:'W1-2',p:2,t:'single',q:'Permission marketing w e-mail marketingu zakłada:',a:[['Wysyłanie wiadomości wyłącznie do osób, które wyraziły zgodę',1],['Masową wysyłkę do wszystkich adresów',0],['Kupowanie baz adresowych',0],['Wysyłkę tylko papierową',0]],e:'Zasada permission marketingu zwiększa skuteczność i minimalizuje ryzyko negatywnego odbioru.'},
+     {d:'W1-2',p:2,t:'single',q:'Content marketing (marketing treści) polega na:',a:[['Pozyskiwaniu klientów przez wartościowe, użyteczne treści',1],['Agresywnych przekazach nakłaniających do zakupu',0],['Obniżaniu cen produktów',0],['Śledzeniu lokalizacji klientów',0]],e:'Content marketing dostarcza treści dopasowane do potrzeb odbiorców i buduje wizerunek eksperta.'},
+     {d:'W1-2',p:1,t:'single',q:'Marketing 3.0 to orientacja:',a:[['Społeczna (wartości, cele społeczne)',1],['Produkcyjna',0],['Internetowa/cyfrowa',0],['Sprzedażowa',0]],e:'Marketing 3.0 odpowiada orientacji społecznej — działaniom na rzecz wartości i celów społecznych.'},
+     {d:'W1-2',p:1,t:'single',q:'Marketing 4.0 to przede wszystkim:',a:[['Marketing internetowy/cyfrowy',1],['Marketing produkcyjny',0],['Marketing relacji',0],['Marketing polityczny',0]],e:'Marketing 4.0 wiąże się z internetem, dwustronną komunikacją i marketingiem bezpośrednim online.'},
+     {d:'W1-2',p:3,t:'single',q:'Marketing 5.0 wg Kotlera to:',a:[['Połączenie czynnika ludzkiego z nowoczesną technologią i AI',1],['Powrót do orientacji produkcyjnej',0],['Rezygnacja z technologii',0],['Marketing wyłącznie masowy',0]],e:'Marketing 5.0 (Technology for Humanity) łączy wiedzę ekspertów, technologię i sztuczną inteligencję.'},
+     {d:'W1-2',p:2,t:'single',q:'W którym roku po raz pierwszy zastosowano techniki marketingu politycznego w demokratycznej Polsce?',a:[['1989',1],['1952',0],['1959',0],['2004',0]],e:'W czerwcu 1989 r. (kampania Solidarności). 1952 to kampania Eisenhowera w USA, 1959 — pierwsze użycie w Europie (W. Brytania).'},
+     {d:'W1-2',p:2,t:'multi',q:'Które z poniższych to przykłady marketingu społecznego?',a:[['Wielka Orkiestra Świątecznej Pomocy',1],['„Rzuć palenie razem z nami”',1],['Place zabaw Muszkieterów',1],['Program lojalnościowy z rabatem za zakupy',0]],e:'Marketing społeczny to zmiana szkodliwych zachowań lub wspieranie celów społecznych — WOŚP, akcje prozdrowotne, place zabaw.'},
+     {d:'W1-2',p:3,t:'single',q:'Sprawa Tylenolu (Johnson & Johnson) jest przykładem:',a:[['Orientacji społecznej/etycznej — wycofanie produktu mimo kosztów wzmocniło zaufanie klientów',1],['Nieudanej kampanii wirusowej',0],['Marketingu politycznego',0],['Downsizingu',0]],e:'Mimo straty 240 mln USD wycofanie skażonego produktu umocniło lojalność klientów — czynienie tego, co słuszne, opłaciło się.'},
+     {d:'W1-2',p:2,t:'single',q:'Marketing sensoryczny (zmysłowy) polega na:',a:[['Oddziaływaniu na zmysły: wzrok, słuch, węch, dotyk, smak',1],['Kierowaniu reklamy tylko do dzieci',0],['Sprzedaży wyłącznie online',0],['Obniżaniu cen w sezonie',0]],e:'Przykłady: zapach świeżego pieczywa, dźwięk chrupania chipsów, degustacje, miłe w dotyku tkaniny.'},
+     {d:'W1-2',p:3,t:'tf',q:'Według „mitów marketingu” to koszty wyznaczają cenę produktu.',a:[['Fałsz',1],['Prawda',0]],e:'To mit — w rzeczywistości cenę wyznacza rynek (podaż, popyt, konkurencja). Klient nie zapłaci więcej tylko dlatego, że firma ma wyższe koszty.'},
+     {d:'W1-2',p:2,t:'single',q:'„Farma trolli” to:',a:[['Firma zatrudniająca ludzi do rozsiewania w sieci określonych treści',1],['Portal do porównywania cen',0],['Rodzaj sklepu dyskontowego',0],['Program CRM',0]],e:'Trolle udają zwykłych użytkowników, realizując strategię zleceniodawcy — często w celach politycznych.'}
+    );
+    Q.push(
+     {d:'W3',p:1,t:'single',q:'Od czego rozpoczyna się proces podejmowania decyzji zakupu?',a:[['Od odczucia potrzeby',1],['Od zakupu',0],['Od oceny pozakupowej',1===0?1:0],['Od preferencji marki',0]],e:'Proces zaczyna się od odczucia potrzeby, przez zdobywanie wiedzy, świadomość, przekonanie, preferencję, zamiar, aż do zakupu i oceny.'},
+     {d:'W3',p:2,t:'single',q:'Dysonans pozakupowy to:',a:[['Negatywne odczucia i wątpliwości po dokonaniu zakupu',1],['Zadowolenie z zakupu',0],['Brak potrzeby zakupu',0],['Lojalność wobec marki',0]],e:'Następstwem zakupu może być lojalność (ocena pozytywna) albo dysonans pozakupowy (wątpliwości, żal).'},
+     {d:'W3',p:2,t:'single',q:'Decyzje nawykowe dotyczą najczęściej:',a:[['Produktów częstego zakupu (chleb, mleko) przy minimalnym poszukiwaniu informacji',1],['Domu budowanego według własnego projektu',0],['Zakupu samochodu',0],['Renowacji mieszkania',0]],e:'Decyzje nawykowe to rutynowe zakupy dóbr codziennych; poszukiwanie informacji jest minimalne.'},
+     {d:'W3',p:2,t:'single',q:'Zakup domu według własnego projektu to przykład decyzji:',a:[['Rozważnej (maksymalne poszukiwanie informacji)',1],['Impulsywnej',0],['Nawykowej',0],['Rutynowej',0]],e:'To sytuacja o istotnym znaczeniu — decyzja rozważna, z maksymalną intensywnością poszukiwania informacji.'},
+     {d:'W3',p:1,t:'tf',q:'Zakupy impulsywne to przykład zachowań niezamierzonych (nieświadomych).',a:[['Prawda',1],['Fałsz',0]],e:'Zachowania niezamierzone to przypadkowe, impulsywne, nieświadome — w odróżnieniu od zamierzonych (zaplanowanych).'},
+     {d:'W3',p:3,t:'single',q:'„Wabik cenowy” (efekt kontekstu): na półce są wina za 18 i 29 zł. Co się stanie po dołożeniu trzeciego wina za 36 zł?',a:[['Klienci częściej wybiorą wino środkowe (29 zł)',1],['Klienci przestaną kupować wino',0],['Wszyscy wybiorą najtańsze',0],['Cena przestaje mieć znaczenie',0]],e:'Trzecia, droższa opcja przesuwa wybór ku wersji środkowej — to działanie wabika cenowego (efekt kontekstu).'},
+     {d:'W3',p:2,t:'tf',q:'Konsumenci silniej reagują na stratę niż na równoważny zysk.',a:[['Prawda',1],['Fałsz',0]],e:'To awersja do straty — informacja o utracie działa mocniej niż informacja o zysku tej samej wielkości.'},
+     {d:'W3',p:2,t:'single',q:'Która dziedzina bada nieświadome i często irracjonalne motywy zakupów?',a:[['Ekonomia behawioralna',1],['Rachunkowość',0],['Logistyka',0],['Prawo handlowe',0]],e:'Ekonomia behawioralna wyjaśnia, jak kontekst, emocje i otoczenie wpływają na decyzje, których konsument nie jest w pełni świadomy.'},
+     {d:'W3',p:2,t:'single',q:'Motywacja negatywna opiera się na:',a:[['„Karach” i dążeniu do uniknięcia czegoś',1],['Nagrodach i dążeniu do czegoś',0],['Ciekawości',0],['Wyłącznie na cenie',0]],e:'Motywacja negatywna („dążenie od”) mobilizuje do unikania kary; pozytywna („dążenie do”) opiera się na wzmocnieniach.'},
+     {d:'W3',p:2,t:'single',q:'Według teorii motywacji Freuda siły kierujące zachowaniami tkwią w:',a:[['Podświadomości',1],['Świadomej kalkulacji kosztów',0],['Wyłącznie w cenie produktu',0],['Reklamie',0]],e:'Wg Freuda człowiek sam nie rozumie motywów swojego działania — bada się je m.in. przez testy skojarzeń i przeniesienie.'},
+     {d:'W3',p:2,t:'single',q:'Selektywna uwaga w procesie postrzegania to:',a:[['Tendencja do odsiewania większości docierających informacji',1],['Dopasowywanie informacji do własnych wyobrażeń',0],['Zapamiętywanie wszystkiego',0],['Brak reakcji na bodźce',0]],e:'Nie da się zapamiętać wszystkiego — selektywna uwaga odsiewa większość bodźców.'},
+     {d:'W3',p:3,t:'single',q:'Selektywne zniekształcanie polega na:',a:[['Dopasowywaniu informacji do własnych wyobrażeń i przekonań',1],['Odsiewaniu bodźców',0],['Zapamiętywaniu tylko części informacji',0],['Zupełnym ignorowaniu reklamy',0]],e:'„Człowiek lubi to, co zna” — zniekształcamy informacje tak, by pasowały do naszych wyobrażeń.'},
+     {d:'W3',p:3,t:'single',q:'Efekt „halo” w postrzeganiu produktu oznacza:',a:[['Ocenę produktu przez pryzmat jednej, szczególnie istotnej cechy',1],['Zapamiętywanie wszystkich cech',0],['Brak wpływu emocji',0],['Kupowanie wyłącznie po cenie',0]],e:'Gdy jedna cecha jest dla nas kluczowa, stajemy się „głusi” na inne argumenty — postrzegamy produkt przez jej pryzmat.'},
+     {d:'W3',p:1,t:'single',q:'Około ilu procent spostrzeżeń dokonujemy za pomocą wzroku?',a:[['Około 80%',1],['Około 20%',0],['Około 50%',0],['Około 5%',0]],e:'Ok. 80% spostrzeżeń pochodzi ze wzroku, następnie ze słuchu; pozostałe zmysły mają marginalną rolę (zależnie od produktu).'},
+     {d:'W3',p:2,t:'multi',q:'Które typy temperamentu wymieniono jako typy osobowości konsumentów?',a:[['Choleryk',1],['Sangwinik',1],['Flegmatyk',1],['Melancholik',1],['Hedonista',0]],e:'Cztery temperamenty: choleryk, sangwinik, flegmatyk, melancholik. Hedonista to styl życia, nie temperament.'},
+     {d:'W3',p:3,t:'single',q:'Sangwinik jako klient:',a:[['Szybko decyduje się na zakup, ale równie szybko może zrezygnować (zakupy impulsywne)',1],['Przywiązuje wagę do tradycji i ostrożnie podchodzi do nowości',0],['Wymaga życzliwości i pomocy w decyzji, jest mało aktywny',0],['Jest wybuchowy i przecenia siebie',0]],e:'Sangwinik jest zmienny w nastrojach i poglądach, co sprzyja zakupom impulsywnym.'},
+     {d:'W3',p:2,t:'single',q:'Cenowa elastyczność popytu Ec > 1 oznacza, że:',a:[['Zmianie ceny odpowiada więcej niż proporcjonalna zmiana popytu (popyt elastyczny)',1],['Popyt jest sztywny',0],['Zmiana ceny nie wpływa na popyt',0],['Popyt jest mało elastyczny',0]],e:'Ec>1 — popyt elastyczny; Ec<1 — mało elastyczny; Ec=1 — proporcjonalny; Ec=0 — popyt stały/sztywny.'},
+     {d:'W3',p:2,t:'single',q:'Popyt o elastyczności cenowej Ec = 0 (sztywny) jest typowy dla:',a:[['Dóbr podstawowych, np. soli, ziemniaków',1],['Dóbr luksusowych',0],['Nowinek technologicznych',0],['Usług turystycznych',0]],e:'Przy popycie stałym (Ec=0) można w ograniczonym zakresie podnosić ceny bez zmiany wielkości sprzedaży.'},
+     {d:'W3',p:2,t:'single',q:'Prawo Engla mówi, że wraz ze wzrostem dochodów udział wydatków na żywność:',a:[['Maleje',1],['Rośnie szybciej niż dochód',0],['Nie zmienia się',0],['Rośnie w tym samym tempie co dochód',0]],e:'Wg prawa Engla udział wydatków na żywność maleje, na odzież/mieszkanie rośnie jak dochód, a na kulturę i rozrywkę — szybciej niż dochód.'},
+     {d:'W3',p:3,t:'single',q:'Paradoks Veblena (efekt prestiżowy) dotyczy sytuacji, w której:',a:[['Popyt na dobra luksusowe rośnie mimo wzrostu ich ceny (konsumpcja na pokaz)',1],['Popyt na chleb rośnie przy niskich dochodach',0],['Popyt spada wraz ze wzrostem dochodu',0],['Cena nie wpływa na popyt',0]],e:'Dobra luksusowe są środkiem dowartościowania — popyt rośnie wraz z ceną, bo mało kto je posiada.'},
+     {d:'W3',p:3,t:'single',q:'Paradoks Giffena występuje, gdy popyt na dobro podstawowe rośnie mimo wzrostu ceny. Kiedy?',a:[['Przy bardzo niskich dochodach konsumentów i braku bliskich substytutów (np. chleb)',1],['Przy wysokich dochodach i dobrach luksusowych',0],['Zawsze, niezależnie od dochodu',0],['Tylko dla dóbr sezonowych',0]],e:'Przy niskich dochodach wzrost ceny chleba wypiera droższe dobra — konsumpcja chleba paradoksalnie rośnie.'},
+     {d:'W3',p:2,t:'single',q:'Dekonsumpcja to:',a:[['Świadome ograniczenie konsumpcji do rozmiarów wynikających z realnych potrzeb',1],['Nadmierna konsumpcja dla samej przyjemności',0],['Kupowanie wyłącznie dóbr luksusowych',0],['Zakupy na kredyt',0]],e:'Dekonsumpcja to nacisk na jakość życia, odpowiedzialne decyzje i ograniczenie konsumpcji (np. ruch dobrowolnej prostoty).'},
+     {d:'W3',p:1,t:'single',q:'Konsumpcjonizm oznacza:',a:[['Nadmierną, niepotrzebną konsumpcję, życie skoncentrowane wokół konsumpcji',1],['Świadome ograniczanie zakupów',0],['Zakupy tylko ekologiczne',0],['Rezygnację z zakupów',0]],e:'Konsumpcjonizm to brak umiaru w zakupach i konsumowanie dla samej konsumpcji, z pominięciem kosztów społecznych i środowiskowych.'},
+     {d:'W3',p:2,t:'single',q:'Smart shopping (inteligentne zakupy) to:',a:[['Racjonalne, przemyślane gospodarowanie pieniędzmi i poszukiwanie najkorzystniejszych ofert',1],['Kupowanie pod wpływem emocji',0],['Zakupy tylko marek luksusowych',0],['Ignorowanie promocji',0]],e:'Smart shopping to śledzenie promocji, porównywanie jakości do ceny i unikanie zakupów kompulsywnych.'},
+     {d:'W3',p:2,t:'single',q:'Etnocentryzm konsumencki to:',a:[['Przekonanie, że należy kupować produkty krajowe (patriotyzm gospodarczy)',1],['Preferowanie produktów zagranicznych',0],['Brak zainteresowania pochodzeniem produktu',0],['Kupowanie tylko dóbr luksusowych',0]],e:'Etnocentryk uważa zakup produktów zagranicznych za nieodpowiedni; przeciwieństwem jest postawa internacjonalistyczna.'},
+     {d:'W3',p:2,t:'tf',q:'Największy etnocentryzm konsumenci wykazują wobec żywności.',a:[['Prawda',1],['Fałsz',0]],e:'Wobec żywności etnocentryzm jest najsilniejszy; przy kosmetykach preferuje się francuskie, elektronice — japońską, samochodach — niemieckie.'},
+     {d:'W3',p:3,t:'single',q:'Efekt kraju pochodzenia: z jakimi produktami najczęściej kojarzona jest Szwajcaria?',a:[['Zegarki, czekolada, sery',1],['Samochody i piwo',0],['Perfumy i wino',0],['Elektronika i aparaty',0]],e:'Stereotypy: Szwajcaria — zegarki/czekolada/sery; Niemcy — samochody/piwo; Francja — perfumy/wino; Japonia — elektronika.'},
+     {d:'W3',p:2,t:'single',q:'Trysumeryzm to trend polegający na:',a:[['Testowaniu i próbowaniu produktów (np. wirtualna przymierzalnia, konfiguratory)',1],['Rezygnacji z zakupów',0],['Kupowaniu grupowym',0],['Śledzeniu lokalizacji',0]],e:'Trysumeryzm (od „try”) to poszukiwanie doświadczeń przez symulacje: awatary, wirtualne meblowanie (IKEA), konfiguratory.'},
+     {d:'W3',p:3,t:'single',q:'Webrooming to zachowanie polegające na:',a:[['Oglądaniu produktów w sieci, a następnie kupowaniu ich w sklepie stacjonarnym',1],['Oglądaniu w sklepie i kupowaniu w sieci',0],['Kupowaniu wyłącznie grupowym',0],['Rezygnacji z internetu',0]],e:'Webrooming: research online → zakup offline. Odwrotnością jest showrooming (oglądanie w sklepie, zakup w sieci).'},
+     {d:'W3',p:2,t:'single',q:'Który zestaw czynników kształtujących decyzje zakupu jest zaklasyfikowany jako wewnętrzny (psychologiczny)?',a:[['Potrzeby, motywacje, postrzeganie',1],['Cena i dochody',0],['Rodzina i grupa odniesienia',0],['Kultura i subkultura',0]],e:'Czynniki wewnętrzne to psychologiczne (potrzeby, motywacja, postrzeganie); zewnętrzne to ekonomiczne, socjologiczne i kulturowe.'}
+    );
+    Q.push(
+     {d:'W4',p:2,t:'multi',q:'Które podsystemy tworzą system informacji marketingowej?',a:[['Podsystem ewidencji i rachunkowości wewnętrznej',1],['Podsystem wywiadu marketingowego',1],['Podsystem badań marketingowych',1],['Podsystem modelowania i pomocy w decyzjach',1],['Podsystem reklamy telewizyjnej',0]],e:'Cztery podsystemy: ewidencji/rachunkowości wewnętrznej, wywiadu marketingowego, badań marketingowych oraz modelowania i pomocy w decyzjach.'},
+     {d:'W4',p:2,t:'single',q:'„Biały wywiad” w firmie to:',a:[['Legalne pozyskiwanie informacji o rynku i konkurencji',1],['Nielegalny szpiegostwo przemysłowe',0],['Wewnętrzny audyt finansowy',0],['Reklama porównawcza',0]],e:'Wywiad marketingowy (biały wywiad) opiera się na legalnych źródłach: prasa, targi, kontakty, produkty konkurencji.'},
+     {d:'W4',p:1,t:'single',q:'Od czego rozpoczyna się proces badania marketingowego?',a:[['Od określenia problemu badawczego',1],['Od opracowania raportu',0],['Od gromadzenia danych',0],['Od doboru próby',0]],e:'Pierwszym i decydującym etapem jest określenie problemu badawczego.'},
+     {d:'W4',p:3,t:'single',q:'Spadek obrotów firmy to zazwyczaj:',a:[['Symptom, a nie faktyczny problem',1],['Sam w sobie problem badawczy',0],['Hipoteza badawcza',0],['Cel badania',0]],e:'Trzeba odróżnić symptom (spadek obrotów) od problemu (np. niekonkurencyjne ceny, przestarzały produkt, słabe przygotowanie sprzedawców).'},
+     {d:'W4',p:2,t:'single',q:'Hipoteza badawcza to:',a:[['Przypuszczalna odpowiedź na pytanie badawcze, którą można zweryfikować',1],['Ostateczny wniosek z badania',0],['Lista respondentów',0],['Raport końcowy',0]],e:'Hipoteza to przypuszczenie sformułowane tak, by dało się je potwierdzić lub obalić w toku badań.'},
+     {d:'W4',p:2,t:'single',q:'Badania eksploracyjne (poszukiwawcze) służą przede wszystkim:',a:[['Wstępnemu rozpoznaniu problemu jako punkt wyjścia do dalszych badań',1],['Wyjaśnianiu związków przyczynowo-skutkowych',0],['Sporządzeniu raportu końcowego',0],['Pomiarowi elastyczności cenowej',0]],e:'Badania eksploracyjne to wstęp — pomagają zawęzić i zrozumieć problem przed dalszymi analizami.'},
+     {d:'W4',p:3,t:'single',q:'Badania przyczynowo-skutkowe:',a:[['Wyjaśniają związki między zmiennymi (np. wpływ reklamy na sprzedaż)',1],['Tylko opisują zjawiska rynkowe',0],['Służą wyłącznie do wstępnego rozpoznania',0],['Nie wymagają doświadczenia badacza',0]],e:'To najbardziej zaawansowane metodycznie badania — wyjaśniają zależności przyczynowo-skutkowe między zmiennymi.'},
+     {d:'W4',p:2,t:'single',q:'Dane wtórne to dane:',a:[['Zebrane wcześniej w innym celu, ale dostępne dla badacza (np. GUS, raporty)',1],['Zebrane specjalnie na potrzeby danego badania',0],['Uzyskane wyłącznie z ankiet',0],['Pochodzące tylko z eksperymentów',0]],e:'Dane wtórne (np. dokumentacja firmy, publikacje GUS) oszczędzają czas i pieniądze; pierwotne zbiera się od nowa.'},
+     {d:'W4',p:2,t:'single',q:'Metoda „tajemniczy klient” to rodzaj obserwacji:',a:[['Ukrytej',1],['Jawnej',0],['Niekontrolowanej i jawnej',0],['Standaryzowanej jawnej',0]],e:'Tajemniczy klient to obserwacja ukryta — obserwator gra rolę klienta, badany nie wie o obserwacji.'},
+     {d:'W4',p:2,t:'tf',q:'W obserwacji jawnej badany często zachowuje się nienaturalnie.',a:[['Prawda',1],['Fałsz',0]],e:'Świadomość bycia obserwowanym zmienia zachowanie — to główna wada obserwacji jawnej.'},
+     {d:'W4',p:2,t:'single',q:'Na czym polega eksperyment marketingowy?',a:[['Na manipulowaniu zmienną niezależną i rejestrowaniu jej wpływu na zmienną zależną',1],['Na biernym opisie zjawisk rynkowych',0],['Na analizie wyłącznie danych wtórnych',0],['Na tworzeniu raportu końcowego',0]],e:'Eksperymentator manipuluje zmiennymi niezależnymi i mierzy zmiany zmiennych zależnych — bada związki przyczynowo-skutkowe.'},
+     {d:'W4',p:3,t:'single',q:'Schemat „kwadratu łacińskiego” w eksperymencie pozwala:',a:[['Ograniczyć liczbę eksperymentów (np. 16 zamiast 64)',1],['Zwiększyć liczbę respondentów',0],['Zrezygnować z hipotez',0],['Wyeliminować zmienne zależne',0]],e:'Kwadrat łaciński (np. 4 sklepy × 4 dni × 4 ceny) redukuje liczbę koniecznych pomiarów.'},
+     {d:'W4',p:2,t:'multi',q:'Które metody należą do badań jakościowych?',a:[['Zogniskowane wywiady grupowe (fokusy)',1],['Techniki projekcyjne',1],['Testy skojarzeń słownych',1],['Kwadrat łaciński',0]],e:'Badania jakościowe (dorobek psychologii): wywiady grupowe, techniki projekcyjne, testy skojarzeń. Kwadrat łaciński to schemat eksperymentu.'},
+     {d:'W4',p:2,t:'single',q:'Zogniskowany wywiad grupowy (fokus) liczy zwykle:',a:[['6–8 osób z moderatorem',1],['1 osobę',0],['ponad 100 osób',0],['dokładnie 2 osoby',0]],e:'Fokus to nagrywana, kontrolowana przez moderatora dyskusja grupy 6–8 osób.'},
+     {d:'W4',p:1,t:'single',q:'Próba badawcza to:',a:[['Część populacji wybrana do badania, mająca reprezentować całość',1],['Cała populacja',0],['Zestaw hipotez',0],['Lista pytań w ankiecie',0]],e:'Próba powinna mieć walor reprezentatywności, co zależy od sposobu jej doboru.'},
+     {d:'W4',p:3,t:'single',q:'Jak zmienia się wymagana wielkość próby, gdy zmniejszamy dopuszczalny błąd?',a:[['Próba musi być większa',1],['Próba musi być mniejsza',0],['Wielkość próby nie zależy od błędu',0],['Próba zawsze wynosi 100',0]],e:'Im mniejszy założony błąd, tym większa musi być próba (przy tej samej populacji).'},
+     {d:'W4',p:2,t:'single',q:'Eye tracking jako narzędzie badawcze:',a:[['Śledzi ruch gałki ocznej — kolejność i czas skupienia wzroku',1],['Wyświetla obrazy przez ułamki sekundy',0],['Mierzy głośność reklamy',0],['Liczy liczbę klientów w sklepie',0]],e:'Eye tracking rejestruje, na czym i jak długo zatrzymuje się wzrok badanego.'},
+     {d:'W4',p:3,t:'single',q:'Tachistoskop to urządzenie, które:',a:[['Wyświetla obrazy przez bardzo krótki czas (od 1/100 s), a badany opisuje, co dostrzegł',1],['Śledzi ruch gałki ocznej',0],['Skanuje kody kreskowe',0],['Nagrywa dyskusję grupową',0]],e:'Tachistoskop bada percepcję przez krótką ekspozycję bodźca wzrokowego.'},
+     {d:'W4',p:3,t:'single',q:'Metoda „kuli śnieżnej” należy do doboru:',a:[['Celowego (nielosowego)',1],['Losowego prostego',0],['Warstwowego losowego',0],['Wielostopniowego losowego',0]],e:'Kula śnieżna to metoda doboru celowego — kolejni respondenci wskazują następnych.'},
+     {d:'W4',p:2,t:'single',q:'Który sposób dotarcia do respondentów jest zwykle najtańszy, ale ma najniższy wskaźnik odpowiedzi?',a:[['Ankieta pocztowa',1],['Ankieta osobista',0],['Ankieta telefoniczna',0],['Wywiad pogłębiony',0]],e:'Ankieta pocztowa jest najtańsza, lecz ma niski wskaźnik odpowiedzi i zerowy wpływ ankietera; osobista jest najdroższa, ale daje największe możliwości.'}
+    );
+    Q.push(
+     {d:'W5-6',p:1,t:'single',q:'Jak definiuje się produkt w ujęciu marketingowym?',a:[['Wszystko, co można zaoferować w celu zaspokojenia potrzeby lub pragnienia',1],['Wyłącznie przedmiot fizyczny',0],['Tylko usługa',0],['Jedynie cena i opakowanie',0]],e:'Produktem może być rzecz fizyczna, usługa, a także osoba, miejsce, działanie, organizacja czy idea.'},
+     {d:'W5-6',p:1,t:'tf',q:'Produktem w rozumieniu marketingu może być także osoba, miejsce lub idea.',a:[['Prawda',1],['Fałsz',0]],e:'Politycy, celebryci, miejscowości turystyczne, akcje i idee również są „produktem”.'},
+     {d:'W5-6',p:2,t:'single',q:'Zasada „nie sprzedajemy butów, sprzedajemy marzenia” oznacza, że:',a:[['Sprzedaje się korzyść/usługę związaną z produktem, a nie jego cechy fizyczne',1],['Należy obniżać cenę',0],['Liczy się tylko opakowanie',0],['Nie warto opisywać produktu',0]],e:'Przedmiot fizyczny to „opakowanie” korzyści — zadaniem marketingu jest sprzedaż komfortu, prestiżu, nadziei, a nie cech technicznych.'},
+     {d:'W5-6',p:2,t:'multi',q:'Które z poniższych to rodzaje użyteczności produktu dla nabywcy?',a:[['Użyteczność formy',1],['Użyteczność miejsca i czasu',1],['Użyteczność posiadania',1],['Użyteczność informacji',1],['Użyteczność produkcji',0]],e:'Cztery użyteczności: formy (produkt), miejsca i czasu (dystrybucja), posiadania (cena) i informacji (promocja).'},
+     {d:'W5-6',p:2,t:'single',q:'Dobra wygodnego zakupu (FMCG) to produkty:',a:[['Kupowane często, tanie, nabywane bez większego zastanowienia',1],['Drogie, kupowane rzadko',0],['Nieznane konsumentom',0],['Wymagające indywidualnej obsługi',0]],e:'FMCG (żywność, podstawowe kosmetyki) kupuje się rutynowo; kluczowa jest szeroka dostępność w wielu punktach sprzedaży.'},
+     {d:'W5-6',p:2,t:'single',q:'Samochody, domy i mieszkania zalicza się do dóbr:',a:[['Specjalnych',1],['Wygodnego zakupu',0],['Niepostrzegalnych',0],['Częstego zakupu',0]],e:'Dobra specjalne mają unikalne cechy, wysoką cenę i wymagają indywidualnej obsługi oraz nielicznych punktów sprzedaży.'},
+     {d:'W5-6',p:3,t:'single',q:'Dobra niepostrzegalne to m.in.:',a:[['Produkty nieznane lub zaspokajające nieuświadomione potrzeby (np. filtry do wody, pieluchy)',1],['Chleb i mleko',0],['Samochody luksusowe',0],['Codzienne kosmetyki',0]],e:'Dobra niepostrzegalne: dotąd nieznane, zaspokajające nieuświadomione potrzeby, świadomie odrzucone lub używane tylko na pewnych etapach życia.'},
+     {d:'W5-6',p:2,t:'single',q:'Głębokość asortymentu to:',a:[['Liczba odmian produktu w ramach poszczególnych linii',1],['Liczba linii produktowych',0],['Wszystkie produkty firmy razem',0],['Stopień powiązania linii',0]],e:'Głębokość = odmiany w ramach linii; szerokość = liczba linii; długość = wszystkie produkty; spójność = powiązanie linii.'},
+     {d:'W5-6',p:2,t:'single',q:'Szerokość asortymentu to:',a:[['Liczba linii produkcyjnych',1],['Liczba odmian w ramach jednej linii',0],['Powiązanie między liniami',0],['Liczba punktów sprzedaży',0]],e:'Szerokość asortymentu oznacza liczbę linii produktowych firmy.'},
+     {d:'W5-6',p:1,t:'single',q:'Jaka jest poprawna kolejność faz cyklu życia produktu?',a:[['Wprowadzenie → wzrost → dojrzałość → spadek',1],['Wzrost → wprowadzenie → spadek → dojrzałość',0],['Dojrzałość → wzrost → wprowadzenie → spadek',0],['Spadek → dojrzałość → wzrost → wprowadzenie',0]],e:'Cykl życia produktu: wprowadzenie, wzrost, dojrzałość, spadek (schyłek).'},
+     {d:'W5-6',p:2,t:'single',q:'W której fazie cyklu życia produkt osiąga najwyższą sprzedaż i największe zyski?',a:[['W fazie dojrzałości',1],['W fazie wprowadzenia',0],['W fazie spadku',0],['Zawsze w fazie wzrostu',0]],e:'W dojrzałości sprzedaż jest najwyższa, a zyski największe — trzeba maksymalnie wydłużyć tę fazę.'},
+     {d:'W5-6',p:2,t:'tf',q:'W fazie wprowadzenia produktu zyski są zwykle niewielkie z powodu wysokich kosztów.',a:[['Prawda',1],['Fałsz',0]],e:'Wysokie koszty wprowadzenia sprawiają, że sprzedaż rośnie powoli, a zyski są niewielkie.'},
+     {d:'W5-6',p:2,t:'single',q:'Strategia „zbierania śmietanki” (skimming) polega na:',a:[['Wprowadzeniu produktu po wysokiej cenie',1],['Wejściu z bardzo niską ceną',0],['Rezygnacji z promocji',0],['Sprzedaży wyłącznie hurtowej',0]],e:'Zbieranie śmietanki to wysoka cena nowości dla nabywców otwartych na nowości; z czasem cenę się obniża.'},
+     {d:'W5-6',p:2,t:'single',q:'Strategia penetracji (przenikania) rynku polega na:',a:[['Wejściu z niską ceną, by szybko zdobyć duży udział w rynku',1],['Ustaleniu bardzo wysokiej ceny',0],['Rezygnacji z reklamy',0],['Sprzedaży tylko dobrom luksusowym',0]],e:'Niska cena zniechęca konkurencję i zwiększa pojemność rynku firmy; skuteczna przy wysokiej elastyczności cenowej popytu.'},
+     {d:'W5-6',p:3,t:'single',q:'W fazie spadku (schyłku) racjonalnym działaniem może być:',a:[['Ograniczenie promocji do lojalnych klientów, redukcja słabych punktów sprzedaży, ewentualne wycofanie (demarketing)',1],['Duże inwestycje w nowe cechy produktu',0],['Maksymalne rozszerzanie dystrybucji',0],['Podniesienie ceny znacznie powyżej konkurencji',0]],e:'W fazie spadku minimalizuje się koszty; promocja kierowana jest do lojalnych klientów, a produkt bywa wycofywany.'},
+     {d:'W5-6',p:2,t:'single',q:'Zrównoważony portfel produktów firmy powinien:',a:[['Zawierać obecnych „żywicieli” i dobrą perspektywę przyszłych',1],['Składać się tylko z nowości',0],['Zawierać wyłącznie produkty w fazie spadku',0],['Ograniczać się do jednego produktu',0]],e:'Portfel powinien być zrównoważony i prorozwojowy — produkty w różnych fazach cyklu życia wymagają różnego zarządzania.'},
+     {d:'W5-6',p:2,t:'multi',q:'Które stwierdzenia o cenie jako instrumencie marketingu są prawdziwe?',a:[['Można ją szybko zmienić bez ponoszenia nakładów',1],['Jest jedynym instrumentem po stronie przychodów (pozostałe to koszty)',1],['Jej efekty są mierzalne i szybkie do oszacowania',1],['Jest zawsze najważniejszym kryterium wyboru dla wszystkich klientów',0]],e:'Cena jest elastyczna, mierzalna i jako jedyna generuje przychód; nie jest jednak zawsze najważniejszym kryterium wyboru.'},
+     {d:'W5-6',p:2,t:'single',q:'Metoda ustalania ceny „koszt +” polega na:',a:[['Doliczeniu marży/zysku do kosztu jednostkowego',1],['Ustaleniu ceny wyłącznie na podstawie popytu',0],['Kopiowaniu ceny lidera rynku',0],['Negocjacjach z każdym klientem',0]],e:'„Koszt +” = koszty jednostkowe (stałe + zmienne) + zysk. Wada: brak powiązania ceny z rynkiem.'},
+     {d:'W5-6',p:3,t:'single',q:'Konkurencja doskonała to rynek, na którym:',a:[['Wielu sprzedających handluje jednorodnym produktem i nikt nie ma wpływu na cenę',1],['Jest jeden sprzedający',0],['Kilku sprzedających prowadzi wojny cenowe',0],['Ceny są mocno zróżnicowane jakością',0]],e:'Konkurencja doskonała: jednorodny produkt (np. zboże), brak wpływu pojedynczego podmiotu na cenę rynkową.'},
+     {d:'W5-6',p:3,t:'single',q:'Rynek oligopolistyczny charakteryzuje się tym, że:',a:[['Jest kilku sprzedających bardzo wrażliwych na strategie konkurentów, częste są wojny cenowe',1],['Jest jeden sprzedający kontrolujący rynek',0],['Występuje nieskończenie wielu drobnych sprzedawców jednorodnego dobra',0],['Ceny nie mają znaczenia',0]],e:'Oligopol: kilku dużych graczy, podobne ceny i częste wojny cenowe.'},
+     {d:'W5-6',p:2,t:'single',q:'Ceny kończące się na 9,99 zł to przykład:',a:[['Psychologicznego ustalania cen',1],['Rabatu funkcjonalnego',0],['Ceny wiodącej',0],['Ceny składanej',0]],e:'Ceny nieznacznie niższe od okrągłej sumy (9,99) są postrzegane jako okazja — to psychologia ceny.'},
+     {d:'W5-6',p:3,t:'single',q:'„Ceny łamane” (np. 347,41 zł) są przez klientów postrzegane jako:',a:[['Precyzyjnie skalkulowane (choć mniej „pociągające”)',1],['Zawyżone i nieuczciwe',0],['Zawsze promocyjne',0],['Zaokrąglone w górę',0]],e:'Ceny łamane sprawiają wrażenie dokładnie wyliczonych; ceny typu 9,99 są bardziej „pociągające”.'},
+     {d:'W5-6',p:2,t:'single',q:'Rabat funkcjonalny udzielany jest:',a:[['Pośrednikom za realizację określonej funkcji (np. sortowanie, pakowanie)',1],['Klientom płacącym gotówką',0],['Za zakup dużej ilości',0],['Za udział w reklamie',0]],e:'Rabat funkcjonalny otrzymuje pośrednik za wykonanie funkcji handlowej; gotówkowy — za natychmiastową zapłatę, ilościowy — za wielkość dostawy.'},
+     {d:'W5-6',p:3,t:'single',q:'„Pułapka płytkiej kieszeni” odnosi się do:',a:[['Konkurowania ceną, które jest łatwe do naśladowania przez konkurentów',1],['Ceny luksusowej niedostępnej dla większości',0],['Braku środków na promocję',0],['Zbyt głębokiego asortymentu',0]],e:'Obniżanie ceny łatwo skopiować — dlatego konkurowanie wyłącznie ceną bywa pułapką.'},
+     {d:'W5-6',p:3,t:'single',q:'Rynek i popyt oraz koszty wyznaczają granice ceny. Które przyporządkowanie jest poprawne?',a:[['Rynek i popyt — górna granica ceny; koszty — dolna granica',1],['Koszty — górna granica; popyt — dolna granica',0],['Obie granice wyznacza wyłącznie konkurencja',0],['Cena nie ma żadnych granic',0]],e:'Koszty wyznaczają dolną granicę (cena musi je pokryć + zysk), a rynek i popyt — górną granicę ceny.'}
+    );
+    Q.push(
+     {d:'Promocja',p:2,t:'multi',q:'Które z poniższych są instrumentami promotion-mix?',a:[['Reklama',1],['Public relations / publicity',1],['Promocja sprzedaży',1],['Sprzedaż osobista',1],['Marketing bezpośredni',1],['Influencer marketing',1],['Dystrybucja',0]],e:'Instrumenty promocji-mix: reklama, PR/publicity, promocja sprzedaży, sprzedaż osobista, marketing bezpośredni i influencer marketing. Dystrybucja to osobny element marketingu-mix.'},
+     {d:'Promocja',p:2,t:'single',q:'Reklama to:',a:[['Płatna, nieosobista forma prezentacji i promocji przez sponsora',1],['Bezpośrednia rozmowa sprzedawcy z klientem',0],['Bezpłatna publikacja w mediach',0],['Krótkookresowy bodziec ekonomiczny',0]],e:'Reklama jest płatna i nieosobista; sprzedaż osobista jest bezpośrednia, a promocja sprzedaży to krótkookresowe bodźce.'},
+     {d:'Promocja',p:2,t:'single',q:'Który instrument promocji jest uważany za najbardziej wiarygodny, a bywa niedoceniany?',a:[['Public relations (PR/publicity)',1],['Reklama telewizyjna',0],['Promocja sprzedaży',0],['Marketing bezpośredni',0]],e:'PR jest postrzegany jako najbardziej wiarygodny, ponieważ przypomina neutralny przekaz dziennikarski.'},
+     {d:'Promocja',p:2,t:'single',q:'Promocja sprzedaży to:',a:[['Krótkookresowe bodźce ekonomiczne pobudzające sprzedaż (kupony, konkursy, degustacje)',1],['Długofalowe budowanie wizerunku firmy',0],['Płatna reklama w telewizji',0],['Osobista prezentacja oferty',0]],e:'Promocja sprzedaży to krótkookresowe zachęty: kupony, konkursy, premie, degustacje — z zaproszeniem do zakupu „teraz”.'},
+     {d:'Promocja',p:2,t:'single',q:'Sprzedaż osobista cechuje się:',a:[['Bezpośrednim kontaktem z klientem, ale wysokimi kosztami utrzymania personelu',1],['Brakiem kontaktu z klientem',0],['Najniższymi kosztami ze wszystkich instrumentów',0],['Wyłącznie formą pisemną',0]],e:'Sprzedaż osobista to żywa, natychmiastowa relacja i możliwość reakcji, ale kosztowna (utrzymanie personelu).'},
+     {d:'Promocja',p:2,t:'single',q:'Influencer marketing opiera się głównie na:',a:[['Autentycznych rekomendacjach osób wpływowych w mediach społecznościowych',1],['Billboardach przy drogach',0],['Reklamie prasowej',0],['Sprzedaży telefonicznej',0]],e:'Influencer marketing wykorzystuje zaufanie społeczności do influencera oraz mechanizmy takie jak konformizm i efekt bandwagon.'},
+     {d:'Promocja',p:3,t:'single',q:'Efekt bandwagon (efekt „owczego pędu”/stada) to:',a:[['Przyjmowanie zachowań lub postaw dlatego, że robią to inni',1],['Reakcja na obniżkę ceny',0],['Lęk przed reklamą',0],['Preferowanie produktów krajowych',0]],e:'Efekt bandwagon: ludzie podejmują decyzje, by „dołączyć do tłumu” i „nie zostać w tyle”.'},
+     {d:'Promocja',p:2,t:'multi',q:'Które elementy należą do procesu komunikacji marketingowej?',a:[['Nadawca',1],['Kodowanie',1],['Przekaz',1],['Odkodowanie',1],['Odbiorca',1],['Zakłócenia (szum)',1],['Rabat ilościowy',0]],e:'Model komunikacji: nadawca → kodowanie → przekaz → odkodowanie → odbiorca, a wszystko zaburzają zakłócenia (szumy).'},
+     {d:'Promocja',p:3,t:'multi',q:'Które zjawiska powodują zakłócenia w odbiorze przekazu?',a:[['Selektywne postrzeganie',1],['Selektywne zniekształcanie',1],['Selektywne przypominanie',1],['Kodowanie przekazu',0]],e:'Odbiorca może nie odebrać przekazu przez selektywne postrzeganie, zniekształcanie i przypominanie.'},
+     {d:'Promocja',p:3,t:'single',q:'Jaka jest poprawna kolejność etapów gotowości nabywcy do zakupu?',a:[['Świadomość → znajomość → sympatia → preferencja → przekonanie → zakup',1],['Zakup → przekonanie → sympatia → świadomość',0],['Preferencja → świadomość → zakup → sympatia',0],['Znajomość → zakup → świadomość → preferencja',0]],e:'Etapy: świadomość, znajomość, sympatia, preferencja, przekonanie i wreszcie zakup — cel to doprowadzenie rynku do ostatniego etapu.'},
+     {d:'Promocja',p:2,t:'single',q:'Dobry przekaz reklamowy (model AIDA) powinien kolejno:',a:[['Zwrócić uwagę, podtrzymać zainteresowanie, pobudzić pragnienie, wywołać działanie',1],['Wywołać działanie, potem zwrócić uwagę',0],['Tylko obniżyć cenę',0],['Zniechęcić konkurencję',0]],e:'Dobry przekaz: uwaga → zainteresowanie → pragnienie → działanie.'},
+     {d:'Promocja',p:2,t:'single',q:'Apel racjonalny w reklamie odwołuje się do:',a:[['Konkretnych korzyści: jakości, oszczędności, użyteczności',1],['Emocji: strachu, poczucia winy',0],['Tego, co dobre i moralne',0],['Wyłącznie do humoru',0]],e:'Apel racjonalny podkreśla wymierne korzyści; emocjonalny gra na uczuciach; moralny odwołuje się do wartości.'},
+     {d:'Promocja',p:2,t:'single',q:'Apel emocjonalny w reklamie wykorzystuje:',a:[['Emocje pozytywne lub negatywne (np. strach, poczucie winy, wstyd)',1],['Wyłącznie dane techniczne',0],['Tabelę cen',0],['Kalkulację kosztów kredytu',0]],e:'Apel emocjonalny stosuje się m.in. w reklamach past do zębów, dezodorantów, badań profilaktycznych.'},
+     {d:'Promocja',p:2,t:'single',q:'Apel moralny w reklamie odwołuje się do:',a:[['Odczuć, co jest dobre i właściwe (akcje humanitarne, ochrona środowiska)',1],['Konkretnych korzyści finansowych',0],['Strachu przed chorobą',0],['Prestiżu i statusu',0]],e:'Apel moralny nakłania do popierania słusznych spraw — np. WOŚP, akcje charytatywne, ochrona środowiska.'},
+     {d:'Promocja',p:3,t:'single',q:'Reklama, która pod pozorem neutralnego przekazu oddziałuje na podświadomość, to reklama:',a:[['Ukryta (subminimalna)',1],['Porównawcza',0],['Racjonalna',0],['Zewnętrzna',0]],e:'Reklama ukryta kamufluje przekaz i oddziałuje na podświadomość; jest to niedozwolone.'},
+     {d:'Promocja',p:3,t:'tf',q:'W polskim prawie obowiązuje zakaz reklamy wprowadzającej w błąd oraz bezpośredniej reklamy porównawczej.',a:[['Prawda',1],['Fałsz',0]],e:'Przepisy zakazują reklamy wprowadzającej w błąd, nierzeczowej, ukrytej oraz bezpośredniej reklamy porównawczej.'},
+     {d:'Promocja',p:2,t:'single',q:'CPC (cost per click) to:',a:[['Koszt za kliknięcie — wskaźnik efektywności reklamy internetowej',1],['Koszt tysiąca wyświetleń',0],['Liczba subskrybentów kanału',0],['Wskaźnik lojalności klienta',0]],e:'CPC to stosunek kosztów emisji reklamy do liczby kliknięć w nią.'},
+     {d:'Promocja',p:3,t:'single',q:'Metoda ustalania budżetu promocji „na co nas stać” ma istotną wadę, ponieważ:',a:[['Traktuje sprzedaż jako przyczynę promocji, a nie jej efekt, i nie wiąże budżetu z potrzebami rynku',1],['Jest zbyt kosztowna w realizacji',0],['Wymaga zaawansowanych modeli statystycznych',0],['Zawsze prowadzi do przeinwestowania',0]],e:'W metodzie „na co nas stać” wielkość sprzedaży błędnie traktuje się jako przyczynę promocji, a nie jej skutek.'},
+     {d:'Promocja',p:3,t:'single',q:'Najbardziej uzasadnioną, choć najtrudniejszą metodą ustalania budżetu promocji jest metoda:',a:[['Założonego celu (celów i zadań)',1],['Procentu od wielkości sprzedaży',0],['Naśladowania konkurencji',0],['„Na co nas stać”',0]],e:'Metoda celów i zadań określa, co trzeba osiągnąć i co zrobić — najbardziej uzasadniona, ale najtrudniejsza.'},
+     {d:'Promocja',p:1,t:'tf',q:'Według badań osoby o wyższym wykształceniu lub inteligencji mniej ulegają wpływom reklamy.',a:[['Prawda',1],['Fałsz',0]],e:'Badania wskazują, że osoby lepiej wykształcone/inteligentne są mniej podatne na wpływ; najbardziej podatne są dzieci.'},
+     {d:'Promocja',p:2,t:'single',q:'Do nieosobistych kanałów komunikacji zalicza się m.in.:',a:[['Środki masowego przekazu, nastrój („opakowane środowisko”), wydarzenia',1],['Rozmowę sprzedawcy z klientem',0],['Poradę dentysty',0],['Telefon do znajomego',0]],e:'Kanały nieosobiste: media masowe, nastrój (aranżacja otoczenia) i wydarzenia; kanały osobiste to bezpośredni kontakt.'},
+     {d:'Promocja',p:3,t:'single',q:'Kontrowersyjne reklamy Benettona (Oliviero Toscani) zdobyły rozpoznawalność głównie dzięki:',a:[['Kontrowersji, która sprawiała, że wszyscy o nich mówili',1],['Bardzo niskim cenom produktów',0],['Długiemu czasowi ekspozycji',0],['Rezygnacji z jakiegokolwiek przekazu',0]],e:'Reklamy wisiały krótko (były oprotestowywane), ale kontrowersja dała ogromną rozpoznawalność marce.'}
+    );
+    /*APPEND*/
+    return Q;
+  }
+}
+</script>
+</body>
+</html>
