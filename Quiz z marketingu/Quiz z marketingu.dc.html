@@ -91,12 +91,6 @@ button{font-family:inherit;}
     </sc-if>
     <div style="display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:20px;">
      <span style="font-size:13.5px;color:#7C8499;">{{ poolLabel }}</span>
-     <div style="display:flex;gap:18px;">
-      <button onClick="{{ onClear }}" style="background:none;border:none;color:#626C84;font-size:12.5px;cursor:pointer;text-decoration:underline;transition:color .15s ease;" style-hover="color:#C3C6FF;">Wyczyść zapisany postęp</button>
-      <sc-if value="{{ hasHistory }}" hint-placeholder-val="{{ false }}">
-       <button onClick="{{ onClearHistory }}" style="background:none;border:none;color:#626C84;font-size:12.5px;cursor:pointer;text-decoration:underline;transition:color .15s ease;" style-hover="color:#C3C6FF;">Wyczyść historię</button>
-      </sc-if>
-     </div>
     </div>
    </div>
   </sc-if>
