@@ -10,7 +10,7 @@
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;}
 body{margin:0;-webkit-font-smoothing:antialiased;}
@@ -20,71 +20,84 @@ body{margin:0;-webkit-font-smoothing:antialiased;}
 button{font-family:inherit;}
 </style>
 </helmet>
-<div style="min-height:100vh;background:radial-gradient(1000px 540px at 50% -12%, rgba(124,108,255,.18), transparent 62%), #0B0D12;color:#EDF0F7;font-family:'Space Grotesk',sans-serif;display:flex;justify-content:center;padding:44px 18px;position:relative;overflow:hidden;">
- <canvas ref="{{ bgCanvas }}" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none;"></canvas>
- <div style="width:100%;max-width:720px;position:relative;z-index:1;">
+<div style="min-height:100vh;background:#F4F0E6;color:#262019;font-family:'Public Sans',sans-serif;display:flex;justify-content:center;padding:40px 18px;">
+ <div style="width:100%;max-width:720px;">
 
   <sc-if value="{{ isStart }}" hint-placeholder-val="{{ true }}">
    <div style="animation:qfade .4s ease;">
-    <div style="text-align:center;margin:14px 0 36px;">
-     <h1 style="font:700 44px/1.2 'Unbounded',sans-serif;margin:0;letter-spacing:-.015em;color:#EDF0F7;">Quiz<br><span style="background:linear-gradient(90deg,#9A8DFF,#C9CBFF 55%,#8F82FF);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">z marketingu</span></h1>
+    <div style="text-align:center;margin-bottom:26px;">
+     <div style="font:600 12px/1 'Public Sans';letter-spacing:.18em;text-transform:uppercase;color:#9C7A3C;margin-bottom:14px;">Marketing · baza pytań</div>
+     <h1 style="font:700 42px/1.05 'Spectral',serif;margin:0 0 12px;letter-spacing:-.01em;">Quiz z marketingu</h1>
+     <p style="font-size:15.5px;color:#7A6F5D;margin:0 auto;max-width:530px;line-height:1.55;">Powtórka z całego kursu. Zaznacz odpowiedź — od razu zobaczysz, czy dobrze, wraz z krótkim wyjaśnieniem.</p>
     </div>
-    <div style="background:rgba(21,25,38,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(124,108,255,.22);border-radius:26px;padding:28px;box-shadow:0 30px 80px -40px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.05);">
-     <div style="font:600 11.5px 'Space Grotesk';color:#7C8499;text-transform:uppercase;letter-spacing:.16em;margin-bottom:13px;">Zakres materiału</div>
-     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:26px;">
+    <div style="background:#FBF9F3;border:1px solid #E4DCCB;border-radius:18px;padding:24px;box-shadow:0 22px 44px -34px rgba(38,32,25,.55);">
+     <div style="font:600 12px 'Public Sans';color:#8A7F6D;text-transform:uppercase;letter-spacing:.11em;margin-bottom:12px;">Zakres materiału</div>
+     <div style="display:flex;flex-wrap:wrap;gap:9px;margin-bottom:22px;">
       <sc-for list="{{ dzialChips }}" as="c" hint-placeholder-count="6">
-       <button onClick="{{ c.onClick }}" style="{{ c.style }}" style-hover="{{ c.hover }}" style-active="{{ c.press }}"><span>{{ c.label }}</span><span style="{{ c.countStyle }}">{{ c.count }}</span></button>
+       <button onClick="{{ c.onClick }}" style="{{ c.style }}"><span>{{ c.label }}</span><span style="{{ c.countStyle }}">{{ c.count }}</span></button>
       </sc-for>
      </div>
-     <div style="font:600 11.5px 'Space Grotesk';color:#7C8499;text-transform:uppercase;letter-spacing:.16em;margin-bottom:13px;">Liczba pytań w sesji</div>
-     <div style="display:flex;gap:4px;background:#10141F;border:1px solid #232938;border-radius:15px;padding:4px;margin-bottom:26px;">
+     <div style="font:600 12px 'Public Sans';color:#8A7F6D;text-transform:uppercase;letter-spacing:.11em;margin-bottom:12px;">Liczba pytań w sesji</div>
+     <div style="display:flex;flex-wrap:wrap;gap:9px;margin-bottom:24px;">
       <sc-for list="{{ lengthChips }}" as="c" hint-placeholder-count="4">
-       <button onClick="{{ c.onClick }}" style="{{ c.style }}" style-hover="{{ c.hover }}" style-active="{{ c.press }}">{{ c.label }}</button>
+       <button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button>
       </sc-for>
      </div>
-     <button onClick="{{ onStart }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:18px;border:none;border-radius:99px;background:linear-gradient(135deg,#9A8DFF,#6C5AF5 60%,#5B49E8);color:#fff;font:700 16px 'Space Grotesk';letter-spacing:.02em;cursor:pointer;box-shadow:0 18px 45px -14px rgba(124,108,255,.7), inset 0 1px 0 rgba(255,255,255,.25);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;" style-hover="transform:translateY(-2px);box-shadow:0 26px 60px -16px rgba(124,108,255,.95), inset 0 1px 0 rgba(255,255,255,.3);filter:brightness(1.06);" style-active="transform:translateY(0) scale(.985);filter:brightness(.96);"><span>{{ startLabel }}</span><span style="font-size:19px;line-height:1;">→</span></button>
+     <button onClick="{{ onStart }}" style="width:100%;padding:16px;border:none;border-radius:13px;background:#2E5A8F;color:#fff;font:700 16px 'Public Sans';cursor:pointer;box-shadow:0 14px 26px -14px rgba(46,90,143,.8);">{{ startLabel }}</button>
      <sc-if value="{{ hasResume }}" hint-placeholder-val="{{ false }}">
-      <button onClick="{{ onResume }}" style="width:100%;margin-top:10px;padding:15px;border:1px solid rgba(124,108,255,.45);border-radius:99px;background:rgba(124,108,255,.08);color:#C3C6FF;font:600 15px 'Space Grotesk';cursor:pointer;transition:transform .18s ease, background .18s ease, border-color .18s ease;" style-hover="background:rgba(124,108,255,.18);border-color:#8F82FF;transform:translateY(-2px);" style-active="transform:translateY(0) scale(.985);">{{ resumeLabel }}</button>
+      <button onClick="{{ onResume }}" style="width:100%;margin-top:10px;padding:14px;border:1.5px solid #2E5A8F;border-radius:13px;background:#EEF3FA;color:#22406A;font:600 15px 'Public Sans';cursor:pointer;">{{ resumeLabel }}</button>
      </sc-if>
     </div>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:20px;">
-     <span style="font-size:13.5px;color:#7C8499;">{{ poolLabel }}</span>
-     <button onClick="{{ onClear }}" style="background:none;border:none;color:#626C84;font-size:12.5px;cursor:pointer;text-decoration:underline;transition:color .15s ease;" style-hover="color:#C3C6FF;">Wyczyść zapisany postęp</button>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding:0 6px;gap:12px;">
+     <span style="font-size:13.5px;color:#8A7F6D;">{{ poolLabel }}</span>
+     <sc-if value="{{ hasBest }}" hint-placeholder-val="{{ false }}"><span style="font-size:13.5px;color:#8A7F6D;font-weight:600;">{{ bestLabel }}</span></sc-if>
     </div>
+    <sc-if value="{{ hasMastery }}" hint-placeholder-val="{{ false }}">
+     <div style="margin-top:16px;background:#FBF9F3;border:1px solid #E4DCCB;border-radius:16px;padding:19px 21px;">
+      <div style="font:600 12px 'Public Sans';letter-spacing:.1em;text-transform:uppercase;color:#8A7F6D;margin-bottom:15px;">Twoje opanowanie materiału</div>
+      <sc-for list="{{ mastery }}" as="m" hint-placeholder-count="3">
+       <div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;font:600 13px 'Public Sans';margin-bottom:5px;"><span>{{ m.label }}</span><span style="{{ m.pctStyle }}">{{ m.pct }}</span></div>
+        <div style="height:7px;background:#E7DFCE;border-radius:5px;overflow:hidden;"><div style="{{ m.barStyle }}"></div></div>
+       </div>
+      </sc-for>
+     </div>
+    </sc-if>
+    <div style="text-align:center;margin-top:14px;"><button onClick="{{ onClear }}" style="background:none;border:none;color:#B0A594;font-size:12.5px;cursor:pointer;text-decoration:underline;">Wyczyść zapisany postęp</button></div>
    </div>
   </sc-if>
 
   <sc-if value="{{ isQuiz }}" hint-placeholder-val="{{ false }}">
    <div style="animation:qfade .3s ease;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:10px;">
-     <button onClick="{{ onQuit }}" style="background:none;border:none;color:#7C8499;font:600 14px 'Space Grotesk';cursor:pointer;padding:6px 0;transition:color .15s ease, transform .15s ease;" style-hover="color:#C3C6FF;transform:translateX(-3px);">‹ Zakończ</button>
+     <button onClick="{{ onQuit }}" style="background:none;border:none;color:#8A7F6D;font:600 14px 'Public Sans';cursor:pointer;padding:6px 0;">‹ Zakończ</button>
      <div style="display:flex;gap:8px;align-items:center;">
-      <span style="padding:5px 11px;border-radius:8px;background:#222840;color:#A9B2CC;font:600 12px 'Space Grotesk';">{{ dzialLabel }}</span>
+      <span style="padding:5px 11px;border-radius:8px;background:#EDE6D6;color:#6C6250;font:600 12px 'Public Sans';">{{ dzialLabel }}</span>
       <span style="{{ poziomBadgeStyle }}">{{ poziomLabel }}</span>
      </div>
     </div>
     <sc-if value="{{ showProgress }}" hint-placeholder-val="{{ true }}">
-     <div style="display:flex;justify-content:space-between;align-items:center;font:600 13px 'Space Grotesk';color:#97A0B5;margin-bottom:8px;"><span>{{ counterLabel }}</span><span style="display:flex;gap:8px;align-items:center;"><sc-if value="{{ showStreak }}" hint-placeholder-val="{{ false }}"><span style="{{ streakStyle }}">{{ streakLabel }}</span></sc-if><span>{{ scoreLabel }}</span></span></div>
-     <div style="height:8px;background:#232938;border-radius:6px;overflow:hidden;margin-bottom:24px;"><div style="{{ progressStyle }}"></div></div>
+     <div style="display:flex;justify-content:space-between;align-items:center;font:600 13px 'Public Sans';color:#7A6F5D;margin-bottom:8px;"><span>{{ counterLabel }}</span><span style="display:flex;gap:8px;align-items:center;"><sc-if value="{{ showStreak }}" hint-placeholder-val="{{ false }}"><span style="{{ streakStyle }}">{{ streakLabel }}</span></sc-if><span>{{ scoreLabel }}</span></span></div>
+     <div style="height:8px;background:#E7DFCE;border-radius:6px;overflow:hidden;margin-bottom:24px;"><div style="{{ progressStyle }}"></div></div>
     </sc-if>
-    <div style="background:#151926;border:1px solid #262D40;border-radius:22px;padding:26px 26px 24px;box-shadow:0 22px 44px -34px rgba(0,0,0,.85);">
-     <div style="font:600 12px 'Space Grotesk';letter-spacing:.08em;text-transform:uppercase;color:#8F82FF;margin-bottom:12px;">{{ typLabel }}</div>
-     <h2 style="font:600 21px/1.5 'Space Grotesk',sans-serif;margin:0 0 20px;color:#EDF0F7;">{{ qText }}</h2>
+    <div style="background:#FBF9F3;border:1px solid #E4DCCB;border-radius:18px;padding:26px 26px 24px;box-shadow:0 22px 44px -34px rgba(38,32,25,.55);">
+     <div style="font:600 12px 'Public Sans';letter-spacing:.08em;text-transform:uppercase;color:#9C7A3C;margin-bottom:12px;">{{ typLabel }}</div>
+     <h2 style="font:600 22px/1.38 'Spectral',serif;margin:0 0 20px;">{{ qText }}</h2>
      <div style="display:flex;flex-direction:column;gap:10px;">
       <sc-for list="{{ opts }}" as="o" hint-placeholder-count="4">
-       <button onClick="{{ o.onClick }}" style="{{ o.style }}" style-hover="{{ o.hover }}" style-active="{{ o.press }}"><span style="{{ o.markStyle }}">{{ o.mark }}</span><span style="flex:1;">{{ o.text }}</span></button>
+       <button onClick="{{ o.onClick }}" style="{{ o.style }}"><span style="{{ o.markStyle }}">{{ o.mark }}</span><span style="flex:1;">{{ o.text }}</span></button>
       </sc-for>
      </div>
-     <sc-if value="{{ showKbdHint }}" hint-placeholder-val="{{ true }}"><div style="margin-top:14px;font-size:12px;color:#626C84;text-align:center;">Klawisze 1–4 wybierają odpowiedź · Enter przechodzi dalej</div></sc-if>
+     <sc-if value="{{ showKbdHint }}" hint-placeholder-val="{{ true }}"><div style="margin-top:14px;font-size:12px;color:#B0A594;text-align:center;">Klawisze 1–4 wybierają odpowiedź · Enter przechodzi dalej</div></sc-if>
      <sc-if value="{{ showCheck }}" hint-placeholder-val="{{ false }}">
-      <button onClick="{{ onCheck }}" style="margin-top:16px;width:100%;padding:14px;border:none;border-radius:13px;background:#6C5AF5;color:#fff;font:700 15px 'Space Grotesk';cursor:pointer;box-shadow:0 12px 26px -14px rgba(124,108,255,.6);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;" style-hover="transform:translateY(-2px);box-shadow:0 18px 38px -14px rgba(124,108,255,.85);filter:brightness(1.08);" style-active="transform:translateY(0) scale(.985);filter:brightness(.96);">Sprawdź odpowiedź</button>
+      <button onClick="{{ onCheck }}" style="margin-top:16px;width:100%;padding:14px;border:none;border-radius:12px;background:#22406A;color:#fff;font:700 15px 'Public Sans';cursor:pointer;">Sprawdź odpowiedź</button>
      </sc-if>
      <sc-if value="{{ answered }}" hint-placeholder-val="{{ false }}">
       <div style="{{ feedbackStyle }}">
        <div style="{{ feedbackTitleStyle }}">{{ feedbackTitle }}</div>
-       <sc-if value="{{ showExpl }}" hint-placeholder-val="{{ true }}"><div style="font-size:14.5px;line-height:1.55;color:#C6CCDC;">{{ explanation }}</div></sc-if>
+       <sc-if value="{{ showExpl }}" hint-placeholder-val="{{ true }}"><div style="font-size:14.5px;line-height:1.55;color:#4A4132;">{{ explanation }}</div></sc-if>
       </div>
-      <button onClick="{{ onNext }}" style="margin-top:16px;width:100%;padding:15px;border:none;border-radius:13px;background:linear-gradient(135deg,#8F82FF,#6C5AF5);color:#fff;font:700 15px 'Space Grotesk';cursor:pointer;box-shadow:0 12px 26px -14px rgba(124,108,255,.6);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;" style-hover="transform:translateY(-2px);box-shadow:0 18px 38px -14px rgba(124,108,255,.85);filter:brightness(1.07);" style-active="transform:translateY(0) scale(.985);filter:brightness(.96);">{{ nextLabel }}</button>
+      <button onClick="{{ onNext }}" style="margin-top:16px;width:100%;padding:15px;border:none;border-radius:12px;background:#2E5A8F;color:#fff;font:700 15px 'Public Sans';cursor:pointer;">{{ nextLabel }}</button>
      </sc-if>
     </div>
    </div>
@@ -92,27 +105,27 @@ button{font-family:inherit;}
 
   <sc-if value="{{ isEnd }}" hint-placeholder-val="{{ false }}">
    <div style="text-align:center;animation:qfade .4s ease;padding-top:16px;">
-    <div style="font:600 12px 'Space Grotesk';letter-spacing:.18em;text-transform:uppercase;color:#8F82FF;margin-bottom:20px;">Wynik sesji</div>
+    <div style="font:600 12px 'Public Sans';letter-spacing:.18em;text-transform:uppercase;color:#9C7A3C;margin-bottom:20px;">Wynik sesji</div>
     <div style="{{ endRingStyle }}">
      <div style="{{ endNumStyle }}">{{ endPct }}</div>
-     <div style="font-size:13px;color:#97A0B5;margin-top:6px;">{{ endScoreLabel }}</div>
+     <div style="font-size:13px;color:#7A6F5D;margin-top:6px;">{{ endScoreLabel }}</div>
     </div>
-    <h2 style="font:600 23px 'Unbounded',sans-serif;margin:0 0 10px;color:#EDF0F7;">{{ endTitle }}</h2>
-    <p style="color:#97A0B5;max-width:450px;margin:0 auto 22px;line-height:1.55;">{{ endMsg }}</p>
+    <h2 style="font:600 27px 'Spectral',serif;margin:0 0 8px;">{{ endTitle }}</h2>
+    <p style="color:#7A6F5D;max-width:450px;margin:0 auto 22px;line-height:1.55;">{{ endMsg }}</p>
     <sc-if value="{{ hasBreakdown }}" hint-placeholder-val="{{ false }}">
-     <div style="max-width:430px;margin:0 auto 26px;text-align:left;background:#151926;border:1px solid #262D40;border-radius:15px;padding:19px 21px;">
-      <div style="font:600 12px 'Space Grotesk';letter-spacing:.1em;text-transform:uppercase;color:#7C8499;margin-bottom:15px;">Wyniki według działów</div>
+     <div style="max-width:430px;margin:0 auto 26px;text-align:left;background:#FBF9F3;border:1px solid #E4DCCB;border-radius:15px;padding:19px 21px;">
+      <div style="font:600 12px 'Public Sans';letter-spacing:.1em;text-transform:uppercase;color:#8A7F6D;margin-bottom:15px;">Wyniki według działów</div>
       <sc-for list="{{ breakdown }}" as="b" hint-placeholder-count="3">
        <div style="margin-bottom:13px;">
-        <div style="display:flex;justify-content:space-between;font:600 13.5px 'Space Grotesk';margin-bottom:5px;"><span>{{ b.label }}</span><span style="{{ b.pctStyle }}">{{ b.scoreLabel }}</span></div>
-        <div style="height:7px;background:#232938;border-radius:5px;overflow:hidden;"><div style="{{ b.barStyle }}"></div></div>
+        <div style="display:flex;justify-content:space-between;font:600 13.5px 'Public Sans';margin-bottom:5px;"><span>{{ b.label }}</span><span style="{{ b.pctStyle }}">{{ b.scoreLabel }}</span></div>
+        <div style="height:7px;background:#E7DFCE;border-radius:5px;overflow:hidden;"><div style="{{ b.barStyle }}"></div></div>
        </div>
       </sc-for>
      </div>
     </sc-if>
     <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-     <sc-if value="{{ hasWrong }}" hint-placeholder-val="{{ false }}"><button onClick="{{ onRetryWrong }}" style="padding:14px 22px;border:none;border-radius:13px;background:linear-gradient(135deg,#8F82FF,#6C5AF5);color:#fff;font:700 15px 'Space Grotesk';cursor:pointer;box-shadow:0 12px 26px -14px rgba(124,108,255,.6);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;" style-hover="transform:translateY(-2px);box-shadow:0 18px 38px -14px rgba(124,108,255,.85);filter:brightness(1.07);" style-active="transform:translateY(0) scale(.985);filter:brightness(.96);">{{ retryLabel }}</button></sc-if>
-     <button onClick="{{ onRestart }}" style="padding:14px 22px;border:1.5px solid #7C6CFF;border-radius:13px;background:#1A1F30;color:#C3C6FF;font:700 15px 'Space Grotesk';cursor:pointer;transition:transform .18s ease, background .18s ease, border-color .18s ease;" style-hover="background:#232A4A;border-color:#8F82FF;transform:translateY(-2px);" style-active="transform:translateY(0) scale(.985);">Do menu</button>
+     <sc-if value="{{ hasWrong }}" hint-placeholder-val="{{ false }}"><button onClick="{{ onRetryWrong }}" style="padding:14px 22px;border:none;border-radius:12px;background:#2E5A8F;color:#fff;font:700 15px 'Public Sans';cursor:pointer;">{{ retryLabel }}</button></sc-if>
+     <button onClick="{{ onRestart }}" style="padding:14px 22px;border:1.5px solid #2E5A8F;border-radius:12px;background:#fff;color:#22406A;font:700 15px 'Public Sans';cursor:pointer;">Do menu</button>
     </div>
    </div>
   </sc-if>
@@ -123,38 +136,12 @@ button{font-family:inherit;}
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:780},&quot;shuffleAnswers&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Zachowanie quizu&quot;},&quot;showExplanations&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Zachowanie quizu&quot;},&quot;showProgressBar&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Wygląd&quot;}}">
 class Component extends DCLogic {
   state = { screen:'start', scope:'all', length:'20', order:[], pos:0, score:0, selected:[], answered:false, wrongIdx:[], resumable:null, streak:0, bestStreak:0, results:[] };
-  bgCanvas = React.createRef();
 
   componentDidMount(){
     try{ const s=JSON.parse(localStorage.getItem('quizmkt_session')||'null'); if(s&&s.order&&s.order.length&&s.pos<s.order.length){ this.setState({resumable:s}); } }catch(e){}
     this._onKey=(e)=>this.handleKey(e); window.addEventListener('keydown',this._onKey);
-    this.startParticles();
   }
-  componentWillUnmount(){
-    if(this._onKey) window.removeEventListener('keydown',this._onKey);
-    if(this._raf) cancelAnimationFrame(this._raf);
-    if(this._onResize) window.removeEventListener('resize',this._onResize);
-  }
-
-  startParticles(){
-    const c=this.bgCanvas&&this.bgCanvas.current; if(!c||this._raf) return;
-    const ctx=c.getContext('2d'); const DPR=Math.min(window.devicePixelRatio||1,2); let W=0,H=0;
-    const resize=()=>{ W=window.innerWidth; H=window.innerHeight; c.width=W*DPR; c.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0); };
-    resize(); this._onResize=resize; window.addEventListener('resize',resize);
-    const N=Math.max(35,Math.min(85,Math.round(W*H/18000)));
-    const P=[]; for(let i=0;i<N;i++){ P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.32,vy:(Math.random()-.5)*.32,r:Math.random()*1.6+.6,tw:Math.random()*6.283}); }
-    const LINK=130;
-    const step=()=>{
-      ctx.clearRect(0,0,W,H);
-      for(const p of P){ p.x+=p.vx; p.y+=p.vy; p.tw+=.018; if(p.x<-20)p.x=W+20; if(p.x>W+20)p.x=-20; if(p.y<-20)p.y=H+20; if(p.y>H+20)p.y=-20; }
-      ctx.lineWidth=1;
-      for(let i=0;i<P.length;i++){ for(let j=i+1;j<P.length;j++){ const a=P[i],b=P[j],dx=a.x-b.x,dy=a.y-b.y,d2=dx*dx+dy*dy;
-        if(d2<LINK*LINK){ const al=(1-Math.sqrt(d2)/LINK)*.13; ctx.strokeStyle='rgba(140,130,255,'+al.toFixed(3)+')'; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); } } }
-      for(const p of P){ const al=.32+Math.sin(p.tw)*.22; ctx.fillStyle='rgba(160,150,255,'+al.toFixed(3)+')'; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.283); ctx.fill(); }
-      this._raf=requestAnimationFrame(step);
-    };
-    this._raf=requestAnimationFrame(step);
-  }
+  componentWillUnmount(){ if(this._onKey) window.removeEventListener('keydown',this._onKey); }
 
   handleKey(e){
     if(this.state.screen!=='quiz') return; const q=this.curQ(); if(!q) return;
@@ -163,7 +150,7 @@ class Component extends DCLogic {
     const n=parseInt(e.key,10); if(!isNaN(n)&&n>=1&&n<=order.length){ e.preventDefault(); this.pick(order[n-1]); }
   }
 
-  C(){ return { ink:'#EDF0F7', muted:'#97A0B5', line:'#2A3145', ok:'#3CCB7F', okBg:'#142A1F', bad:'#FF6B6B', badBg:'#2C1A1C', brand:'#7C6CFF' }; }
+  C(){ return { ink:'#262019', muted:'#7A6F5D', line:'#E0D7C4', ok:'#2E7D57', okBg:'#E7F1EA', bad:'#C0492E', badBg:'#F6E7E1', brand:'#2E5A8F' }; }
 
   bank(){ if(!this._b) this._b=this.buildBank(); return this._b; }
 
@@ -174,15 +161,10 @@ class Component extends DCLogic {
   optOrderFor(q){ if(!q) return []; if(q.t==='tf' || this.props.shuffleAnswers===false) return q.a.map((_,i)=>i); return this.shuffle(q.a.map((_,i)=>i)); }
 
   dzialLabel(k){ return ({'W1-2':'Geneza i trendy','W3':'Zachowania nabywców','W4':'Badania','W5-6':'Produkt i cena','Promocja':'Promocja'})[k]||k; }
-  pozInfo(p){ return [null,{t:'łatwe',c:'#3CCB7F',bg:'#142A1F'},{t:'średnie',c:'#E8C766',bg:'#2A2415'},{t:'trudne',c:'#FF6B6B',bg:'#2C1A1C'}][p]||{t:'',c:'#97A0B5',bg:'#222840'}; }
+  pozInfo(p){ return [null,{t:'łatwe',c:'#2E7D57',bg:'#E7F1EA'},{t:'średnie',c:'#9A6B1A',bg:'#F3EBD8'},{t:'trudne',c:'#C0492E',bg:'#F6E7E1'}][p]||{t:'',c:'#7A6F5D',bg:'#EDE6D6'}; }
 
-  scopeCard(a){ return {padding:'14px 15px 12px',borderRadius:'16px',border:'1px solid '+(a?'#8F82FF':'#262D40'),background:a?'linear-gradient(160deg,rgba(124,108,255,.30),rgba(124,108,255,.08))':'#171B2A',color:a?'#EDF0F7':'#B9C0D4',cursor:'pointer',textAlign:'left',display:'flex',flexDirection:'column',gap:'5px',font:'600 14px "Space Grotesk"',transition:'all .18s ease',boxShadow:a?'0 12px 30px -16px rgba(124,108,255,.6)':'none'}; }
-  scopeCount(a){ return {font:'500 12px "Space Grotesk"',color:a?'#C9CBFF':'#626C84'}; }
-  scopeHover(a){ return a?{transform:'translateY(-2px)',filter:'brightness(1.08)'}:{borderColor:'#8F82FF',color:'#EDF0F7',background:'#1D2138',transform:'translateY(-2px)'}; }
-  segStyle(a){ return {flex:'1',padding:'11px 0',borderRadius:'11px',border:'none',background:a?'linear-gradient(135deg,#8F82FF,#6C5AF5)':'transparent',color:a?'#fff':'#97A0B5',font:'600 14px "Space Grotesk"',cursor:'pointer',transition:'all .18s ease',boxShadow:a?'0 8px 20px -10px rgba(124,108,255,.7)':'none'}; }
-  segHover(a){ return a?{filter:'brightness(1.08)'}:{color:'#EDF0F7',background:'#1D2138'}; }
-  plural(n){ if(n===1)return 'pytanie'; const m=n%10,h=n%100; return (m>=2&&m<=4&&!(h>=12&&h<=14))?'pytania':'pytań'; }
-  chipPress(){ return {transform:'translateY(0) scale(.97)'}; }
+  chipStyle(active){ return {padding:'9px 14px',borderRadius:'10px',border:'1.5px solid '+(active?'#2E5A8F':'#E0D7C4'),background:active?'#2E5A8F':'#F1EBDD',color:active?'#fff':'#3A3226',font:'600 13.5px "Public Sans"',cursor:'pointer',display:'inline-flex',alignItems:'center',gap:'8px'}; }
+  countStyle(active){ return {fontSize:'11.5px',fontWeight:'700',padding:'1px 8px',borderRadius:'20px',background:active?'rgba(255,255,255,.25)':'#E4DCCB',color:active?'#fff':'#7A6F5D'}; }
 
   start(scope,length){
     let idx=this.shuffle(this.filtered(scope));
@@ -218,33 +200,31 @@ class Component extends DCLogic {
   retryWrong(){ const order=this.shuffle(this.state.wrongIdx.slice()); if(!order.length){ this.toStart(); return; } this._optOrder=this.optOrderFor(this.bank()[order[0]]); this.setState({screen:'quiz',order,pos:0,score:0,selected:[],answered:false,wrongIdx:[],streak:0,bestStreak:0,results:[]}); }
   toStart(){ this.setState({screen:'start'}); }
   clearProgress(){ try{ localStorage.removeItem('quizmkt_session'); localStorage.removeItem('quizmkt_best'); localStorage.removeItem('quizmkt_last'); localStorage.removeItem('quizmkt_mastery'); }catch(e){} this.setState({resumable:null}); }
-  pctColor(p){ return p>=80?'#3CCB7F':(p>=50?'#E8C766':'#FF6B6B'); }
+  pctColor(p){ return p>=80?'#2E7D57':(p>=50?'#9A6B1A':'#C0492E'); }
 
   optView(){
     const C=this.C(); const q=this.curQ(); const order=this._optOrder&&this._optOrder.length?this._optOrder:q.a.map((_,i)=>i);
     const ans=this.state.answered; const sel=this.state.selected; const isMulti=q.t==='multi'; const letters=['A','B','C','D','E','F','G'];
     return order.map((oi,pos)=>{
       const o=q.a[oi]; const chosen=sel.indexOf(oi)>=0; const correct=o[1]===1;
-      let bd='#2A3145', bg='#171B2A', col=C.ink, mbg='#232A3E', mcol='#97A0B5', mark=letters[pos];
-      if(!ans){ if(chosen){ bd=C.brand; bg='#1D2138'; mbg=C.brand; mcol='#fff'; } }
-      else { if(correct){ bd=C.ok; bg=C.okBg; mbg=C.ok; mcol='#0E1A13'; mark='✓'; } else if(chosen){ bd=C.bad; bg=C.badBg; mbg=C.bad; mcol='#2A1113'; mark='✗'; col='#8B94A9'; } else { col='#6E7891'; bd='#222738'; } }
-      const style={display:'flex',alignItems:'center',gap:'13px',width:'100%',textAlign:'left',padding:'15px 16px',borderRadius:'13px',border:'1.5px solid '+bd,background:bg,color:col,font:'500 15.5px/1.45 "Space Grotesk"',cursor:(ans&&!isMulti)?'default':'pointer',transition:'all .12s',boxShadow:(!ans&&chosen)?'0 4px 16px -6px rgba(124,108,255,.55)':'none'};
+      let bd='#E0D7C4', bg='#FFFFFF', col=C.ink, mbg='#EFE9DA', mcol='#8A7F6D', mark=letters[pos];
+      if(!ans){ if(chosen){ bd=C.brand; bg='#EEF3FA'; mbg=C.brand; mcol='#fff'; } }
+      else { if(correct){ bd=C.ok; bg=C.okBg; mbg=C.ok; mcol='#fff'; mark='✓'; } else if(chosen){ bd=C.bad; bg=C.badBg; mbg=C.bad; mcol='#fff'; mark='✗'; col='#6b5f50'; } else { col='#9c9384'; bd='#E7E0D0'; } }
+      const style={display:'flex',alignItems:'center',gap:'13px',width:'100%',textAlign:'left',padding:'15px 16px',borderRadius:'13px',border:'1.5px solid '+bd,background:bg,color:col,font:'500 15.5px/1.45 "Public Sans"',cursor:(ans&&!isMulti)?'default':'pointer',transition:'all .12s',boxShadow:(!ans&&chosen)?'0 3px 12px -7px rgba(46,90,143,.6)':'none'};
       if(ans && correct) style.animation='popIn .32s ease'; else if(ans && chosen && !correct) style.animation='shakeX .35s ease';
-      const markStyle={flex:'0 0 auto',width:'27px',height:'27px',borderRadius:(isMulti&&!ans)?'7px':'50%',background:mbg,color:mcol,display:'flex',alignItems:'center',justifyContent:'center',font:'700 13px "Space Grotesk"'};
-      const canHover=!ans||isMulti&&!ans; const hover=canHover?{borderColor:C.brand,background:'#1A2036',transform:'translateY(-2px)',boxShadow:'0 10px 24px -12px rgba(124,108,255,.55)'}:{};
-      const press=canHover?{transform:'translateY(0) scale(.99)'}:{};
-      return {text:o[0],mark,style,markStyle,hover,press,onClick:()=>this.pick(oi)};
+      const markStyle={flex:'0 0 auto',width:'27px',height:'27px',borderRadius:(isMulti&&!ans)?'7px':'50%',background:mbg,color:mcol,display:'flex',alignItems:'center',justifyContent:'center',font:'700 13px "Public Sans"'};
+      return {text:o[0],mark,style,markStyle,onClick:()=>this.pick(oi)};
     });
   }
 
   renderVals(){
     const C=this.C(); const s=this.state; const scr=s.screen;
-    const base={ isStart:scr==='start', isQuiz:scr==='quiz', isEnd:scr==='end', bgCanvas:this.bgCanvas };
+    const base={ isStart:scr==='start', isQuiz:scr==='quiz', isEnd:scr==='end' };
     if(scr==='start'){
       const scopes=[['all','Wszystkie'],['W1-2','Geneza i trendy'],['W3','Zachowania nabywców'],['W4','Badania'],['W5-6','Produkt i cena'],['Promocja','Promocja']];
-      const dzialChips=scopes.map(x=>{ const n=this.filtered(x[0]).length; const act=s.scope===x[0]; return {label:x[1],count:n+' '+this.plural(n),style:this.scopeCard(act),countStyle:this.scopeCount(act),hover:this.scopeHover(act),press:this.chipPress(),onClick:()=>this.setState({scope:x[0]})};});
+      const dzialChips=scopes.map(x=>({label:x[1],count:this.filtered(x[0]).length,style:this.chipStyle(s.scope===x[0]),countStyle:this.countStyle(s.scope===x[0]),onClick:()=>this.setState({scope:x[0]})}));
       const lens=[['10','10'],['20','20'],['40','40'],['all','Wszystkie']];
-      const lengthChips=lens.map(x=>({label:x[1],style:this.segStyle(s.length===x[0]),hover:this.segHover(s.length===x[0]),press:this.chipPress(),onClick:()=>this.setState({length:x[0]})}));
+      const lengthChips=lens.map(x=>({label:x[1],style:this.chipStyle(s.length===x[0]),onClick:()=>this.setState({length:x[0]})}));
       const pool=this.filtered(s.scope).length;
       let best=null; try{best=JSON.parse(localStorage.getItem('quizmkt_best')||'null');}catch(e){}
       let mst={}; try{mst=JSON.parse(localStorage.getItem('quizmkt_mastery')||'{}');}catch(e){}
@@ -266,21 +246,21 @@ class Component extends DCLogic {
       const q=this.curQ(); const total=s.order.length; const pct=Math.round(s.pos/total*100);
       const poz=this.pozInfo(q.p); const ok=s.answered?this.wasCorrect():false; const isLast=s.pos===total-1;
       const typLabel=q.t==='single'?'Jedna poprawna odpowiedź':(q.t==='multi'?'Zaznacz wszystkie poprawne':'Prawda czy fałsz');
-      const st=s.streak; const streakStyle={padding:'2px 10px',borderRadius:'20px',font:'700 12px "Space Grotesk"',background: st>=5?'#2E2A18':'#142A1F',color: st>=5?'#F5D97B':'#3CCB7F'};
+      const st=s.streak; const streakStyle={padding:'2px 10px',borderRadius:'20px',font:'700 12px "Public Sans"',background: st>=5?'#F3E6C9':'#E7F1EA',color: st>=5?'#8A6516':'#2E7D57'};
       return Object.assign(base,{
         onQuit:()=>this.toStart(),
         showProgress:this.props.showProgressBar!==false,
         showStreak: st>=2, streakLabel:'Seria: '+st, streakStyle,
         showKbdHint: !s.answered,
         dzialLabel:this.dzialLabel(q.d),
-        poziomLabel:poz.t, poziomBadgeStyle:{padding:'5px 11px',borderRadius:'8px',background:poz.bg,color:poz.c,font:'600 12px "Space Grotesk"'},
+        poziomLabel:poz.t, poziomBadgeStyle:{padding:'5px 11px',borderRadius:'8px',background:poz.bg,color:poz.c,font:'600 12px "Public Sans"'},
         counterLabel:'Pytanie '+(s.pos+1)+' / '+total, scoreLabel:'Punkty: '+s.score,
         progressStyle:{height:'100%',width:pct+'%',background:C.brand,borderRadius:'6px',transition:'width .3s'},
         typLabel, qText:q.q, opts:this.optView(),
         showCheck: q.t==='multi' && !s.answered, onCheck:()=>this.check(),
         answered:s.answered, showExpl:this.props.showExplanations!==false,
         feedbackStyle:{marginTop:'18px',padding:'15px 17px',borderRadius:'13px',background: ok?C.okBg:C.badBg,border:'1px solid '+(ok?C.ok:C.bad)},
-        feedbackTitleStyle:{font:'700 15px "Space Grotesk"',margin:'0 0 6px',color: ok?C.ok:C.bad},
+        feedbackTitleStyle:{font:'700 15px "Public Sans"',margin:'0 0 6px',color: ok?C.ok:C.bad},
         feedbackTitle: ok?'Dobrze!':'Niepoprawnie', explanation:q.e,
         onNext:()=>this.next(), nextLabel: isLast?'Zakończ i zobacz wynik':'Następne pytanie'
       });
@@ -289,15 +269,15 @@ class Component extends DCLogic {
     const total=last?last.total:0, score=last?last.score:0, pct=last?last.pct:0;
     const hasWrong=s.wrongIdx.length>0;
     let title,msg; if(pct>=85){title='Świetnie!';msg='Rewelacyjny wynik — materiał opanowany bardzo dobrze.';} else if(pct>=60){title='Dobra robota';msg='Solidnie. Powtórz błędne pytania, żeby dopiąć resztę.';} else {title='Jeszcze chwila nauki';msg='Warto powtórzyć materiał i spróbować ponownie.';}
-    const ring= pct>=85?C.ok:(pct>=60?'#E8C766':C.bad);
+    const ring= pct>=85?C.ok:(pct>=60?'#9A6B1A':C.bad);
     const byD={}; s.results.forEach(r=>{ (byD[r.d]=byD[r.d]||{c:0,t:0}); byD[r.d].t++; if(r.ok)byD[r.d].c++; });
     const bOrder=[['W1-2','Geneza i trendy'],['W3','Zachowania nabywców'],['W4','Badania'],['W5-6','Produkt i cena'],['Promocja','Promocja']];
     const breakdown=bOrder.filter(x=>byD[x[0]]).map(x=>{ const o=byD[x[0]]; const p=Math.round(o.c/o.t*100); const col=this.pctColor(p); return {label:x[1],scoreLabel:o.c+'/'+o.t+' · '+p+'%',pctStyle:{color:col,fontWeight:'700'},barStyle:{height:'100%',width:p+'%',background:col,borderRadius:'5px',transition:'width .4s'}}; });
     return Object.assign(base,{
       hasBreakdown: breakdown.length>0, breakdown,
       endPct:pct+'%', endScoreLabel:score+' / '+total+' poprawnych',
-      endRingStyle:{width:'184px',height:'184px',margin:'0 auto 24px',borderRadius:'50%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',border:'4px solid '+ring,background:'#151926',boxShadow:'0 28px 56px -36px rgba(0,0,0,.85)'},
-      endNumStyle:{font:'700 40px "Unbounded",sans-serif',color:ring,lineHeight:'1'},
+      endRingStyle:{width:'184px',height:'184px',margin:'0 auto 24px',borderRadius:'50%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',border:'4px solid '+ring,background:'#FBF9F3',boxShadow:'0 20px 40px -30px rgba(38,32,25,.5)'},
+      endNumStyle:{font:'700 54px "Spectral",serif',color:ring,lineHeight:'1'},
       endTitle:title, endMsg:msg,
       hasWrong, retryLabel:'Powtórz błędne ('+s.wrongIdx.length+')', onRetryWrong:()=>this.retryWrong(), onRestart:()=>this.toStart()
     });
