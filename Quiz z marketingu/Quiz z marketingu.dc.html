@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
+<!-- Supabase JS v2 (leaderboard). Pinned exact version; exposes window.supabase.createClient -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.0/dist/umd/supabase.min.js"></script>
 </head>
 <body>
 <x-dc>
@@ -30,6 +32,8 @@ button{font-family:inherit;}
      <h1 style="font:700 44px/1.2 'Unbounded',sans-serif;margin:0;letter-spacing:-.015em;color:#EDF0F7;">Quiz<br><span style="background:linear-gradient(90deg,#9A8DFF,#C9CBFF 55%,#8F82FF);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">z marketingu</span></h1>
     </div>
     <div style="background:rgba(21,25,38,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(124,108,255,.22);border-radius:26px;padding:28px;box-shadow:0 30px 80px -40px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.05);">
+     <div style="font:600 11.5px 'Space Grotesk';color:#7C8499;text-transform:uppercase;letter-spacing:.16em;margin-bottom:13px;">Twój nick</div>
+     <input value="{{ nick }}" onChange="{{ onNick }}" maxLength="40" placeholder="Wpisz swój nick, aby trafić do rankingu" spellCheck="false" autoComplete="off" style="width:100%;padding:14px 15px;margin-bottom:26px;border-radius:14px;border:1px solid #262D40;background:#10141F;color:#EDF0F7;font:600 15px 'Space Grotesk';outline:none;transition:border-color .18s ease, box-shadow .18s ease;" style-focus="border-color:#8F82FF;box-shadow:0 0 0 3px rgba(124,108,255,.18);" />
      <div style="font:600 11.5px 'Space Grotesk';color:#7C8499;text-transform:uppercase;letter-spacing:.16em;margin-bottom:13px;">Zakres materiału</div>
      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:26px;">
       <sc-for list="{{ dzialChips }}" as="c" hint-placeholder-count="6">
@@ -47,9 +51,47 @@ button{font-family:inherit;}
       <button onClick="{{ onResume }}" style="width:100%;margin-top:10px;padding:15px;border:1px solid rgba(124,108,255,.45);border-radius:99px;background:rgba(124,108,255,.08);color:#C3C6FF;font:600 15px 'Space Grotesk';cursor:pointer;transition:transform .18s ease, background .18s ease, border-color .18s ease;" style-hover="background:rgba(124,108,255,.18);border-color:#8F82FF;transform:translateY(-2px);" style-active="transform:translateY(0) scale(.985);">{{ resumeLabel }}</button>
      </sc-if>
     </div>
+    <sc-if value="{{ hasHistory }}" hint-placeholder-val="{{ false }}">
+     <div style="margin-top:18px;background:rgba(21,25,38,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid #262D40;border-radius:20px;padding:20px 22px;">
+      <div style="font:600 11.5px 'Space Grotesk';color:#7C8499;text-transform:uppercase;letter-spacing:.16em;margin-bottom:13px;">Ostatnie wyniki</div>
+      <div style="display:flex;flex-direction:column;gap:9px;">
+       <sc-for list="{{ historyItems }}" as="h" hint-placeholder-count="3">
+        <div style="display:flex;align-items:center;gap:10px;font:500 13.5px 'Space Grotesk';color:#B9C0D4;">
+         <span style="color:#626C84;flex:0 0 96px;">{{ h.dateLabel }}</span>
+         <span style="padding:2px 9px;border-radius:7px;background:#222840;color:#A9B2CC;font:600 11.5px 'Space Grotesk';">{{ h.modeLabel }}</span>
+         <span style="flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ h.scopeLabel }}</span>
+         <span style="color:#7C8499;">{{ h.scoreLabel }}</span>
+         <span style="{{ h.pctStyle }}">{{ h.pctLabel }}</span>
+        </div>
+       </sc-for>
+      </div>
+     </div>
+    </sc-if>
+    <sc-if value="{{ hasLeaderboard }}" hint-placeholder-val="{{ false }}">
+     <div style="margin-top:18px;background:#151926;border:1px solid #262D40;border-radius:18px;padding:19px 21px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;">
+       <div style="font:600 12px 'Space Grotesk';letter-spacing:.1em;text-transform:uppercase;color:#7C8499;">Ranking — top 10</div>
+       <span style="font:600 10.5px 'Space Grotesk';letter-spacing:.08em;text-transform:uppercase;color:#3CCB7F;display:flex;align-items:center;gap:6px;"><span style="width:7px;height:7px;border-radius:50%;background:#3CCB7F;display:inline-block;box-shadow:0 0 8px #3CCB7F;"></span>Live</span>
+      </div>
+      <sc-if value="{{ lbHasRows }}" hint-placeholder-val="{{ true }}">
+       <div style="display:flex;flex-direction:column;gap:2px;">
+        <sc-for list="{{ leaderboard }}" as="r" hint-placeholder-count="5">
+         <div style="{{ r.rowStyle }}"><span style="{{ r.rankStyle }}">{{ r.rank }}</span><span style="{{ r.nameStyle }}">{{ r.name }}</span><span style="{{ r.scopeStyle }}">{{ r.scopeLabel }}</span><span style="{{ r.scoreStyle }}">{{ r.scoreLabel }}</span><span style="{{ r.pctStyle }}">{{ r.pct }}</span><span style="{{ r.dateStyle }}">{{ r.dateLabel }}</span></div>
+        </sc-for>
+       </div>
+      </sc-if>
+      <sc-if value="{{ lbLoading }}" hint-placeholder-val="{{ false }}"><div style="font:500 13px 'Space Grotesk';color:#626C84;padding:6px 2px;">Ładowanie rankingu…</div></sc-if>
+      <sc-if value="{{ lbEmpty }}" hint-placeholder-val="{{ false }}"><div style="font:500 13px 'Space Grotesk';color:#626C84;padding:6px 2px;">Brak wyników — bądź pierwszy na liście!</div></sc-if>
+     </div>
+    </sc-if>
     <div style="display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:20px;">
      <span style="font-size:13.5px;color:#7C8499;">{{ poolLabel }}</span>
-     <button onClick="{{ onClear }}" style="background:none;border:none;color:#626C84;font-size:12.5px;cursor:pointer;text-decoration:underline;transition:color .15s ease;" style-hover="color:#C3C6FF;">Wyczyść zapisany postęp</button>
+     <div style="display:flex;gap:18px;">
+      <button onClick="{{ onClear }}" style="background:none;border:none;color:#626C84;font-size:12.5px;cursor:pointer;text-decoration:underline;transition:color .15s ease;" style-hover="color:#C3C6FF;">Wyczyść zapisany postęp</button>
+      <sc-if value="{{ hasHistory }}" hint-placeholder-val="{{ false }}">
+       <button onClick="{{ onClearHistory }}" style="background:none;border:none;color:#626C84;font-size:12.5px;cursor:pointer;text-decoration:underline;transition:color .15s ease;" style-hover="color:#C3C6FF;">Wyczyść historię</button>
+      </sc-if>
+     </div>
     </div>
    </div>
   </sc-if>
@@ -83,6 +125,7 @@ button{font-family:inherit;}
       <div style="{{ feedbackStyle }}">
        <div style="{{ feedbackTitleStyle }}">{{ feedbackTitle }}</div>
        <sc-if value="{{ showExpl }}" hint-placeholder-val="{{ true }}"><div style="font-size:14.5px;line-height:1.55;color:#C6CCDC;">{{ explanation }}</div></sc-if>
+       <sc-if value="{{ hasLink }}" hint-placeholder-val="{{ false }}"><a href="{{ qLink }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:11px;color:#8F82FF;font:600 13.5px 'Space Grotesk';text-decoration:none;transition:color .15s ease;" style-hover="color:#C9CBFF;text-decoration:underline;">{{ qLinkLabel }} ↗</a></sc-if>
       </div>
       <button onClick="{{ onNext }}" style="margin-top:16px;width:100%;padding:15px;border:none;border-radius:13px;background:linear-gradient(135deg,#8F82FF,#6C5AF5);color:#fff;font:700 15px 'Space Grotesk';cursor:pointer;box-shadow:0 12px 26px -14px rgba(124,108,255,.6);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;" style-hover="transform:translateY(-2px);box-shadow:0 18px 38px -14px rgba(124,108,255,.85);filter:brightness(1.07);" style-active="transform:translateY(0) scale(.985);filter:brightness(.96);">{{ nextLabel }}</button>
      </sc-if>
@@ -110,6 +153,39 @@ button{font-family:inherit;}
       </sc-for>
      </div>
     </sc-if>
+    <sc-if value="{{ hasRecent }}" hint-placeholder-val="{{ false }}">
+     <div style="max-width:430px;margin:0 auto 26px;text-align:left;background:#151926;border:1px solid #262D40;border-radius:15px;padding:19px 21px;">
+      <div style="font:600 12px 'Space Grotesk';letter-spacing:.1em;text-transform:uppercase;color:#7C8499;margin-bottom:13px;">Ostatnie wyniki</div>
+      <div style="display:flex;flex-direction:column;gap:9px;">
+       <sc-for list="{{ recentItems }}" as="h" hint-placeholder-count="3">
+        <div style="display:flex;align-items:center;gap:10px;font:500 13.5px 'Space Grotesk';color:#B9C0D4;">
+         <span style="color:#626C84;flex:0 0 96px;">{{ h.dateLabel }}</span>
+         <span style="padding:2px 9px;border-radius:7px;background:#222840;color:#A9B2CC;font:600 11.5px 'Space Grotesk';">{{ h.modeLabel }}</span>
+         <span style="flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ h.scopeLabel }}</span>
+         <span style="color:#7C8499;">{{ h.scoreLabel }}</span>
+         <span style="{{ h.pctStyle }}">{{ h.pctLabel }}</span>
+        </div>
+       </sc-for>
+      </div>
+     </div>
+    </sc-if>
+    <sc-if value="{{ hasLeaderboard }}" hint-placeholder-val="{{ false }}">
+     <div style="max-width:430px;margin:0 auto 26px;text-align:left;background:#151926;border:1px solid #262D40;border-radius:15px;padding:19px 21px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;">
+       <div style="font:600 12px 'Space Grotesk';letter-spacing:.1em;text-transform:uppercase;color:#7C8499;">Ranking — top 10</div>
+       <span style="font:600 10.5px 'Space Grotesk';letter-spacing:.08em;text-transform:uppercase;color:#3CCB7F;display:flex;align-items:center;gap:6px;"><span style="width:7px;height:7px;border-radius:50%;background:#3CCB7F;display:inline-block;box-shadow:0 0 8px #3CCB7F;"></span>Live</span>
+      </div>
+      <sc-if value="{{ lbHasRows }}" hint-placeholder-val="{{ true }}">
+       <div style="display:flex;flex-direction:column;gap:2px;">
+        <sc-for list="{{ leaderboard }}" as="r" hint-placeholder-count="5">
+         <div style="{{ r.rowStyle }}"><span style="{{ r.rankStyle }}">{{ r.rank }}</span><span style="{{ r.nameStyle }}">{{ r.name }}</span><span style="{{ r.scopeStyle }}">{{ r.scopeLabel }}</span><span style="{{ r.scoreStyle }}">{{ r.scoreLabel }}</span><span style="{{ r.pctStyle }}">{{ r.pct }}</span><span style="{{ r.dateStyle }}">{{ r.dateLabel }}</span></div>
+        </sc-for>
+       </div>
+      </sc-if>
+      <sc-if value="{{ lbLoading }}" hint-placeholder-val="{{ false }}"><div style="font:500 13px 'Space Grotesk';color:#626C84;padding:6px 2px;">Ładowanie rankingu…</div></sc-if>
+      <sc-if value="{{ lbEmpty }}" hint-placeholder-val="{{ false }}"><div style="font:500 13px 'Space Grotesk';color:#626C84;padding:6px 2px;">Brak wyników — bądź pierwszy na liście!</div></sc-if>
+     </div>
+    </sc-if>
     <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
      <sc-if value="{{ hasWrong }}" hint-placeholder-val="{{ false }}"><button onClick="{{ onRetryWrong }}" style="padding:14px 22px;border:none;border-radius:13px;background:linear-gradient(135deg,#8F82FF,#6C5AF5);color:#fff;font:700 15px 'Space Grotesk';cursor:pointer;box-shadow:0 12px 26px -14px rgba(124,108,255,.6);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;" style-hover="transform:translateY(-2px);box-shadow:0 18px 38px -14px rgba(124,108,255,.85);filter:brightness(1.07);" style-active="transform:translateY(0) scale(.985);filter:brightness(.96);">{{ retryLabel }}</button></sc-if>
      <button onClick="{{ onRestart }}" style="padding:14px 22px;border:1.5px solid #7C6CFF;border-radius:13px;background:#1A1F30;color:#C3C6FF;font:700 15px 'Space Grotesk';cursor:pointer;transition:transform .18s ease, background .18s ease, border-color .18s ease;" style-hover="background:#232A4A;border-color:#8F82FF;transform:translateY(-2px);" style-active="transform:translateY(0) scale(.985);">Do menu</button>
@@ -121,19 +197,158 @@ button{font-family:inherit;}
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:780},&quot;shuffleAnswers&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Zachowanie quizu&quot;},&quot;showExplanations&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Zachowanie quizu&quot;},&quot;showProgressBar&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Wygląd&quot;}}">
+// --- Konfiguracja Supabase (klucze publiczne, chronione przez RLS — bezpieczne w kliencie) ---
+// Zostaw puste stringi, aby wyłączyć ranking online — quiz działa wtedy w pełni lokalnie.
+const SUPABASE_URL = "https://xjlupiohhihtzhqjgtma.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_35E-8urxsuFV4WqxeUfz0Q_VIrJBJNR";
+
 class Component extends DCLogic {
-  state = { screen:'start', scope:'all', length:'20', order:[], pos:0, score:0, selected:[], answered:false, wrongIdx:[], resumable:null, streak:0, bestStreak:0, results:[] };
+  state = { screen:'start', scope:'all', length:'20', order:[], pos:0, score:0, selected:[], answered:false, wrongIdx:[], resumable:null, streak:0, bestStreak:0, results:[], nick:'', leaderboard:[], lbLoading:false, lastSessionId:null };
   bgCanvas = React.createRef();
 
   componentDidMount(){
     try{ const s=JSON.parse(localStorage.getItem('quizmkt_session')||'null'); if(s&&s.order&&s.order.length&&s.pos<s.order.length){ this.setState({resumable:s}); } }catch(e){}
+    try{ const n=localStorage.getItem('quizmkt_nick'); if(n) this.setState({nick:n}); }catch(e){}
     this._onKey=(e)=>this.handleKey(e); window.addEventListener('keydown',this._onKey);
     this.startParticles();
+    this.initSupabase();
   }
   componentWillUnmount(){
     if(this._onKey) window.removeEventListener('keydown',this._onKey);
     if(this._raf) cancelAnimationFrame(this._raf);
     if(this._onResize) window.removeEventListener('resize',this._onResize);
+    this.unsubscribeLeaderboard();
+  }
+
+  // ---- Supabase / leaderboard ----------------------------------------------
+  // Klucz publishable/anon jest projektowany jako publiczny; dostęp ogranicza RLS.
+  supabaseClient(){
+    if(this._sb) return this._sb;
+    try{
+      if(!SUPABASE_URL || !SUPABASE_ANON_KEY) return null;
+      const g=window.supabase;
+      if(!g || typeof g.createClient!=='function') return null; // CDN jeszcze nie gotowe
+      this._sb=g.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth:{ persistSession:false, autoRefreshToken:false } });
+      return this._sb;
+    }catch(e){ return null; }
+  }
+
+  // Odpala leaderboard + realtime, dając czas na doładowanie skryptu Supabase z CDN.
+  initSupabase(tries){
+    tries=tries||0;
+    const sb=this.supabaseClient();
+    if(!sb){ if(tries<25){ this._sbTimer=setTimeout(()=>this.initSupabase(tries+1),400); } return; }
+    this.loadLeaderboard();
+    this.subscribeLeaderboard();
+  }
+
+  normalizePlayerName(name){
+    if(name==null) return '';
+    let s=String(name).replace(/\s+/g,' ').trim();
+    if(s.length>40) s=s.slice(0,40);
+    return s;
+  }
+
+  onNickInput(e){
+    const v=(e&&e.target)?e.target.value:'';
+    this.setState({nick:v});
+    try{ localStorage.setItem('quizmkt_nick', this.normalizePlayerName(v)); }catch(_){}
+  }
+
+  async loadLeaderboard(){
+    const sb=this.supabaseClient(); if(!sb) return;
+    this.setState({lbLoading:true});
+    try{
+      const { data, error } = await sb
+        .from('quiz_scores')
+        .select('player_name,score,total,percent,scope,session_length,best_streak,created_at')
+        .order('percent',{ ascending:false })
+        .order('score',{ ascending:false })
+        .order('created_at',{ ascending:true })
+        .limit(10);
+      if(error) throw error;
+      this.setState({ leaderboard: Array.isArray(data)?data:[], lbLoading:false });
+    }catch(e){
+      // Cicha degradacja — quiz działa dalej bez rankingu.
+      this.setState({ lbLoading:false });
+    }
+  }
+
+  async submitScore(sessionId){
+    const sb=this.supabaseClient(); if(!sb) return;
+    this._submitted=this._submitted||new Set();
+    if(sessionId && this._submitted.has(sessionId)) return; // brak podwójnego wysłania
+    const name=this.normalizePlayerName(this.state.nick);
+    if(!name) return; // bez nicku nie zapisujemy do rankingu (ale quiz działa)
+    const total=this.state.order.length, score=this.state.score;
+    if(!(total>0) || score<0 || score>total || total>200) return;
+    if(sessionId) this._submitted.add(sessionId);
+    try{
+      const { error } = await sb.from('quiz_scores').insert({
+        player_name:name,
+        score:score,
+        total:total,
+        scope:this.state.scope||'all',
+        session_length:String(this.state.length),
+        best_streak:this.state.bestStreak||0
+      });
+      if(error){ if(sessionId) this._submitted.delete(sessionId); } // pozwól spróbować ponownie
+    }catch(e){ if(sessionId) this._submitted.delete(sessionId); }
+  }
+
+  subscribeLeaderboard(){
+    const sb=this.supabaseClient(); if(!sb || this._lbChannel) return;
+    try{
+      this._lbChannel=sb.channel('public:quiz_scores')
+        .on('postgres_changes', { event:'INSERT', schema:'public', table:'quiz_scores' }, ()=>{
+          clearTimeout(this._lbDebounce);
+          this._lbDebounce=setTimeout(()=>this.loadLeaderboard(),300);
+        })
+        .subscribe();
+    }catch(e){}
+  }
+
+  unsubscribeLeaderboard(){
+    try{ clearTimeout(this._sbTimer); clearTimeout(this._lbDebounce); }catch(_){}
+    try{ if(this._lbChannel){ const sb=this.supabaseClient(); if(sb) sb.removeChannel(this._lbChannel); this._lbChannel=null; } }catch(e){}
+  }
+
+  lbRows(){
+    const list=Array.isArray(this.state.leaderboard)?this.state.leaderboard:[];
+    return list.map((r,i)=>{
+      const rank=i+1;
+      const pct=(r.percent!=null)?r.percent:(r.total?Math.round((r.score/r.total)*100):0);
+      const col=this.pctColor(pct);
+      const medal= rank===1?'#F5D97B':(rank===2?'#C9CBD6':(rank===3?'#E0A87E':'#7C8499'));
+      let dt=''; try{ dt=new Date(r.created_at).toLocaleString('pl-PL',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); }catch(e){}
+      return {
+        rank:String(rank),
+        rankStyle:{flex:'0 0 20px',font:'700 14px "Space Grotesk"',color:medal,textAlign:'center'},
+        name:(r.player_name!=null?String(r.player_name):''),
+        nameStyle:{flex:'1 1 auto',minWidth:'0',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis',font:'600 13.5px "Space Grotesk"',color:'#EDF0F7'},
+        scopeLabel:this.scopeName(r.scope),
+        scopeStyle:{flex:'0 0 auto',padding:'2px 8px',borderRadius:'7px',background:'#222840',color:'#A9B2CC',font:'600 11px "Space Grotesk"',whiteSpace:'nowrap'},
+        scoreLabel:(r.score+'/'+r.total),
+        scoreStyle:{flex:'0 0 auto',color:'#7C8499',font:'500 12.5px "Space Grotesk"'},
+        pct:pct+'%',
+        pctStyle:{flex:'0 0 40px',textAlign:'right',color:col,font:'700 13.5px "Space Grotesk"'},
+        dateLabel:dt,
+        dateStyle:{flex:'0 0 auto',color:'#626C84',font:'500 12px "Space Grotesk"',whiteSpace:'nowrap'},
+        rowStyle:{display:'flex',alignItems:'center',gap:'10px',padding:'8px 10px',borderRadius:'10px',background:(rank%2? 'rgba(255,255,255,.025)':'transparent')}
+      };
+    });
+  }
+
+  leaderboardVals(){
+    const sb=this.supabaseClient();
+    const rows=this.lbRows();
+    return {
+      hasLeaderboard: !!sb,
+      leaderboard: rows,
+      lbHasRows: rows.length>0,
+      lbLoading: !!this.state.lbLoading && rows.length===0,
+      lbEmpty: !!sb && !this.state.lbLoading && rows.length===0
+    };
   }
 
   startParticles(){
@@ -167,7 +382,7 @@ class Component extends DCLogic {
 
   bank(){ if(!this._b) this._b=this.buildBank(); return this._b; }
 
-  filtered(scope){ const b=this.bank(); const idx=[]; b.forEach((q,i)=>{ if(scope==='all'||q.d===scope) idx.push(i); }); return idx; }
+  filtered(scope){ const b=this.bank(); const idx=[]; b.forEach((q,i)=>{ if(scope==='all'||(scope==='links'?!!q.l:q.d===scope)) idx.push(i); }); return idx; }
 
   shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
 
@@ -213,12 +428,21 @@ class Component extends DCLogic {
       const byD={}; results.forEach(r=>{ (byD[r.d]=byD[r.d]||{c:0,t:0}); byD[r.d].t++; if(r.ok)byD[r.d].c++; });
       const m=JSON.parse(localStorage.getItem('quizmkt_mastery')||'{}'); Object.keys(byD).forEach(d=>{ const p=Math.round(byD[d].c/byD[d].t*100); m[d]=Math.max(m[d]||0,p); }); localStorage.setItem('quizmkt_mastery',JSON.stringify(m));
       localStorage.removeItem('quizmkt_session'); }catch(e){}
-    this.setState({screen:'end',resumable:null}); }
+    try{ const h=this.loadHistory(); h.unshift({id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),createdAt:new Date().toISOString(),mode:'study',scope:this.state.scope,length:this.state.length,score:this.state.score,total,pct,bestStreak:this.state.bestStreak}); localStorage.setItem('quizmkt_history',JSON.stringify(h.slice(0,20))); }catch(e){}
+    const sid=Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+    this.setState({screen:'end',resumable:null,lastSessionId:sid}, ()=>{
+      Promise.resolve(this.submitScore(sid)).then(()=>this.loadLeaderboard());
+    }); }
 
   retryWrong(){ const order=this.shuffle(this.state.wrongIdx.slice()); if(!order.length){ this.toStart(); return; } this._optOrder=this.optOrderFor(this.bank()[order[0]]); this.setState({screen:'quiz',order,pos:0,score:0,selected:[],answered:false,wrongIdx:[],streak:0,bestStreak:0,results:[]}); }
   toStart(){ this.setState({screen:'start'}); }
   clearProgress(){ try{ localStorage.removeItem('quizmkt_session'); localStorage.removeItem('quizmkt_best'); localStorage.removeItem('quizmkt_last'); localStorage.removeItem('quizmkt_mastery'); }catch(e){} this.setState({resumable:null}); }
   pctColor(p){ return p>=80?'#3CCB7F':(p>=50?'#E8C766':'#FF6B6B'); }
+  clearHistory(){ try{ localStorage.removeItem('quizmkt_history'); }catch(e){} this.forceUpdate(); }
+  loadHistory(){ try{ const h=JSON.parse(localStorage.getItem('quizmkt_history')||'[]'); return Array.isArray(h)?h:[]; }catch(e){ return []; } }
+  scopeName(k){ return k==='all'?'Wszystkie':(k==='links'?'Pytania z linków':this.dzialLabel(k)); }
+  histView(h){ let dt=''; try{ dt=new Date(h.createdAt).toLocaleString('pl-PL',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); }catch(e){}
+    return {dateLabel:dt, modeLabel:h.mode==='exam'?'Egzamin':'Nauka', scopeLabel:this.scopeName(h.scope), scoreLabel:h.score+'/'+h.total, pctLabel:h.pct+'%', pctStyle:{color:this.pctColor(h.pct),font:'700 13.5px "Space Grotesk"',flex:'0 0 46px',textAlign:'right'}}; }
 
   optView(){
     const C=this.C(); const q=this.curQ(); const order=this._optOrder&&this._optOrder.length?this._optOrder:q.a.map((_,i)=>i);
@@ -241,7 +465,7 @@ class Component extends DCLogic {
     const C=this.C(); const s=this.state; const scr=s.screen;
     const base={ isStart:scr==='start', isQuiz:scr==='quiz', isEnd:scr==='end', bgCanvas:this.bgCanvas };
     if(scr==='start'){
-      const scopes=[['all','Wszystkie'],['W1-2','Geneza i trendy'],['W3','Zachowania nabywców'],['W4','Badania'],['W5-6','Produkt i cena'],['Promocja','Promocja']];
+      const scopes=[['all','Wszystkie'],['W1-2','Geneza i trendy'],['W3','Zachowania nabywców'],['W4','Badania'],['W5-6','Produkt i cena'],['Promocja','Promocja'],['links','Pytania z linków']];
       const dzialChips=scopes.map(x=>{ const n=this.filtered(x[0]).length; const act=s.scope===x[0]; return {label:x[1],count:n+' '+this.plural(n),style:this.scopeCard(act),countStyle:this.scopeCount(act),hover:this.scopeHover(act),press:this.chipPress(),onClick:()=>this.setState({scope:x[0]})};});
       const lens=[['10','10'],['20','20'],['40','40'],['all','Wszystkie']];
       const lengthChips=lens.map(x=>({label:x[1],style:this.segStyle(s.length===x[0]),hover:this.segHover(s.length===x[0]),press:this.chipPress(),onClick:()=>this.setState({length:x[0]})}));
@@ -251,6 +475,7 @@ class Component extends DCLogic {
       const mOrder=[['W1-2','Geneza i trendy'],['W3','Zachowania nabywców'],['W4','Badania'],['W5-6','Produkt i cena'],['Promocja','Promocja']];
       const mastery=mOrder.filter(x=>mst[x[0]]!=null).map(x=>{ const p=mst[x[0]]; const col=this.pctColor(p); return {label:x[1],pct:p+'%',pctStyle:{color:col,fontWeight:'700'},barStyle:{height:'100%',width:p+'%',background:col,borderRadius:'5px',transition:'width .4s'}}; });
       const hasResume=!!s.resumable;
+      const history=this.loadHistory();
       return Object.assign(base,{
         dzialChips, lengthChips,
         poolLabel:'Pytań w wybranym zakresie: '+pool,
@@ -259,8 +484,10 @@ class Component extends DCLogic {
         hasResume, onResume:()=>this.resume(), resumeLabel: hasResume?('Kontynuuj sesję ('+(s.resumable.pos+1)+' / '+s.resumable.order.length+')'):'',
         hasBest:!!best, bestLabel: best?('Najlepszy wynik: '+best.pct+'%'):'',
         hasMastery:mastery.length>0, mastery,
-        onClear:()=>this.clearProgress()
-      });
+        nick:s.nick||'', onNick:(e)=>this.onNickInput(e),
+        onClear:()=>this.clearProgress(),
+        hasHistory:history.length>0, historyItems:history.map(h=>this.histView(h)), onClearHistory:()=>this.clearHistory()
+      }, this.leaderboardVals());
     }
     if(scr==='quiz'){
       const q=this.curQ(); const total=s.order.length; const pct=Math.round(s.pos/total*100);
@@ -282,6 +509,7 @@ class Component extends DCLogic {
         feedbackStyle:{marginTop:'18px',padding:'15px 17px',borderRadius:'13px',background: ok?C.okBg:C.badBg,border:'1px solid '+(ok?C.ok:C.bad)},
         feedbackTitleStyle:{font:'700 15px "Space Grotesk"',margin:'0 0 6px',color: ok?C.ok:C.bad},
         feedbackTitle: ok?'Dobrze!':'Niepoprawnie', explanation:q.e,
+        hasLink:!!q.l, qLink:q.l||'', qLinkLabel:q.ll||'Zobacz przykład',
         onNext:()=>this.next(), nextLabel: isLast?'Zakończ i zobacz wynik':'Następne pytanie'
       });
     }
@@ -293,14 +521,16 @@ class Component extends DCLogic {
     const byD={}; s.results.forEach(r=>{ (byD[r.d]=byD[r.d]||{c:0,t:0}); byD[r.d].t++; if(r.ok)byD[r.d].c++; });
     const bOrder=[['W1-2','Geneza i trendy'],['W3','Zachowania nabywców'],['W4','Badania'],['W5-6','Produkt i cena'],['Promocja','Promocja']];
     const breakdown=bOrder.filter(x=>byD[x[0]]).map(x=>{ const o=byD[x[0]]; const p=Math.round(o.c/o.t*100); const col=this.pctColor(p); return {label:x[1],scoreLabel:o.c+'/'+o.t+' · '+p+'%',pctStyle:{color:col,fontWeight:'700'},barStyle:{height:'100%',width:p+'%',background:col,borderRadius:'5px',transition:'width .4s'}}; });
+    const recent=this.loadHistory().slice(0,5);
     return Object.assign(base,{
+      hasRecent:recent.length>0, recentItems:recent.map(h=>this.histView(h)),
       hasBreakdown: breakdown.length>0, breakdown,
       endPct:pct+'%', endScoreLabel:score+' / '+total+' poprawnych',
       endRingStyle:{width:'184px',height:'184px',margin:'0 auto 24px',borderRadius:'50%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',border:'4px solid '+ring,background:'#151926',boxShadow:'0 28px 56px -36px rgba(0,0,0,.85)'},
       endNumStyle:{font:'700 40px "Unbounded",sans-serif',color:ring,lineHeight:'1'},
       endTitle:title, endMsg:msg,
       hasWrong, retryLabel:'Powtórz błędne ('+s.wrongIdx.length+')', onRetryWrong:()=>this.retryWrong(), onRestart:()=>this.toStart()
-    });
+    }, this.leaderboardVals());
   }
 
   buildBank(){
@@ -325,7 +555,7 @@ class Component extends DCLogic {
      {d:'W1-2',p:1,t:'tf',q:'Koszt utrzymania stałego klienta jest ponad 5-krotnie niższy niż koszt pozyskania nowego klienta.',a:[['Prawda',1],['Fałsz',0]],e:'To jeden z głównych argumentów za marketingiem relacji.'},
      {d:'W1-2',p:3,t:'single',q:'Astroturfing to:',a:[['Sztuczne tworzenie komentarzy i opinii w sieci budujące fałszywy obraz',1],['Legalne badanie opinii klientów',0],['Program lojalnościowy',0],['Rodzaj rabatu ilościowego',0]],e:'Astroturfing to zagrożenie dla WOMM — nakręcanie fałszywego zainteresowania, np. przez farmy trolli.'},
      {d:'W1-2',p:2,t:'single',q:'Marketing szeptany (WOM) opiera się na:',a:[['Nieformalnym przekazywaniu informacji między ludźmi',1],['Płatnych reklamach telewizyjnych',0],['Billboardach zewnętrznych',0],['Wyłącznie na e-mailach',0]],e:'Word-of-mouth to przekaz nieformalny; jego celem jest rozpowszechnianie pozytywnych treści o marce.'},
-     {d:'W1-2',p:2,t:'single',q:'Najbardziej znanym przykładem Real-Time Marketingu (RTM) jest:',a:[['Tweet Oreo podczas SuperBowl 2013 („po ciemku możesz nadal maczać”)',1],['Kampania Hotmaila z 1997 r.',0],['Reklama Forda T',0],['Kampania Eisenhowera',0]],e:'RTM to docieranie do odbiorców w konkretnym czasie i miejscu; przykład Oreo podczas blackoutu na SuperBowl.'},
+     {d:'W1-2',p:2,t:'single',q:'Najbardziej znanym przykładem Real-Time Marketingu (RTM) jest:',a:[['Tweet Oreo podczas SuperBowl 2013 („po ciemku możesz nadal maczać”)',1],['Kampania Hotmaila z 1997 r.',0],['Reklama Forda T',0],['Kampania Eisenhowera',0]],e:'RTM to docieranie do odbiorców w konkretnym czasie i miejscu; przykład Oreo podczas blackoutu na SuperBowl.',l:'https://x.com/Oreo/status/298793433655701505',ll:'Zobacz tweet Oreo z SuperBowl'},
      {d:'W1-2',p:2,t:'single',q:'Pierwsza znana kampania marketingu wirusowego (1997) to:',a:[['Hotmail',1],['Oreo',0],['Allegro (dziadek)',0],['Volvo',0]],e:'Kampania Hotmaila (1997) sprawiła, że miliony użytkowników założyły konta — klasyczny viral marketing.'},
      {d:'W1-2',p:3,t:'single',q:'Czym różni się marketing wirusowy (viral) od marketingu szeptanego?',a:[['Viral stawia na kontrowersję/humor/rozrywkę, a szeptany na użyteczność',1],['Viral jest zawsze płatny, a szeptany darmowy',0],['Nie różnią się niczym',0],['Viral działa tylko offline',0]],e:'Treść wirusowa rozprzestrzenia się dzięki emocjom i humorowi; marketing szeptany opiera się na użyteczności informacji.'},
      {d:'W1-2',p:2,t:'single',q:'Mikromarketing (hipersegmentacja, one-to-one) polega na:',a:[['Dostosowaniu oferty do bardzo wąskich segmentów lub indywidualnego klienta',1],['Kierowaniu jednej reklamy do wszystkich',0],['Rezygnacji z badań rynku',0],['Sprzedaży wyłącznie hurtowej',0]],e:'To koncentracja na małych grupach lub jednym kliencie; przykłady: Nike ID, personalizacja M&M.'},
@@ -455,25 +685,25 @@ class Component extends DCLogic {
     );
     /* --- Audyt merytoryczny: case'y z wykładów --- */
     Q.push(
-     {d:'W1-2',p:2,t:'single',q:'Reklama Allegro z dziadkiem uczącym się angielskiego („English for beginners”) jest przede wszystkim przykładem:',a:[['Marketingu wirusowego opartego na emocjonalnym storytellingu',1],['Reklamy porównawczej',0],['Reklamy racjonalnej opartej na cenie',0],['Marketingu sensorycznego',0]],e:'Spot rozszedł się wiralowo dzięki wzruszającej historii (dziadek uczy się angielskiego dla wnuczki) — to viral marketing budowany na emocjach, a nie na cechach czy cenie produktu.'},
-     {d:'W1-2',p:2,t:'single',q:'Reklama Volvo Trucks z Jean-Claude Van Damme’em („Epic Split”) najtrafniej pokazuje wykorzystanie viral marketingu przez:',a:[['Widowiskowość (spektakularny, zapadający w pamięć obraz)',1],['Rabat cenowy',0],['Apel moralny',0],['Reklamę ukrytą',0]],e:'Efekt wirusowy wywołał tu spektakularny, widowiskowy popis (szpagat między dwiema cofającymi ciężarówkami) demonstrujący precyzję układu kierowniczego — nie humor ani obniżka ceny.'},
-     {d:'W1-2',p:2,t:'multi',q:'Reklama typu ASMR wykorzystuje przede wszystkim oddziaływanie na które zmysły?',a:[['Słuch',1],['Wzrok',1],['Węch',0],['Smak',0]],e:'ASMR to element marketingu sensorycznego — działa głównie przez dźwięk (szepty, chrupanie, szelesty), wspierany obrazem. Zapachu i smaku nie da się przekazać w spocie.'},
+     {d:'W1-2',p:2,t:'single',q:'Reklama Allegro z dziadkiem uczącym się angielskiego („English for beginners”) jest przede wszystkim przykładem:',a:[['Marketingu wirusowego opartego na emocjonalnym storytellingu',1],['Reklamy porównawczej',0],['Reklamy racjonalnej opartej na cenie',0],['Marketingu sensorycznego',0]],e:'Spot rozszedł się wiralowo dzięki wzruszającej historii (dziadek uczy się angielskiego dla wnuczki) — to viral marketing budowany na emocjach, a nie na cechach czy cenie produktu.',l:'https://www.youtube.com/watch?v=tU5Rnd-HM6A',ll:'Obejrzyj reklamę Allegro'},
+     {d:'W1-2',p:2,t:'single',q:'Reklama Volvo Trucks z Jean-Claude Van Damme’em („Epic Split”) najtrafniej pokazuje wykorzystanie viral marketingu przez:',a:[['Widowiskowość (spektakularny, zapadający w pamięć obraz)',1],['Rabat cenowy',0],['Apel moralny',0],['Reklamę ukrytą',0]],e:'Efekt wirusowy wywołał tu spektakularny, widowiskowy popis (szpagat między dwiema cofającymi ciężarówkami) demonstrujący precyzję układu kierowniczego — nie humor ani obniżka ceny.',l:'https://www.youtube.com/watch?v=M7FIvfx5J10',ll:'Obejrzyj „Epic Split”'},
+     {d:'W1-2',p:2,t:'multi',q:'Spot wideo typu ASMR wykorzystuje przede wszystkim oddziaływanie na które zmysły?',a:[['Słuch',1],['Wzrok',1],['Węch',0],['Smak',0]],e:'ASMR to element marketingu sensorycznego — w spocie wideo działa przez dźwięk (szepty, chrupanie, szelesty) wspierany obrazem. Szerzej ASMR wiąże się też z bodźcami dotykowymi, ale zapachu, smaku i dotyku nie da się przekazać w nagraniu.',l:'https://www.youtube.com/results?search_query=ASMR+reklama+super+bowl',ll:'Zobacz przykłady reklam ASMR'},
      {d:'W1-2',p:3,t:'single',q:'Afera Corhydronu (Jelfa) — pomylone fiolki leku — bywa omawiana jako przykład znaczenia czego w marketingu społecznym/etycznym?',a:[['Odpowiedzialności i bezpieczeństwa produktu oraz reakcji firmy na kryzys',1],['Skuteczności reklamy porównawczej',0],['Psychologicznego ustalania cen',0],['Głębokości asortymentu',0]],e:'Sprawa pokazuje wagę bezpieczeństwa produktu i etycznej, szybkiej reakcji na kryzys — analogicznie do sprawy Tylenolu, gdzie właściwe działanie chroni zaufanie do marki.'},
-     {d:'W1-2',p:2,t:'single',q:'Reklamy Apple / wystąpienia Steve’a Jobsa dobrze ilustrują budowanie wartości marki przez:',a:[['Wizję i emocje (styl życia, prostota, „think different”)',1],['Wyłącznie parametry techniczne produktu',0],['Najniższą cenę na rynku',0],['Reklamę porównawczą wobec konkurencji',0]],e:'Apple sprzedaje wizję i emocje, a nie specyfikację — to klasyczne „nie sprzedajemy produktu, sprzedajemy marzenie / styl życia”.'},
+     {d:'W1-2',p:2,t:'single',q:'Reklamy Apple / wystąpienia Steve’a Jobsa dobrze ilustrują budowanie wartości marki przez:',a:[['Wizję i emocje (styl życia, prostota, „think different”)',1],['Wyłącznie parametry techniczne produktu',0],['Najniższą cenę na rynku',0],['Reklamę porównawczą wobec konkurencji',0]],e:'Apple sprzedaje wizję i emocje, a nie specyfikację — to klasyczne „nie sprzedajemy produktu, sprzedajemy marzenie / styl życia”.',l:'https://www.youtube.com/watch?v=5sMBhDv4sik',ll:'Obejrzyj „Think Different” (1997)'},
      {d:'W1-2',p:2,t:'multi',q:'Przykład Green Caffè Nero pokazuje, że w usługach gastronomicznych poza samym produktem (kawą) liczy się także:',a:[['Lokalizacja',1],['Atmosfera miejsca',1],['Doświadczenie klienta',1],['Wyłącznie najniższa cena',0]],e:'W usługach (7P) o wartości decyduje otoczenie i przeżycie klienta — lokalizacja, atmosfera i całościowe doświadczenie, nie tylko sam napój.'},
      {d:'W3',p:3,t:'single',q:'Wg przykładów z teorii Freuda (badania motywacji) niechęć do suszonych owoców interpretowano jako:',a:[['Lęk przed starością (skojarzenie z pomarszczoną skórą)',1],['Lęk przed wysokością',0],['Obawę przed wysoką ceną',0],['Strach przed nowością technologiczną',0]],e:'W motivational research pomarszczone suszone owoce podświadomie kojarzono ze starczą, pomarszczoną skórą — stąd niechęć. Podobnie interpretowano opory wobec gotowych mieszanek do ciast czy symbolikę cygara.'},
      {d:'W3',p:2,t:'single',q:'Gdzie najlepiej umieścić pojedynczy billboard, aby przekroczyć dolny próg zauważalności bodźca?',a:[['Tam, gdzie jest niewiele konkurujących bodźców i reklama wyraźnie się wyróżnia',1],['W miejscu z jak największą liczbą innych reklam',0],['Zawsze przy najniższym natężeniu ruchu',0],['Wyłącznie w centrach handlowych',0]],e:'Dolny (bezwzględny) próg to minimalne natężenie bodźca, przy którym zostaje on w ogóle dostrzeżony. Pojedynczy billboard łatwiej przekracza ten próg tam, gdzie nie ginie w gąszczu innych bodźców.'},
-     {d:'W3',p:3,t:'single',q:'Eksperyment ze sklepu z kanapami (tło z obłoczkami vs z monetami/dolarami) pokazuje wpływ czego na decyzję zakupową?',a:[['Nieświadomego torowania (priming) — bodziec z tła kieruje uwagę na wygodę lub cenę',1],['Elastyczności cenowej popytu',0],['Prawa Engla',0],['Rabatu funkcjonalnego',0]],e:'Tło z obłoczkami kierowało uwagę klientów na wygodę mebla, a tło z monetami — na cenę. To dowód torowania (priming): kontekst nieświadomie zmienia kryteria decyzji.'},
+     {d:'W3',p:3,t:'single',q:'Eksperyment ze sklepu z kanapami (tło z obłoczkami vs z monetami/dolarami) pokazuje wpływ czego na decyzję zakupową?',a:[['Kontekstu — informacje z otoczenia kierują uwagę na wygodę lub na cenę',1],['Elastyczności cenowej popytu',0],['Prawa Engla',0],['Rabatu funkcjonalnego',0]],e:'Tło z obłoczkami kierowało uwagę klientów na wygodę mebla, a tło z monetami — na cenę. Informacje z otoczenia (kontekst) nieświadomie zmieniają kryteria decyzji zakupowej.'},
      {d:'W5-6',p:2,t:'single',q:'Zasada „kobiety nie kupują szminki, kupują nadzieję” pokazuje, że marketer sprzedaje przede wszystkim:',a:[['Obietnicę / korzyść emocjonalną (nadzieję na urodę)',1],['Cechę fizyczną produktu (skład, kolor)',0],['Najniższą cenę',0],['Wyłącznie opakowanie',0]],e:'To ilustracja zasady „sprzedajemy korzyść, nie cechę” — szminka jest jedynie „opakowaniem” obietnicy atrakcyjności i nadziei.'},
      {d:'W5-6',p:2,t:'single',q:'Który przykład pokazuje ponowne wsparcie produktu kampanią reklamową w cyklu życia produktu (przedłużenie/ożywienie fazy dojrzałości)?',a:[['Ciastka Jeżyki wsparte nową kampanią reklamową',1],['Nylon jako jednorazowa nowość',0],['Chwilowa moda sezonowa',0],['Wyprzedaż resztek w fazie schyłku',0]],e:'Jeżyki to przykład produktu, którego dojrzałą fazę ożywiono nową kampanią — to niestandardowy, „ząbkowany” cykl życia z ponownym wsparciem reklamowym.'},
      {d:'W5-6',p:2,t:'single',q:'Różnica między ceną 399,95 zł a 400 zł to działanie jakiego mechanizmu?',a:[['Psychologicznego ustalania cen (efekt progu / lewej cyfry)',1],['Rabatu ilościowego',0],['Paradoksu Veblena',0],['Elastyczności mieszanej popytu',0]],e:'Cena tuż poniżej okrągłej sumy (399,95) jest odbierana jako wyraźnie niższa i „okazyjna”, mimo minimalnej realnej różnicy — to psychologia ceny (efekt lewej cyfry).'},
-     {d:'Promocja',p:2,t:'single',q:'Reklama perfum/kosmetyków Chanel z prezentacji jest przykładem apelu:',a:[['Emocjonalnego',1],['Racjonalnego',0],['Moralnego',0],['Porównawczego',0]],e:'Reklamy Chanel budują nastrój, prestiż i pożądanie — grają na emocjach, a nie na wymiernych, racjonalnych korzyściach.'},
-     {d:'Promocja',p:2,t:'single',q:'Case „Lidl kontra Biedronka” najlepiej pasuje do tematu:',a:[['Reklama porównawcza',1],['Reklama ukryta',0],['Reklama społeczna',0],['Marketing sensoryczny',0]],e:'Bezpośrednie zestawianie własnej oferty z konkretnym konkurentem (ceny, koszyk zakupów) to sztandarowy przykład reklamy porównawczej — w Polsce dopuszczalnej tylko pod warunkami, a bezpośredniej co do zasady ograniczonej.'},
-     {d:'Promocja',p:3,t:'single',q:'Przykład piw Żubr i Żywiec można wykorzystać do pytania o ryzyko jakiego typu reklamy?',a:[['Reklamy ukrytej (obchodzenie zakazu reklamy alkoholu)',1],['Reklamy społecznej',0],['Reklamy racjonalnej',0],['Reklamy porównawczej dozwolonej',0]],e:'Reklamy piwa operujące symboliką marki (żubr, przyroda) bywają analizowane jako obchodzenie ograniczeń reklamy alkoholu — ryzyko reklamy ukrytej i naruszenia aspektów prawnych.'},
+     {d:'Promocja',p:2,t:'single',q:'Reklama perfum/kosmetyków Chanel z prezentacji jest przykładem apelu:',a:[['Emocjonalnego',1],['Racjonalnego',0],['Moralnego',0],['Porównawczego',0]],e:'Reklamy Chanel budują nastrój, prestiż i pożądanie — grają na emocjach, a nie na wymiernych, racjonalnych korzyściach.',l:'https://www.youtube.com/watch?v=0hcaaKhGL00',ll:'Obejrzyj Chanel N°5 „Le Film” (Nicole Kidman)'},
+     {d:'Promocja',p:2,t:'single',q:'Case „Lidl kontra Biedronka” najlepiej pasuje do tematu:',a:[['Reklama porównawcza',1],['Reklama ukryta',0],['Reklama społeczna',0],['Marketing sensoryczny',0]],e:'Bezpośrednie zestawianie własnej oferty z konkretnym konkurentem (ceny, koszyk zakupów) to sztandarowy przykład reklamy porównawczej — w Polsce dopuszczalnej tylko pod warunkami, a bezpośredniej co do zasady ograniczonej.',l:'https://bezprawnik.pl/reklama-porownawcza/',ll:'Przeczytaj o wojnie Lidl kontra Biedronka'},
+     {d:'Promocja',p:3,t:'single',q:'Przykład piw Żubr i Żywiec można wykorzystać do pytania o ryzyko jakiego typu reklamy?',a:[['Reklamy porównawczej — nawiązywanie do konkurenta niesie ryzyko prawne',1],['Reklamy społecznej',0],['Reklamy racjonalnej',0],['Reklamy ukrytej',0]],e:'Kampania Żubra nawiązująca do Żywca to przykład balansowania na granicy reklamy porównawczej — bezpośrednia reklama porównawcza jest w polskim prawie ograniczona, więc takie nawiązania do konkurenta niosą ryzyko prawne.',l:'https://www.youtube.com/results?search_query=%C5%BBubr+reklama+%C5%BBywiec',ll:'Zobacz materiał o kampanii'},
      {d:'Promocja',p:2,t:'multi',q:'Przykłady kredytów z prezentacji („Prostoliczony”, „Mini Ratka”) pokazują, że w przekazie reklamowym trzeba szczególnie uważać na:',a:[['Jasność i przejrzystość kosztów (RRSO, opłaty)',1],['Ryzyko wprowadzenia klienta w błąd',1],['Maksymalne skrócenie informacji o cenie',0],['Ukrywanie warunków umowy',0]],e:'Reklamy produktów finansowych muszą jasno komunikować koszty (RRSO), bo łatwo tu o przekaz wprowadzający w błąd — czego prawo zakazuje.'},
      {d:'Promocja',p:2,t:'single',q:'Dyferencjał semantyczny (skala Osgooda) służy do porównywania:',a:[['Wizerunku marek/obiektów na skali par przeciwstawnych określeń',1],['Kosztów jednostkowych produkcji',0],['Elastyczności cenowej popytu',0],['Liczby punktów sprzedaży',0]],e:'To narzędzie badawcze: respondent ocenia obiekt (markę, produkt) na skali między przeciwstawnymi przymiotnikami (np. tani–drogi, nowoczesny–przestarzały), co pozwala porównać profile wizerunkowe.'},
      {d:'Promocja',p:2,t:'single',q:'Który kanał social media najlepiej pasuje do komunikacji eksperckiej i zawodowej (B2B, employer branding)?',a:[['LinkedIn',1],['TikTok',0],['Instagram',0],['Snapchat',0]],e:'LinkedIn to platforma profesjonalna — sprzyja treściom eksperckim, kontaktom zawodowym i B2B; TikTok i Instagram są mocniej rozrywkowe i wizualne.'},
-     {d:'Promocja',p:1,t:'single',q:'Case Alior Bank „Pewni swego” najlepiej ilustruje pytanie o:',a:[['Budowanie wiarygodności i wizerunku w reklamie usług finansowych',1],['Reklamę porównawczą cen kredytów',0],['Marketing sensoryczny',0],['Downsizing produktu',0]],e:'Kampania budowała zaufanie i wizerunek pewnego, kompetentnego banku — to przykład wzmacniania wiarygodności marki w komunikacji usług finansowych.'}
+     {d:'Promocja',p:1,t:'single',q:'Case Alior Bank „Pewni swego” najlepiej ilustruje pytanie o:',a:[['Budowanie wiarygodności i wizerunku w reklamie usług finansowych',1],['Reklamę porównawczą cen kredytów',0],['Marketing sensoryczny',0],['Downsizing produktu',0]],e:'Kampania budowała zaufanie i wizerunek pewnego, kompetentnego banku — to przykład wzmacniania wiarygodności marki w komunikacji usług finansowych.',l:'https://www.youtube.com/results?search_query=alior+bank+pewni+swego+reklama',ll:'Zobacz spoty „Pewni swego”'}
     );
     return Q;
   }
