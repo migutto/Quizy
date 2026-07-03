@@ -315,6 +315,35 @@ class Component extends DCLogic {
     if(!sb){ if(tries<25){ this._sbTimer=setTimeout(()=>this.initSupabase(tries+1),400); } return; }
     this.loadLeaderboard();
     this.subscribeLeaderboard();
+    if(!this._pvSent){ this._pvSent=true; this.trackQuizEvent('page_view'); } // jedno wejście na załadowanie strony
+  }
+
+  // ---- Analityka (quiz_events) ---------------------------------------------
+  // Losowe, trwałe session_id w localStorage — pozwala liczyć unikalne sesje.
+  getQuizSessionId(){
+    try{
+      let id=localStorage.getItem('quiz_session_id');
+      if(!id){ id=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,10); localStorage.setItem('quiz_session_id', id); }
+      return id;
+    }catch(e){
+      if(!this._memSid) this._memSid=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,10);
+      return this._memSid; // fallback, gdy localStorage niedostępne
+    }
+  }
+
+  // Wysyła event do Supabase (page_view / quiz_start / quiz_complete).
+  // Cicha degradacja: analityka nigdy nie może zepsuć działania quizu.
+  async trackQuizEvent(eventType, data){
+    data=data||{};
+    const sb=this.supabaseClient(); if(!sb) return;
+    try{
+      const row={ event_type:eventType, session_id:this.getQuizSessionId() };
+      if(data.scope!=null) row.scope=String(data.scope);
+      if(data.session_length!=null) row.session_length=String(data.session_length);
+      if(data.score!=null) row.score=data.score;
+      if(data.total!=null) row.total=data.total;
+      await sb.from('quiz_events').insert(row);
+    }catch(e){ /* cicha degradacja */ }
   }
 
   normalizePlayerName(name){
@@ -546,6 +575,7 @@ class Component extends DCLogic {
     if(length!=='all'){ idx=idx.slice(0,parseInt(length,10)); }
     this._optOrder=this.optOrderFor(this.bank()[idx[0]]);
     this.setState({screen:'quiz',scope,length,order:idx,pos:0,score:0,selected:[],answered:false,wrongIdx:[],streak:0,bestStreak:0,results:[]}, ()=>this.save());
+    this.trackQuizEvent('quiz_start', { scope:scope, session_length:String(length) });
   }
   resume(){ const s=this.state.resumable; if(!s)return; const mod=s.module||'marketing'; this.setState({module:mod}, ()=>{ this._optOrder=this.optOrderFor(this.bank()[s.order[s.pos]]); this.setState({screen:'quiz',scope:s.scope,length:s.length,order:s.order,pos:s.pos,score:s.score,selected:[],answered:false,wrongIdx:s.wrongIdx||[],streak:0,bestStreak:0,results:[]}); }); }
   save(){ const {order,pos,score,scope,length,wrongIdx,module}=this.state; try{ localStorage.setItem('quizmkt_session',JSON.stringify({order,pos,score,scope,length,wrongIdx,module})); }catch(e){} }
@@ -572,6 +602,7 @@ class Component extends DCLogic {
       localStorage.removeItem('quizmkt_session'); }catch(e){}
     try{ const h=this.loadHistory(); h.unshift({id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),createdAt:new Date().toISOString(),mode:'study',module:this.state.module,scope:this.state.scope,length:this.state.length,score:this.state.score,total,pct,bestStreak:this.state.bestStreak}); localStorage.setItem('quizmkt_history',JSON.stringify(h.slice(0,20))); }catch(e){}
     const sid=Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+    this.trackQuizEvent('quiz_complete', { score:this.state.score, total:total, scope:this.state.scope, session_length:String(this.state.length) });
     this.setState({screen:'end',resumable:null,lastSessionId:sid,endCount:0}, ()=>{
       this.animateEndRing(pct);
       Promise.resolve(this.submitScore(sid)).then(()=>this.loadLeaderboard());
@@ -590,7 +621,7 @@ class Component extends DCLogic {
     this._countRaf=requestAnimationFrame(step);
   }
 
-  retryWrong(){ const order=this.shuffle(this.state.wrongIdx.slice()); if(!order.length){ this.toStart(); return; } this._optOrder=this.optOrderFor(this.bank()[order[0]]); this.setState({screen:'quiz',order,pos:0,score:0,selected:[],answered:false,wrongIdx:[],streak:0,bestStreak:0,results:[]}); }
+  retryWrong(){ const order=this.shuffle(this.state.wrongIdx.slice()); if(!order.length){ this.toStart(); return; } this._optOrder=this.optOrderFor(this.bank()[order[0]]); this.setState({screen:'quiz',order,pos:0,score:0,selected:[],answered:false,wrongIdx:[],streak:0,bestStreak:0,results:[]}); this.trackQuizEvent('quiz_start', { scope:this.state.scope, session_length:String(order.length) }); }
   toStart(){ this.setState({screen:'start'}); }
   clearProgress(){ try{ localStorage.removeItem('quizmkt_session'); localStorage.removeItem('quizmkt_best'); localStorage.removeItem('quizmkt_last'); localStorage.removeItem('quizmkt_mastery'); }catch(e){} this.setState({resumable:null}); }
   pctColor(p){ return p>=80?'#3CCB7F':(p>=50?'#E8C766':'#FF6B6B'); }
