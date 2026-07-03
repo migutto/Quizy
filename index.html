@@ -3,6 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quizy — Marketing · Żywność roślinna · Ekologia</title>
+<meta name="description" content="Interaktywne quizy z pytaniami zamkniętymi, wyjaśnieniami i rankingiem na żywo. Sprawdź wiedzę z marketingu, technologii żywności roślinnej i ekologii.">
+<meta name="theme-color" content="#0B0D12">
+<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./favicon.svg">
+<!-- Open Graph / Facebook / Messenger -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Quizy">
+<meta property="og:title" content="Quizy — Marketing · Żywność roślinna · Ekologia">
+<meta property="og:description" content="Interaktywne quizy z wyjaśnieniami i rankingiem na żywo. Sprawdź swoją wiedzę!">
+<meta property="og:url" content="https://migutto.github.io/Quizy/">
+<meta property="og:image" content="https://migutto.github.io/Quizy/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="pl_PL">
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Quizy — Marketing · Żywność roślinna · Ekologia">
+<meta name="twitter:description" content="Interaktywne quizy z wyjaśnieniami i rankingiem na żywo.">
+<meta name="twitter:image" content="https://migutto.github.io/Quizy/og-image.png">
 <script src="./support.js"></script>
 <!-- Supabase JS v2 (leaderboard). Pinned exact version; exposes window.supabase.createClient -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.0/dist/umd/supabase.min.js"></script>
@@ -66,6 +86,8 @@ input:focus-visible{outline:none;}
       </sc-if>
       <sc-if value="{{ lbLoading }}" hint-placeholder-val="{{ false }}"><div style="font:500 13px 'Space Grotesk';color:#838DA8;padding:6px 2px;">Ładowanie rankingu…</div></sc-if>
       <sc-if value="{{ lbEmpty }}" hint-placeholder-val="{{ false }}"><div style="font:500 13px 'Space Grotesk';color:#838DA8;padding:6px 2px;">Brak wyników — bądź pierwszy na liście!</div></sc-if>
+      <sc-if value="{{ hasMyPos }}" hint-placeholder-val="{{ false }}"><div style="margin-top:11px;padding-top:11px;border-top:1px solid #262D40;display:flex;align-items:center;gap:8px;font:700 13px 'Space Grotesk';color:#C3C6FF;"><span style="width:6px;height:6px;border-radius:50%;background:#9A8DFF;display:inline-block;box-shadow:0 0 8px #9A8DFF;"></span>{{ myPosLabel }}</div></sc-if>
+      <sc-if value="{{ hasMyHint }}" hint-placeholder-val="{{ false }}"><div style="margin-top:11px;padding-top:11px;border-top:1px solid #262D40;font:500 12px 'Space Grotesk';color:#929BB3;">{{ myHint }}</div></sc-if>
      </div>
     </sc-if>
     <div style="background:rgba(21,25,38,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(124,108,255,.22);border-radius:26px;padding:clamp(18px,5vw,28px);box-shadow:0 30px 80px -40px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.05);">
@@ -137,7 +159,13 @@ input:focus-visible{outline:none;}
       <div style="{{ feedbackStyle }}">
        <div style="{{ feedbackTitleStyle }}">{{ feedbackTitle }}</div>
        <sc-if value="{{ showExpl }}" hint-placeholder-val="{{ true }}"><div style="font-size:14.5px;line-height:1.55;color:#C6CCDC;">{{ explanation }}</div></sc-if>
-       <sc-if value="{{ hasLink }}" hint-placeholder-val="{{ false }}"><a href="{{ qLink }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:11px;color:#8F82FF;font:600 13.5px 'Space Grotesk';text-decoration:none;transition:color .15s ease;" style-hover="color:#C9CBFF;text-decoration:underline;">{{ qLinkLabel }} ↗</a></sc-if>
+       <sc-if value="{{ hasLink }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:11px;">
+         <sc-for list="{{ qLinks }}" as="ln" hint-placeholder-count="2">
+          <a href="{{ ln.href }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;color:#8F82FF;font:600 13.5px 'Space Grotesk';text-decoration:none;transition:color .15s ease;" style-hover="color:#C9CBFF;text-decoration:underline;">{{ ln.label }} ↗</a>
+         </sc-for>
+        </div>
+       </sc-if>
       </div>
       <button onClick="{{ onNext }}" style="margin-top:16px;width:100%;padding:15px;border:none;border-radius:13px;background:linear-gradient(135deg,#8F82FF,#6C5AF5);color:#fff;font:700 15px 'Space Grotesk';cursor:pointer;box-shadow:0 12px 26px -14px rgba(124,108,255,.6);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;" style-hover="transform:translateY(-2px);box-shadow:0 18px 38px -14px rgba(124,108,255,.85);filter:brightness(1.07);" style-active="transform:translateY(0) scale(.985);filter:brightness(.96);">{{ nextLabel }}</button>
      </sc-if>
@@ -168,6 +196,9 @@ input:focus-visible{outline:none;}
         <button onClick="{{ onSaveResult }}" style="flex:0 0 auto;padding:13px 20px;border:none;border-radius:12px;background:linear-gradient(135deg,#9A8DFF,#6C5AF5);color:#fff;font:700 14.5px 'Space Grotesk';cursor:pointer;box-shadow:0 12px 26px -14px rgba(124,108,255,.7);transition:transform .18s ease, filter .18s ease;" style-hover="transform:translateY(-2px);filter:brightness(1.06);" style-active="transform:translateY(0) scale(.985);">Zapisz wynik →</button>
        </div>
       </div>
+     </sc-if>
+     <sc-if value="{{ endTooShort }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:430px;margin:0 auto 22px;display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:12px;background:rgba(232,199,102,.10);border:1px solid rgba(232,199,102,.4);color:#E8C766;font:600 13px 'Space Grotesk';text-align:left;"><span style="font-size:15px;flex:0 0 auto;">ⓘ</span><span>{{ endTooShortLabel }}</span></div>
      </sc-if>
     </sc-if>
     <sc-if value="{{ hasBreakdown }}" hint-placeholder-val="{{ false }}">
@@ -212,6 +243,8 @@ input:focus-visible{outline:none;}
       </sc-if>
       <sc-if value="{{ lbLoading }}" hint-placeholder-val="{{ false }}"><div style="font:500 13px 'Space Grotesk';color:#838DA8;padding:6px 2px;">Ładowanie rankingu…</div></sc-if>
       <sc-if value="{{ lbEmpty }}" hint-placeholder-val="{{ false }}"><div style="font:500 13px 'Space Grotesk';color:#838DA8;padding:6px 2px;">Brak wyników — bądź pierwszy na liście!</div></sc-if>
+      <sc-if value="{{ hasMyPos }}" hint-placeholder-val="{{ false }}"><div style="margin-top:11px;padding-top:11px;border-top:1px solid #262D40;display:flex;align-items:center;gap:8px;font:700 13px 'Space Grotesk';color:#C3C6FF;"><span style="width:6px;height:6px;border-radius:50%;background:#9A8DFF;display:inline-block;box-shadow:0 0 8px #9A8DFF;"></span>{{ myPosLabel }}</div></sc-if>
+      <sc-if value="{{ hasMyHint }}" hint-placeholder-val="{{ false }}"><div style="margin-top:11px;padding-top:11px;border-top:1px solid #262D40;font:500 12px 'Space Grotesk';color:#929BB3;">{{ myHint }}</div></sc-if>
      </div>
     </sc-if>
     <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
@@ -230,8 +263,12 @@ input:focus-visible{outline:none;}
 const SUPABASE_URL = "https://xjlupiohhihtzhqjgtma.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_35E-8urxsuFV4WqxeUfz0Q_VIrJBJNR";
 
+// Minimalna liczba pytań w sesji, aby wynik liczył się do publicznego rankingu.
+// Krótkie sesje (np. 6/6 = 100%) nie powinny wypierać pełnych sesji z top 10.
+const RANK_MIN_TOTAL = 20;
+
 class Component extends DCLogic {
-  state = { module:'marketing', screen:'start', scope:'all', length:'20', order:[], pos:0, score:0, selected:[], answered:false, wrongIdx:[], resumable:null, streak:0, bestStreak:0, results:[], nick:'', leaderboard:[], lbLoading:false, lastSessionId:null, endCount:0 };
+  state = { module:'marketing', screen:'start', scope:'all', length:'20', order:[], pos:0, score:0, selected:[], answered:false, wrongIdx:[], resumable:null, streak:0, bestStreak:0, results:[], nick:'', leaderboard:[], lbLoading:false, lastSessionId:null, endCount:0, myPos:null, myHasQ:false };
   bgCanvas = React.createRef();
 
   componentDidMount(){
@@ -246,6 +283,7 @@ class Component extends DCLogic {
   componentWillUnmount(){
     if(this._onKey) window.removeEventListener('keydown',this._onKey);
     if(this._onVw){ window.removeEventListener('resize',this._onVw); clearTimeout(this._vwT); }
+    clearTimeout(this._posT);
     if(this._raf) cancelAnimationFrame(this._raf);
     if(this._countRaf) cancelAnimationFrame(this._countRaf);
     if(this._onResize) window.removeEventListener('resize',this._onResize);
@@ -287,6 +325,7 @@ class Component extends DCLogic {
     const v=(e&&e.target)?e.target.value:'';
     this.setState({nick:v});
     try{ localStorage.setItem('quizmkt_nick', this.normalizePlayerName(v)); }catch(_){}
+    clearTimeout(this._posT); this._posT=setTimeout(()=>this.loadMyPosition(),600);
   }
 
   async loadLeaderboard(){
@@ -297,16 +336,42 @@ class Component extends DCLogic {
         .from('quiz_scores')
         .select('player_name,score,total,percent,scope,session_length,best_streak,created_at')
         .eq('module', this.state.module||'marketing')
+        .gte('total', RANK_MIN_TOTAL)
         .order('percent',{ ascending:false })
         .order('score',{ ascending:false })
         .order('created_at',{ ascending:true })
         .limit(10);
       if(error) throw error;
       this.setState({ leaderboard: Array.isArray(data)?data:[], lbLoading:false });
+      this.loadMyPosition();
     }catch(e){
       // Cicha degradacja — quiz działa dalej bez rankingu.
       this.setState({ lbLoading:false });
     }
+  }
+
+  // Wylicza pozycję gracza (po nicku) w rankingu, także gdy jest poza top 10.
+  async loadMyPosition(){
+    const sb=this.supabaseClient(); if(!sb) return;
+    const name=this.normalizePlayerName(this.state.nick);
+    const mod=this.state.module||'marketing';
+    if(!name){ this.setState({myPos:null, myHasQ:false}); return; }
+    try{
+      const { data:best, error:e1 } = await sb.from('quiz_scores')
+        .select('percent,score')
+        .eq('module',mod).eq('player_name',name).gte('total',RANK_MIN_TOTAL)
+        .order('percent',{ascending:false}).order('score',{ascending:false}).order('created_at',{ascending:true})
+        .limit(1);
+      if(e1) throw e1;
+      if(!best || !best.length){ this.setState({myPos:null, myHasQ:false}); return; }
+      const p=best[0].percent, sc=best[0].score;
+      const { count, error:e2 } = await sb.from('quiz_scores')
+        .select('*',{count:'exact',head:true})
+        .eq('module',mod).gte('total',RANK_MIN_TOTAL)
+        .or('percent.gt.'+p+',and(percent.eq.'+p+',score.gt.'+sc+')');
+      if(e2) throw e2;
+      this.setState({myPos:(count||0)+1, myHasQ:true});
+    }catch(e){ /* cicha degradacja */ }
   }
 
   async submitScore(sessionId){
@@ -317,6 +382,7 @@ class Component extends DCLogic {
     if(!name) return; // bez nicku nie zapisujemy do rankingu (ale quiz działa)
     const total=this.state.order.length, score=this.state.score;
     if(!(total>0) || score<0 || score>total || total>200) return;
+    if(total<RANK_MIN_TOTAL) return; // krótkie sesje nie trafiają do publicznego rankingu
     if(sessionId) this._submitted.add(sessionId);
     try{
       const { error } = await sb.from('quiz_scores').insert({
@@ -359,8 +425,10 @@ class Component extends DCLogic {
 
   lbRows(){
     const list=Array.isArray(this.state.leaderboard)?this.state.leaderboard:[];
+    const me=this.normalizePlayerName(this.state.nick).toLowerCase();
     return list.map((r,i)=>{
       const rank=i+1;
+      const mine=!!me && r.player_name!=null && String(r.player_name).toLowerCase()===me;
       const pct=(r.percent!=null)?r.percent:(r.total?Math.round((r.score/r.total)*100):0);
       const col=this.pctColor(pct);
       const medal= rank===1?'#F5D97B':(rank===2?'#C9CBD6':(rank===3?'#E0A87E':'#929BB3'));
@@ -370,7 +438,7 @@ class Component extends DCLogic {
         rank:String(rank),
         rankStyle:{flex:'0 0 18px',font:'700 14px "Space Grotesk"',color:medal,textAlign:'center'},
         name:(r.player_name!=null?String(r.player_name):''),
-        nameStyle:{flex:'1 1 auto',minWidth:'0',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis',font:'600 13.5px "Space Grotesk"',color:'#EDF0F7'},
+        nameStyle:{flex:'1 1 auto',minWidth:'0',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis',font:(mine?'700 13.5px':'600 13.5px')+' "Space Grotesk"',color:mine?'#C3C6FF':'#EDF0F7'},
         scopeLabel:this.scopeName(r.scope),
         scopeStyle:{flex:'0 0 auto',display:(narrow?'none':'inline-block'),padding:(m?'2px 6px':'2px 8px'),borderRadius:'7px',background:'#222840',color:'#A9B2CC',font:(m?'600 10px':'600 11px')+' "Space Grotesk"',whiteSpace:'nowrap',maxWidth:(m?'92px':'none'),overflow:'hidden',textOverflow:'ellipsis'},
         scoreLabel:(r.score+'/'+r.total),
@@ -379,7 +447,7 @@ class Component extends DCLogic {
         pctStyle:{flex:'0 0 38px',textAlign:'right',color:col,font:'700 13.5px "Space Grotesk"'},
         dateLabel:dt,
         dateStyle:{flex:'0 0 auto',display:(m?'none':'inline-block'),color:'#838DA8',font:'500 12px "Space Grotesk"',whiteSpace:'nowrap'},
-        rowStyle:{display:'flex',alignItems:'center',gap:(m?'8px':'10px'),padding:(m?'8px 8px':'8px 10px'),borderRadius:'10px',background:(rank%2? 'rgba(255,255,255,.025)':'transparent')}
+        rowStyle:{display:'flex',alignItems:'center',gap:(m?'8px':'10px'),padding:(m?'8px 8px':'8px 10px'),borderRadius:'10px',background:mine?'rgba(124,108,255,.14)':(rank%2? 'rgba(255,255,255,.025)':'transparent'),boxShadow:mine?'inset 0 0 0 1px rgba(124,108,255,.5)':'none'}
       };
     });
   }
@@ -387,12 +455,18 @@ class Component extends DCLogic {
   leaderboardVals(){
     const sb=this.supabaseClient();
     const rows=this.lbRows();
+    const name=this.normalizePlayerName(this.state.nick);
+    const hasPos=this.state.myPos!=null;
     return {
       hasLeaderboard: !!sb,
       leaderboard: rows,
       lbHasRows: rows.length>0,
       lbLoading: !!this.state.lbLoading && rows.length===0,
-      lbEmpty: !!sb && !this.state.lbLoading && rows.length===0
+      lbEmpty: !!sb && !this.state.lbLoading && rows.length===0,
+      hasMyPos: hasPos,
+      myPosLabel: hasPos ? ('Twoja pozycja: #'+this.state.myPos) : '',
+      hasMyHint: !!sb && !!name && !hasPos && this.state.myHasQ===false,
+      myHint: 'Rozegraj sesję od '+RANK_MIN_TOTAL+' pytań, aby trafić do rankingu'
     };
   }
 
@@ -427,7 +501,18 @@ class Component extends DCLogic {
 
   bank(){ const m=this.state.module||'marketing'; this._banks=this._banks||{}; if(!this._banks[m]) this._banks[m]=(m==='zywnosc'?this.buildBankZywnosc():(m==='ekologia'?this.buildBankEkologia():this.buildBank())); return this._banks[m]; }
 
-  filtered(scope){ const b=this.bank(); const idx=[]; b.forEach((q,i)=>{ if(scope==='all'||(scope==='links'?!!q.l:q.d===scope)) idx.push(i); }); return idx; }
+  questionLinks(q){
+    const out=[];
+    if(q && Array.isArray(q.links)){
+      q.links.forEach(x=>{
+        if(Array.isArray(x) && x[0]) out.push({href:x[0],label:x[1]||'Zobacz przykład'});
+        else if(x && x.href) out.push({href:x.href,label:x.label||'Zobacz przykład'});
+      });
+    }
+    if(q && q.l) out.push({href:q.l,label:q.ll||'Zobacz przykład'});
+    return out;
+  }
+  filtered(scope){ const b=this.bank(); const idx=[]; b.forEach((q,i)=>{ if(scope==='all'||(scope==='links'?this.questionLinks(q).length>0:q.d===scope)) idx.push(i); }); return idx; }
 
   shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
 
@@ -579,6 +664,7 @@ class Component extends DCLogic {
         : Object.assign({},typBadgeBase,{background:'rgba(124,108,255,.12)',border:'1px solid rgba(124,108,255,.30)',color:'#B7ADFF',font:'600 11.5px "Space Grotesk"'});
       const kbdHint=isMulti?'Klawisze 1–'+q.a.length+' zaznaczają odpowiedzi · Enter sprawdza':'Klawisze 1–'+q.a.length+' wybierają odpowiedź · Enter przechodzi dalej';
       const st=s.streak; const streakStyle={padding:'2px 10px',borderRadius:'20px',font:'700 12px "Space Grotesk"',background: st>=5?'#2E2A18':'#142A1F',color: st>=5?'#F5D97B':'#3CCB7F'};
+      const qLinks=this.questionLinks(q);
       return Object.assign(base,{
         onQuit:()=>this.toStart(),
         showProgress:this.props.showProgressBar!==false,
@@ -595,7 +681,7 @@ class Component extends DCLogic {
         feedbackStyle:{marginTop:'18px',padding:'15px 17px',borderRadius:'13px',background: ok?C.okBg:C.badBg,border:'1px solid '+(ok?C.ok:C.bad)},
         feedbackTitleStyle:{font:'700 15px "Space Grotesk"',margin:'0 0 6px',color: ok?C.ok:C.bad},
         feedbackTitle: ok?'Dobrze!':'Niepoprawnie', explanation:q.e,
-        hasLink:!!q.l, qLink:q.l||'', qLinkLabel:q.ll||'Zobacz przykład',
+        hasLink:qLinks.length>0, qLinks,
         onNext:()=>this.next(), nextLabel: isLast?'Zakończ i zobacz wynik':'Następne pytanie'
       });
     }
@@ -611,8 +697,11 @@ class Component extends DCLogic {
     const recent=this.loadHistory().filter(h=>(h.module||'marketing')===s.module).slice(0,5);
     const sb=this.supabaseClient(); const savedName=this.normalizePlayerName(s.nick);
     const isSaved=!!sb && !!savedName && !!(this._submitted && s.lastSessionId && this._submitted.has(s.lastSessionId));
+    const tooShort=total>0 && total<RANK_MIN_TOTAL;
     return Object.assign(base,{
-      endHasSb:!!sb, endSaved:isSaved, endNotSaved:!!sb && !isSaved,
+      endHasSb:!!sb, endTooShort:!!sb && tooShort,
+      endSaved:isSaved && !tooShort, endNotSaved:!!sb && !isSaved && !tooShort,
+      endTooShortLabel:'Ta sesja ('+total+' pyt.) nie liczy się do rankingu — zagraj od '+RANK_MIN_TOTAL+' pytań, aby trafić do top 10.',
       endSavedLabel:'Zapisano w rankingu jako '+savedName,
       endNick:s.nick||'', onEndNick:(e)=>this.onNickInput(e), onSaveResult:()=>this.saveResultWithNick(),
       hasRecent:recent.length>0, recentItems:recent.map(h=>this.histView(h)),
@@ -630,10 +719,10 @@ class Component extends DCLogic {
     const Q=[];
     Q.push(
      {d:'W1-2',p:1,t:'single',q:'Jaka jest poprawna kolejność ewolucji orientacji przedsiębiorstw?',a:[['Produkcyjna → produktowa → sprzedażowa → marketingowa → strategiczna',1],['Produktowa → produkcyjna → marketingowa → sprzedażowa',0],['Sprzedażowa → produkcyjna → produktowa → strategiczna',0],['Marketingowa → strategiczna → sprzedażowa → produkcyjna → produktowa',0]],e:'Orientacje pojawiały się kolejno: produkcyjna, produktowa, sprzedażowa, na klienta (marketingowa), a na końcu strategiczna.'},
-     {d:'W1-2',p:1,t:'single',q:'Co było głównym celem orientacji produkcyjnej?',a:[['Wytwarzać dużo i tanio, udostępnić produkt masowemu odbiorcy',1],['Odkrywać i zaspokajać nieuświadomione potrzeby nabywców na rynku',0],['Budować długotrwałe relacje z klientem',0],['Wychwytywać sygnały wczesnego ostrzegania',0]],e:'To rynek sprzedawcy — liczyła się masowa, tania produkcja. Marketing praktycznie nie istniał (np. Ford T „Blaszana Elżunia”).'},
+     {d:'W1-2',p:1,t:'single',q:'Co było głównym celem orientacji produkcyjnej?',a:[['Wytwarzać dużo i tanio, udostępnić produkt masowemu odbiorcy',1],['Odkrywać i zaspokajać nieuświadomione potrzeby nabywców na rynku',0],['Budować długotrwałe relacje z klientem',0],['Wychwytywać sygnały wczesnego ostrzegania',0]],e:'To rynek sprzedawcy — liczyła się masowa, tania produkcja. Marketing praktycznie nie istniał (np. Ford T „Blaszana Elżunia”).',l:'https://en.wikipedia.org/wiki/Ford_Model_T',ll:'Zobacz Forda T („Tin Lizzie”)'},
      {d:'W1-2',p:2,t:'tf',q:'Orientacje produkcyjną, produktową i sprzedażową zalicza się do marketingu 1.0.',a:[['Prawda',1],['Fałsz',0]],e:'Zgodnie z wykładem te trzy wczesne orientacje odpowiadają koncepcji marketingu 1.0.'},
      {d:'W1-2',p:2,t:'single',q:'Na czym polegał narastający problem orientacji produktowej?',a:[['Samo ulepszanie istniejącego produktu przestaje wystarczać',1],['Rosnąca presja na obniżanie cen wszystkich oferowanych produktów',0],['Zbyt niskie ceny produktów',0],['Nadmiar kanałów dystrybucji',0]],e:'Przykład: nie „lepsza pułapka na myszy”, lecz zupełnie nowy sposób rozwiązania problemu (środki chemiczne, usługi deratyzacji).'},
-     {d:'W1-2',p:2,t:'single',q:'Co cechowało orientację sprzedażową?',a:[['Rosnące znaczenie środków aktywizacji sprzedaży i masowej dystrybucji',1],['Całkowita rezygnacja z reklamy na rzecz maksymalnego obniżania kosztów produkcji',0],['Skupienie na relacjach z klientem',0],['Produkcja wyłącznie na zamówienie',0]],e:'Pojawia się problem konkurencji i substytutów; rozwijają się cash and carry, pierwszy supermarket (Kullen), sklepy dyskontowe.'},
+     {d:'W1-2',p:2,t:'single',q:'Co cechowało orientację sprzedażową?',a:[['Rosnące znaczenie środków aktywizacji sprzedaży i masowej dystrybucji',1],['Całkowita rezygnacja z reklamy na rzecz maksymalnego obniżania kosztów produkcji',0],['Skupienie na relacjach z klientem',0],['Produkcja wyłącznie na zamówienie',0]],e:'Pojawia się problem konkurencji i substytutów; rozwijają się cash and carry, pierwszy supermarket (Kullen), sklepy dyskontowe.',l:'https://en.wikipedia.org/wiki/King_Kullen',ll:'Zobacz historię King Kullen'},
      {d:'W1-2',p:2,t:'single',q:'Orientacja marketingowa (na klienta) oznacza przede wszystkim:',a:[['Tworzenie oferty na podstawie rozpoznanych potrzeb nabywców',1],['Maksymalizację wielkości produkcji',0],['Sprzedaż tego, co już wyprodukowano',0],['Maksymalne obniżanie kosztów wytwarzania niezależnie od potrzeb nabywców',0]],e:'Podstawą oferty są aktualne i przyszłe potrzeby nabywców, które kształtują produkt, cenę, promocję i dystrybucję.'},
      {d:'W1-2',p:3,t:'single',q:'„Najkrótsza definicja marketingu” przytoczona na wykładzie brzmi:',a:[['Zyskowne zaspokajanie potrzeb',1],['Maksymalizacja satysfakcji klienta',0],['Sprzedaż za wszelką cenę',0],['Dawanie klientom wszystkiego, czego pragną',0]],e:'Celem marketingu jest tworzenie wartości dla klienta w zamian za zysk — nie maksymalizacja satysfakcji ani oddawanie wszystkiego.'},
      {d:'W1-2',p:1,t:'multi',q:'Które elementy tworzą klasyczny marketing-mix (4P)?',a:[['Produkt',1],['Cena',1],['Dystrybucja',1],['Promocja',1],['Personel',0],['Proces',0]],e:'Klasyczne 4P to: produkt, cena, dystrybucja i promocja. Personel i proces to elementy rozszerzenia 7P.'},
@@ -649,9 +738,9 @@ class Component extends DCLogic {
      {d:'W1-2',p:3,t:'single',q:'Astroturfing to:',a:[['Sztuczne tworzenie komentarzy i opinii w sieci budujące fałszywy obraz',1],['Jawne i legalne badanie opinii oraz satysfakcji klientów przeprowadzane ankietą',0],['Program lojalnościowy',0],['Rodzaj rabatu ilościowego',0]],e:'Astroturfing to zagrożenie dla WOMM — nakręcanie fałszywego zainteresowania, np. przez farmy trolli.'},
      {d:'W1-2',p:2,t:'single',q:'Marketing szeptany (WOM) opiera się na:',a:[['Nieformalnym przekazywaniu informacji między ludźmi',1],['Płatnych reklamach telewizyjnych',0],['Billboardach zewnętrznych',0],['Wyłącznie na masowej wysyłce reklamowych wiadomości e-mail',0]],e:'Word-of-mouth to przekaz nieformalny; jego celem jest rozpowszechnianie pozytywnych treści o marce.'},
      {d:'W1-2',p:2,t:'single',q:'Najbardziej znanym przykładem Real-Time Marketingu (RTM) jest:',a:[['Tweet Oreo podczas SuperBowl 2013',1],['Kampania Hotmaila z 1997 r.',0],['Telewizyjny spot reklamowy samochodu Forda model T',0],['Kampania Eisenhowera',0]],e:'RTM to docieranie do odbiorców w konkretnym czasie i miejscu; przykład Oreo podczas blackoutu na SuperBowl.',l:'https://x.com/Oreo/status/298793433655701505',ll:'Zobacz tweet Oreo z SuperBowl'},
-     {d:'W1-2',p:2,t:'single',q:'Pierwsza znana kampania marketingu wirusowego (1997) to:',a:[['Hotmail',1],['Oreo',0],['Allegro (dziadek)',0],['Volvo',0]],e:'Kampania Hotmaila (1997) sprawiła, że miliony użytkowników założyły konta — klasyczny viral marketing.'},
+     {d:'W1-2',p:2,t:'single',q:'Pierwsza znana kampania marketingu wirusowego (1997) to:',a:[['Hotmail',1],['Oreo',0],['Allegro (dziadek)',0],['Volvo',0]],e:'Kampania Hotmaila (1997) sprawiła, że miliony użytkowników założyły konta — klasyczny viral marketing.',l:'https://en.wikipedia.org/wiki/Viral_marketing#Hotmail_Tagline',ll:'Przeczytaj o kampanii Hotmaila'},
      {d:'W1-2',p:3,t:'single',q:'Czym różni się marketing wirusowy (viral) od marketingu szeptanego?',a:[['Viral stawia na kontrowersję/humor/rozrywkę',1],['Viral jest zawsze płatny, a szeptany darmowy',0],['Nie różnią się niczym',0],['Viral działa tylko offline',0]],e:'Treść wirusowa rozprzestrzenia się dzięki emocjom i humorowi; marketing szeptany opiera się na użyteczności informacji.'},
-     {d:'W1-2',p:2,t:'single',q:'Mikromarketing (hipersegmentacja, one-to-one) polega na:',a:[['Dostosowaniu oferty do bardzo wąskich segmentów lub indywidualnego klienta',1],['Kierowaniu jednej reklamy do wszystkich',0],['Całkowitej rezygnacji z segmentacji i badań rynku docelowego',0],['Sprzedaży wyłącznie hurtowej',0]],e:'To koncentracja na małych grupach lub jednym kliencie; przykłady: Nike ID, personalizacja M&M.'},
+     {d:'W1-2',p:2,t:'single',q:'Mikromarketing (hipersegmentacja, one-to-one) polega na:',a:[['Dostosowaniu oferty do bardzo wąskich segmentów lub indywidualnego klienta',1],['Kierowaniu jednej reklamy do wszystkich',0],['Całkowitej rezygnacji z segmentacji i badań rynku docelowego',0],['Sprzedaży wyłącznie hurtowej',0]],e:'To koncentracja na małych grupach lub jednym kliencie; przykłady: Nike ID, personalizacja M&M.',links:[['https://www.nike.com/nike-by-you','Zobacz Nike By You'],['https://www.mms.com/en-us/configurator','Zobacz personalizację M&M’s']]},
      {d:'W1-2',p:2,t:'single',q:'Up-selling to technika polegająca na:',a:[['Proponowaniu klientowi droższego produktu o wyższym standardzie',1],['Sprzedaży produktów komplementarnych',0],['Zmniejszaniu masy produktu przy tej samej cenie',0],['Społecznościowym finansowaniu produkcji nowego produktu w internecie',0]],e:'Up-selling to oferowanie produktu droższego, „ekskluzywnego”, o podwyższonym standardzie.'},
      {d:'W1-2',p:2,t:'single',q:'Cross-selling to:',a:[['Sprzedaż produktów powiązanych/komplementarnych z głównym',1],['Proponowanie droższej wersji produktu',0],['Jednorazowa obniżka ceny produktu o połowę w czasie promocji',0],['Badanie satysfakcji klienta',0]],e:'Przykład: kredyt powiązany z założeniem konta i ubezpieczeniem; laptop z torbą i myszką.'},
      {d:'W1-2',p:2,t:'single',q:'Downsizing (w kontekście produktu) oznacza:',a:[['Zmniejszanie masy produktu przy utrzymaniu ceny',1],['Powiększanie opakowania produktu bez zmiany jego dotychczasowej ceny',0],['Obniżkę ceny przy tej samej masie',0],['Rezygnację z opakowania',0]],e:'Downsizing to „kreatywne opakowania” — mniej produktu za tę samą cenę.'},
@@ -664,9 +753,9 @@ class Component extends DCLogic {
      {d:'W1-2',p:1,t:'single',q:'Marketing 3.0 to orientacja:',a:[['Społeczna',1],['Produkcyjna',0],['Internetowa/cyfrowa',0],['Sprzedażowa',0]],e:'Marketing 3.0 odpowiada orientacji społecznej — działaniom na rzecz wartości i celów społecznych.'},
      {d:'W1-2',p:1,t:'single',q:'Marketing 4.0 to przede wszystkim:',a:[['Marketing internetowy/cyfrowy',1],['Marketing produkcyjny',0],['Marketing oparty na trwałych relacjach z klientem',0],['Marketing polityczny',0]],e:'Marketing 4.0 wiąże się z internetem, dwustronną komunikacją i marketingiem bezpośrednim online.'},
      {d:'W1-2',p:3,t:'single',q:'Marketing 5.0 wg Kotlera to:',a:[['Połączenie czynnika ludzkiego z nowoczesną technologią i AI',1],['Powrót do orientacji produkcyjnej',0],['Całkowita rezygnacja z nowoczesnych technologii cyfrowych i sztucznej inteligencji',0],['Marketing wyłącznie masowy',0]],e:'Marketing 5.0 (Technology for Humanity) łączy wiedzę ekspertów, technologię i sztuczną inteligencję.'},
-     {d:'W1-2',p:2,t:'single',q:'W którym roku po raz pierwszy zastosowano techniki marketingu politycznego w demokratycznej Polsce?',a:[['1989',1],['1952',0],['1959',0],['2004',0]],e:'W czerwcu 1989 r. (kampania Solidarności). 1952 to kampania Eisenhowera w USA, 1959 — pierwsze użycie w Europie (W. Brytania).'},
-     {d:'W1-2',p:2,t:'multi',q:'Które z poniższych to przykłady marketingu społecznego?',a:[['Wielka Orkiestra Świątecznej Pomocy',1],['„Rzuć palenie razem z nami”',1],['Place zabaw Muszkieterów',1],['Program lojalnościowy z rabatem za zakupy',0]],e:'Marketing społeczny to zmiana szkodliwych zachowań lub wspieranie celów społecznych — WOŚP, akcje prozdrowotne, place zabaw.'},
-     {d:'W1-2',p:3,t:'single',q:'Sprawa Tylenolu (Johnson & Johnson) jest przykładem:',a:[['Orientacji społecznej/etycznej',1],['Nieudanej kampanii wirusowej',0],['Marketingu politycznego',0],['Klasycznego przykładu produktowego downsizingu marki',0]],e:'Mimo straty 240 mln USD wycofanie skażonego produktu umocniło lojalność klientów — czynienie tego, co słuszne, opłaciło się.'},
+     {d:'W1-2',p:2,t:'single',q:'W którym roku po raz pierwszy zastosowano techniki marketingu politycznego w demokratycznej Polsce?',a:[['1989',1],['1952',0],['1959',0],['2004',0]],e:'W czerwcu 1989 r. (kampania Solidarności). 1952 to kampania Eisenhowera w USA, 1959 — pierwsze użycie w Europie (W. Brytania).',links:[['https://en.wikipedia.org/wiki/Solidarity_Citizens%27_Committee','Zobacz kampanię Solidarności 1989'],['https://www.youtube.com/results?search_query=Eisenhower+Answers+America+1952','Zobacz „Eisenhower Answers America”']]},
+     {d:'W1-2',p:2,t:'multi',q:'Które z poniższych to przykłady marketingu społecznego?',a:[['Wielka Orkiestra Świątecznej Pomocy',1],['„Rzuć palenie razem z nami”',1],['Place zabaw Muszkieterów',1],['Program lojalnościowy z rabatem za zakupy',0]],e:'Marketing społeczny to zmiana szkodliwych zachowań lub wspieranie celów społecznych — WOŚP, akcje prozdrowotne, place zabaw.',links:[['https://www.wosp.org.pl/','Zobacz WOŚP'],['https://www.youtube.com/results?search_query=Rzu%C4%87+palenie+razem+z+nami+kampania','Zobacz akcję „Rzuć palenie”'],['https://www.youtube.com/results?search_query=Place+zabaw+Muszkieter%C3%B3w','Zobacz place zabaw Muszkieterów']]},
+     {d:'W1-2',p:3,t:'single',q:'Sprawa Tylenolu (Johnson & Johnson) jest przykładem:',a:[['Orientacji społecznej/etycznej',1],['Nieudanej kampanii wirusowej',0],['Marketingu politycznego',0],['Klasycznego przykładu produktowego downsizingu marki',0]],e:'Mimo straty 240 mln USD wycofanie skażonego produktu umocniło lojalność klientów — czynienie tego, co słuszne, opłaciło się.',l:'https://time.com/3423136/tylenol-deaths-1982/',ll:'Przeczytaj o kryzysie Tylenolu'},
      {d:'W1-2',p:2,t:'single',q:'Marketing sensoryczny (zmysłowy) polega na:',a:[['Oddziaływaniu na zmysły',1],['Kierowaniu reklamy tylko do dzieci',0],['Sprzedaży wyłącznie online',0],['Obniżaniu cen w sezonie',0]],e:'Przykłady: zapach świeżego pieczywa, dźwięk chrupania chipsów, degustacje, miłe w dotyku tkaniny.'},
      {d:'W1-2',p:3,t:'tf',q:'Według „mitów marketingu” to koszty wyznaczają cenę produktu.',a:[['Fałsz',1],['Prawda',0]],e:'To mit — w rzeczywistości cenę wyznacza rynek (podaż, popyt, konkurencja). Klient nie zapłaci więcej tylko dlatego, że firma ma wyższe koszty.'},
      {d:'W1-2',p:2,t:'single',q:'„Farma trolli” to:',a:[['Firma zatrudniająca ludzi do rozsiewania w sieci określonych treści',1],['Internetowy portal do porównywania cen produktów',0],['Rozbudowana ogólnokrajowa sieć tanich sklepów dyskontowych z żywnością',0],['System komputerowy do zarządzania relacjami z klientami',0]],e:'Trolle udają zwykłych użytkowników, realizując strategię zleceniodawcy — często w celach politycznych.'}
@@ -699,7 +788,7 @@ class Component extends DCLogic {
      {d:'W3',p:2,t:'single',q:'Etnocentryzm konsumencki to:',a:[['Przekonanie, że należy kupować produkty krajowe',1],['Preferowanie produktów zagranicznych',0],['Brak zainteresowania pochodzeniem produktu',0],['Kupowanie wyłącznie zagranicznych dóbr luksusowych z wyższej półki',0]],e:'Etnocentryk uważa zakup produktów zagranicznych za nieodpowiedni; przeciwieństwem jest postawa internacjonalistyczna.'},
      {d:'W3',p:2,t:'tf',q:'Największy etnocentryzm konsumenci wykazują wobec żywności.',a:[['Prawda',1],['Fałsz',0]],e:'Wobec żywności etnocentryzm jest najsilniejszy; przy kosmetykach preferuje się francuskie, elektronice — japońską, samochodach — niemieckie.'},
      {d:'W3',p:3,t:'single',q:'Efekt kraju pochodzenia: z jakimi produktami najczęściej kojarzona jest Szwajcaria?',a:[['Zegarki, czekolada',1],['Samochody i piwo',0],['Perfumy i wino',0],['Elektronika i aparaty',0]],e:'Stereotypy: Szwajcaria — zegarki/czekolada/sery; Niemcy — samochody/piwo; Francja — perfumy/wino; Japonia — elektronika.'},
-     {d:'W3',p:2,t:'single',q:'Trysumeryzm to trend polegający na:',a:[['Testowaniu i próbowaniu produktów',1],['Rezygnacji z zakupów',0],['Kupowaniu grupowym',0],['Śledzeniu lokalizacji klientów przez aplikacje mobilne',0]],e:'Trysumeryzm (od „try”) to poszukiwanie doświadczeń przez symulacje: awatary, wirtualne meblowanie (IKEA), konfiguratory.'},
+     {d:'W3',p:2,t:'single',q:'Trysumeryzm to trend polegający na:',a:[['Testowaniu i próbowaniu produktów',1],['Rezygnacji z zakupów',0],['Kupowaniu grupowym',0],['Śledzeniu lokalizacji klientów przez aplikacje mobilne',0]],e:'Trysumeryzm (od „try”) to poszukiwanie doświadczeń przez symulacje: awatary, wirtualne meblowanie (IKEA), konfiguratory.',l:'https://www.ikea.com/us/en/home-design/',ll:'Zobacz IKEA Kreativ'},
      {d:'W3',p:3,t:'single',q:'Webrooming to zachowanie polegające na:',a:[['Oglądaniu produktów w sieci, a następnie kupowaniu ich w sklepie stacjonarnym',1],['Oglądaniu produktów w sklepie stacjonarnym, a potem kupowaniu ich taniej w sieci',0],['Kupowaniu wyłącznie grupowym',0],['Rezygnacji z internetu',0]],e:'Webrooming: research online → zakup offline. Odwrotnością jest showrooming (oglądanie w sklepie, zakup w sieci).'},
      {d:'W3',p:2,t:'single',q:'Który zestaw czynników kształtujących decyzje zakupu jest zaklasyfikowany jako wewnętrzny (psychologiczny)?',a:[['Potrzeby, motywacje',1],['Cena i dochody',0],['Rodzina i grupa odniesienia',0],['Kultura i subkultura',0]],e:'Czynniki wewnętrzne to psychologiczne (potrzeby, motywacja, postrzeganie); zewnętrzne to ekonomiczne, socjologiczne i kulturowe.'}
     );
@@ -766,7 +855,7 @@ class Component extends DCLogic {
      {d:'Promocja',p:2,t:'single',q:'Dobry przekaz reklamowy (model AIDA) powinien kolejno:',a:[['Zwrócić uwagę, podtrzymać zainteresowanie, pobudzić pragnienie, wywołać działanie',1],['Wywołać działanie, potem zwrócić uwagę',0],['Tylko obniżyć cenę',0],['Zniechęcić konkurencję',0]],e:'Dobry przekaz: uwaga → zainteresowanie → pragnienie → działanie.'},
      {d:'Promocja',p:2,t:'single',q:'Apel racjonalny w reklamie odwołuje się do:',a:[['Konkretnych korzyści',1],['Emocji: strachu, poczucia winy',0],['Tego, co dobre i moralne',0],['Wyłącznie do humoru',0]],e:'Apel racjonalny podkreśla wymierne korzyści; emocjonalny gra na uczuciach; moralny odwołuje się do wartości.'},
      {d:'Promocja',p:2,t:'single',q:'Apel emocjonalny w reklamie wykorzystuje:',a:[['Emocje pozytywne lub negatywne',1],['Wyłącznie dane techniczne',0],['Tabelę cen',0],['Kalkulację kosztów kredytu',0]],e:'Apel emocjonalny stosuje się m.in. w reklamach past do zębów, dezodorantów, badań profilaktycznych.'},
-     {d:'Promocja',p:2,t:'single',q:'Apel moralny w reklamie odwołuje się do:',a:[['Odczuć, co jest dobre i właściwe',1],['Konkretnych korzyści finansowych',0],['Strachu przed chorobą',0],['Prestiżu i statusu',0]],e:'Apel moralny nakłania do popierania słusznych spraw — np. WOŚP, akcje charytatywne, ochrona środowiska.'},
+     {d:'Promocja',p:2,t:'single',q:'Apel moralny w reklamie odwołuje się do:',a:[['Odczuć, co jest dobre i właściwe',1],['Konkretnych korzyści finansowych',0],['Strachu przed chorobą',0],['Prestiżu i statusu',0]],e:'Apel moralny nakłania do popierania słusznych spraw — np. WOŚP, akcje charytatywne, ochrona środowiska.',l:'https://www.wosp.org.pl/',ll:'Zobacz przykład WOŚP'},
      {d:'Promocja',p:3,t:'single',q:'Reklama, która pod pozorem neutralnego przekazu oddziałuje na podświadomość, to reklama:',a:[['Ukryta',1],['Porównawcza',0],['Racjonalna',0],['Zewnętrzna',0]],e:'Reklama ukryta kamufluje przekaz i oddziałuje na podświadomość; jest to niedozwolone.'},
      {d:'Promocja',p:3,t:'tf',q:'W polskim prawie obowiązuje zakaz reklamy wprowadzającej w błąd oraz bezpośredniej reklamy porównawczej.',a:[['Prawda',1],['Fałsz',0]],e:'Przepisy zakazują reklamy wprowadzającej w błąd, nierzeczowej, ukrytej oraz bezpośredniej reklamy porównawczej.'},
      {d:'Promocja',p:2,t:'single',q:'CPC (cost per click) to:',a:[['Koszt za kliknięcie',1],['Koszt tysiąca wyświetleń',0],['Liczba subskrybentów kanału',0],['Wskaźnik lojalności klienta',0]],e:'CPC to stosunek kosztów emisji reklamy do liczby kliknięć w nią.'},
@@ -774,26 +863,26 @@ class Component extends DCLogic {
      {d:'Promocja',p:3,t:'single',q:'Najbardziej uzasadnioną, choć najtrudniejszą metodą ustalania budżetu promocji jest metoda:',a:[['Założonego celu',1],['Procentu od wielkości sprzedaży',0],['Naśladowania konkurencji',0],['„Na co nas stać”',0]],e:'Metoda celów i zadań określa, co trzeba osiągnąć i co zrobić — najbardziej uzasadniona, ale najtrudniejsza.'},
      {d:'Promocja',p:1,t:'tf',q:'Według badań osoby o wyższym wykształceniu lub inteligencji mniej ulegają wpływom reklamy.',a:[['Prawda',1],['Fałsz',0]],e:'Badania wskazują, że osoby lepiej wykształcone/inteligentne są mniej podatne na wpływ; najbardziej podatne są dzieci.'},
      {d:'Promocja',p:2,t:'single',q:'Do nieosobistych kanałów komunikacji zalicza się m.in.:',a:[['Środki masowego przekazu, nastrój, wydarzenia',1],['Rozmowę sprzedawcy z klientem',0],['Poradę dentysty',0],['Telefon do znajomego',0]],e:'Kanały nieosobiste: media masowe, nastrój (aranżacja otoczenia) i wydarzenia; kanały osobiste to bezpośredni kontakt.'},
-     {d:'Promocja',p:3,t:'single',q:'Kontrowersyjne reklamy Benettona (Oliviero Toscani) zdobyły rozpoznawalność głównie dzięki:',a:[['Kontrowersji, która sprawiała, że wszyscy o nich mówili',1],['Bardzo niskim cenom produktów',0],['Długiemu czasowi ekspozycji',0],['Rezygnacji z jakiegokolwiek przekazu',0]],e:'Reklamy wisiały krótko (były oprotestowywane), ale kontrowersja dała ogromną rozpoznawalność marce.'}
+     {d:'Promocja',p:3,t:'single',q:'Kontrowersyjne reklamy Benettona (Oliviero Toscani) zdobyły rozpoznawalność głównie dzięki:',a:[['Kontrowersji, która sprawiała, że wszyscy o nich mówili',1],['Bardzo niskim cenom produktów',0],['Długiemu czasowi ekspozycji',0],['Rezygnacji z jakiegokolwiek przekazu',0]],e:'Reklamy wisiały krótko (były oprotestowywane), ale kontrowersja dała ogromną rozpoznawalność marce.',l:'https://en.wikipedia.org/wiki/Benetton_Group#Marketing',ll:'Przeczytaj o kampaniach Benettona'}
     );
     /* --- Audyt merytoryczny: case'y z wykładów --- */
     Q.push(
      {d:'W1-2',p:2,t:'single',q:'Reklama Allegro z dziadkiem uczącym się angielskiego („English for beginners”) jest przede wszystkim przykładem:',a:[['Marketingu wirusowego opartego na emocjonalnym storytellingu',1],['Reklamy porównawczej',0],['Reklamy racjonalnej opartej na cenie',0],['Marketingu sensorycznego',0]],e:'Spot rozszedł się wiralowo dzięki wzruszającej historii (dziadek uczy się angielskiego dla wnuczki) — to viral marketing budowany na emocjach, a nie na cechach czy cenie produktu.',l:'https://www.youtube.com/watch?v=tU5Rnd-HM6A',ll:'Obejrzyj reklamę Allegro'},
      {d:'W1-2',p:2,t:'single',q:'Reklama Volvo Trucks z Jean-Claude Van Damme’em („Epic Split”) najtrafniej pokazuje wykorzystanie viral marketingu przez:',a:[['Widowiskowość',1],['Rabat cenowy',0],['Apel moralny',0],['Reklamę ukrytą',0]],e:'Efekt wirusowy wywołał tu spektakularny, widowiskowy popis (szpagat między dwiema cofającymi ciężarówkami) demonstrujący precyzję układu kierowniczego — nie humor ani obniżka ceny.',l:'https://www.youtube.com/watch?v=M7FIvfx5J10',ll:'Obejrzyj „Epic Split”'},
      {d:'W1-2',p:2,t:'multi',q:'Spot wideo typu ASMR wykorzystuje przede wszystkim oddziaływanie na które zmysły?',a:[['Słuch',1],['Wzrok',1],['Węch',0],['Smak',0]],e:'ASMR to element marketingu sensorycznego — w spocie wideo działa przez dźwięk (szepty, chrupanie, szelesty) wspierany obrazem. Szerzej ASMR wiąże się też z bodźcami dotykowymi, ale zapachu, smaku i dotyku nie da się przekazać w nagraniu.',l:'https://www.youtube.com/results?search_query=ASMR+reklama+super+bowl',ll:'Zobacz przykłady reklam ASMR'},
-     {d:'W1-2',p:3,t:'single',q:'Afera Corhydronu (Jelfa) — pomylone fiolki leku — bywa omawiana jako przykład znaczenia czego w marketingu społecznym/etycznym?',a:[['Odpowiedzialności i bezpieczeństwa produktu oraz reakcji firmy na kryzys',1],['Skuteczności reklamy porównawczej',0],['Psychologicznego ustalania cen',0],['Głębokości asortymentu',0]],e:'Sprawa pokazuje wagę bezpieczeństwa produktu i etycznej, szybkiej reakcji na kryzys — analogicznie do sprawy Tylenolu, gdzie właściwe działanie chroni zaufanie do marki.'},
+     {d:'W1-2',p:3,t:'single',q:'Afera Corhydronu (Jelfa) — pomylone fiolki leku — bywa omawiana jako przykład znaczenia czego w marketingu społecznym/etycznym?',a:[['Odpowiedzialności i bezpieczeństwa produktu oraz reakcji firmy na kryzys',1],['Skuteczności reklamy porównawczej',0],['Psychologicznego ustalania cen',0],['Głębokości asortymentu',0]],e:'Sprawa pokazuje wagę bezpieczeństwa produktu i etycznej, szybkiej reakcji na kryzys — analogicznie do sprawy Tylenolu, gdzie właściwe działanie chroni zaufanie do marki.',l:'https://www.youtube.com/results?search_query=afera+Corhydronu+Jelfa',ll:'Zobacz materiały o aferze Corhydronu'},
      {d:'W1-2',p:2,t:'single',q:'Reklamy Apple / wystąpienia Steve’a Jobsa dobrze ilustrują budowanie wartości marki przez:',a:[['Wizję i emocje',1],['Wyłącznie parametry techniczne produktu',0],['Najniższą cenę na rynku',0],['Reklamę porównawczą wobec konkurencji',0]],e:'Apple sprzedaje wizję i emocje, a nie specyfikację — to klasyczne „nie sprzedajemy produktu, sprzedajemy marzenie / styl życia”.',l:'https://www.youtube.com/watch?v=5sMBhDv4sik',ll:'Obejrzyj „Think Different” (1997)'},
      {d:'W1-2',p:2,t:'multi',q:'Przykład Green Caffè Nero pokazuje, że w usługach gastronomicznych poza samym produktem (kawą) liczy się także:',a:[['Lokalizacja',1],['Atmosfera miejsca',1],['Doświadczenie klienta',1],['Wyłącznie najniższa cena',0]],e:'W usługach (7P) o wartości decyduje otoczenie i przeżycie klienta — lokalizacja, atmosfera i całościowe doświadczenie, nie tylko sam napój.'},
      {d:'W3',p:3,t:'single',q:'Wg przykładów z teorii Freuda (badania motywacji) niechęć do suszonych owoców interpretowano jako:',a:[['Lęk przed starością',1],['Lęk przed wysokością',0],['Obawę przed wysoką ceną',0],['Strach przed nowością technologiczną',0]],e:'W motivational research pomarszczone suszone owoce podświadomie kojarzono ze starczą, pomarszczoną skórą — stąd niechęć. Podobnie interpretowano opory wobec gotowych mieszanek do ciast czy symbolikę cygara.'},
      {d:'W3',p:2,t:'single',q:'Gdzie najlepiej umieścić pojedynczy billboard, aby przekroczyć dolny próg zauważalności bodźca?',a:[['Tam, gdzie jest niewiele konkurujących bodźców i reklama wyraźnie się wyróżnia',1],['W miejscu z jak największą liczbą innych reklam',0],['Zawsze przy najniższym natężeniu ruchu',0],['Wyłącznie w centrach handlowych',0]],e:'Dolny (bezwzględny) próg to minimalne natężenie bodźca, przy którym zostaje on w ogóle dostrzeżony. Pojedynczy billboard łatwiej przekracza ten próg tam, gdzie nie ginie w gąszczu innych bodźców.'},
      {d:'W3',p:3,t:'single',q:'Eksperyment ze sklepu z kanapami (tło z obłoczkami vs z monetami/dolarami) pokazuje wpływ czego na decyzję zakupową?',a:[['Kontekstu',1],['Elastyczności cenowej popytu',0],['Prawa Engla',0],['Rabatu funkcjonalnego',0]],e:'Tło z obłoczkami kierowało uwagę klientów na wygodę mebla, a tło z monetami — na cenę. Informacje z otoczenia (kontekst) nieświadomie zmieniają kryteria decyzji zakupowej.'},
      {d:'W5-6',p:2,t:'single',q:'Zasada „kobiety nie kupują szminki, kupują nadzieję” pokazuje, że marketer sprzedaje przede wszystkim:',a:[['Obietnicę / korzyść emocjonalną (nadzieję na urodę)',1],['Cechę fizyczną produktu (skład, kolor)',0],['Najniższą cenę',0],['Wyłącznie opakowanie',0]],e:'To ilustracja zasady „sprzedajemy korzyść, nie cechę” — szminka jest jedynie „opakowaniem” obietnicy atrakcyjności i nadziei.'},
-     {d:'W5-6',p:2,t:'single',q:'Który przykład pokazuje ponowne wsparcie produktu kampanią reklamową w cyklu życia produktu (przedłużenie/ożywienie fazy dojrzałości)?',a:[['Ciastka Jeżyki wsparte nową kampanią reklamową',1],['Nylon jako jednorazowa nowość',0],['Chwilowa moda sezonowa',0],['Wyprzedaż resztek w fazie schyłku',0]],e:'Jeżyki to przykład produktu, którego dojrzałą fazę ożywiono nową kampanią — to niestandardowy, „ząbkowany” cykl życia z ponownym wsparciem reklamowym.'},
+     {d:'W5-6',p:2,t:'single',q:'Który przykład pokazuje ponowne wsparcie produktu kampanią reklamową w cyklu życia produktu (przedłużenie/ożywienie fazy dojrzałości)?',a:[['Ciastka Jeżyki wsparte nową kampanią reklamową',1],['Nylon jako jednorazowa nowość',0],['Chwilowa moda sezonowa',0],['Wyprzedaż resztek w fazie schyłku',0]],e:'Jeżyki to przykład produktu, którego dojrzałą fazę ożywiono nową kampanią — to niestandardowy, „ząbkowany” cykl życia z ponownym wsparciem reklamowym.',l:'https://www.youtube.com/results?search_query=ciastka+Je%C5%BCyki+reklama+kampania',ll:'Zobacz reklamy Jeżyków'},
      {d:'W5-6',p:2,t:'single',q:'Różnica między ceną 399,95 zł a 400 zł to działanie jakiego mechanizmu?',a:[['Psychologicznego ustalania cen',1],['Rabatu ilościowego',0],['Paradoksu Veblena',0],['Elastyczności mieszanej popytu',0]],e:'Cena tuż poniżej okrągłej sumy (399,95) jest odbierana jako wyraźnie niższa i „okazyjna”, mimo minimalnej realnej różnicy — to psychologia ceny (efekt lewej cyfry).'},
      {d:'Promocja',p:2,t:'single',q:'Reklama perfum/kosmetyków Chanel z prezentacji jest przykładem apelu:',a:[['Emocjonalnego',1],['Racjonalnego',0],['Moralnego',0],['Porównawczego',0]],e:'Reklamy Chanel budują nastrój, prestiż i pożądanie — grają na emocjach, a nie na wymiernych, racjonalnych korzyściach.',l:'https://www.youtube.com/watch?v=0hcaaKhGL00',ll:'Obejrzyj Chanel N°5 „Le Film” (Nicole Kidman)'},
      {d:'Promocja',p:2,t:'single',q:'Case „Lidl kontra Biedronka” najlepiej pasuje do tematu:',a:[['Reklama porównawcza',1],['Reklama ukryta',0],['Reklama społeczna',0],['Marketing sensoryczny',0]],e:'Bezpośrednie zestawianie własnej oferty z konkretnym konkurentem (ceny, koszyk zakupów) to sztandarowy przykład reklamy porównawczej — w Polsce dopuszczalnej tylko pod warunkami, a bezpośredniej co do zasady ograniczonej.',l:'https://bezprawnik.pl/reklama-porownawcza/',ll:'Przeczytaj o wojnie Lidl kontra Biedronka'},
      {d:'Promocja',p:3,t:'single',q:'Przykład piw Żubr i Żywiec można wykorzystać do pytania o ryzyko jakiego typu reklamy?',a:[['Reklamy porównawczej',1],['Reklamy społecznej',0],['Reklamy racjonalnej',0],['Reklamy ukrytej',0]],e:'Kampania Żubra nawiązująca do Żywca to przykład balansowania na granicy reklamy porównawczej — bezpośrednia reklama porównawcza jest w polskim prawie ograniczona, więc takie nawiązania do konkurenta niosą ryzyko prawne.',l:'https://www.youtube.com/results?search_query=%C5%BBubr+reklama+%C5%BBywiec',ll:'Zobacz materiał o kampanii'},
-     {d:'Promocja',p:2,t:'multi',q:'Przykłady kredytów z prezentacji („Prostoliczony”, „Mini Ratka”) pokazują, że w przekazie reklamowym trzeba szczególnie uważać na:',a:[['Jasność i przejrzystość kosztów (RRSO, opłaty)',1],['Ryzyko wprowadzenia klienta w błąd',1],['Maksymalne skrócenie informacji o cenie',0],['Ukrywanie warunków umowy',0]],e:'Reklamy produktów finansowych muszą jasno komunikować koszty (RRSO), bo łatwo tu o przekaz wprowadzający w błąd — czego prawo zakazuje.'},
+     {d:'Promocja',p:2,t:'multi',q:'Przykłady kredytów z prezentacji („Prostoliczony”, „Mini Ratka”) pokazują, że w przekazie reklamowym trzeba szczególnie uważać na:',a:[['Jasność i przejrzystość kosztów (RRSO, opłaty)',1],['Ryzyko wprowadzenia klienta w błąd',1],['Maksymalne skrócenie informacji o cenie',0],['Ukrywanie warunków umowy',0]],e:'Reklamy produktów finansowych muszą jasno komunikować koszty (RRSO), bo łatwo tu o przekaz wprowadzający w błąd — czego prawo zakazuje.',links:[['https://www.youtube.com/results?search_query=kredyt+Prostoliczony+reklama','Zobacz reklamę „Prostoliczony”'],['https://www.youtube.com/watch?v=g6g9t78M9X0','Zobacz reklamę „Mini Ratka”']]},
      {d:'Promocja',p:2,t:'single',q:'Dyferencjał semantyczny (skala Osgooda) służy do porównywania:',a:[['Wizerunku marek/obiektów na skali par przeciwstawnych określeń',1],['Kosztów jednostkowych produkcji',0],['Elastyczności cenowej popytu',0],['Liczby punktów sprzedaży',0]],e:'To narzędzie badawcze: respondent ocenia obiekt (markę, produkt) na skali między przeciwstawnymi przymiotnikami (np. tani–drogi, nowoczesny–przestarzały), co pozwala porównać profile wizerunkowe.'},
      {d:'Promocja',p:2,t:'single',q:'Który kanał social media najlepiej pasuje do komunikacji eksperckiej i zawodowej (B2B, employer branding)?',a:[['LinkedIn',1],['TikTok',0],['Instagram',0],['Snapchat',0]],e:'LinkedIn to platforma profesjonalna — sprzyja treściom eksperckim, kontaktom zawodowym i B2B; TikTok i Instagram są mocniej rozrywkowe i wizualne.'},
      {d:'Promocja',p:1,t:'single',q:'Case Alior Bank „Pewni swego” najlepiej ilustruje pytanie o:',a:[['Budowanie wiarygodności i wizerunku w reklamie usług finansowych',1],['Reklamę porównawczą cen kredytów',0],['Marketing sensoryczny',0],['Downsizing produktu',0]],e:'Kampania budowała zaufanie i wizerunek pewnego, kompetentnego banku — to przykład wzmacniania wiarygodności marki w komunikacji usług finansowych.',l:'https://www.youtube.com/results?search_query=alior+bank+pewni+swego+reklama',ll:'Zobacz spoty „Pewni swego”'}
