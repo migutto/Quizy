@@ -115,14 +115,14 @@ button{font-family:inherit;}
      <div style="height:8px;background:#232938;border-radius:6px;overflow:hidden;margin-bottom:24px;"><div style="{{ progressStyle }}"></div></div>
     </sc-if>
     <div style="background:#151926;border:1px solid #262D40;border-radius:22px;padding:clamp(18px,4.5vw,26px) clamp(18px,4.5vw,26px) clamp(18px,4vw,24px);box-shadow:0 22px 44px -34px rgba(0,0,0,.85);">
-     <div style="font:600 12px 'Space Grotesk';letter-spacing:.08em;text-transform:uppercase;color:#8F82FF;margin-bottom:12px;">{{ typLabel }}</div>
+     <div style="{{ typBadgeStyle }}"><span style="font-size:14px;line-height:1;">{{ typIcon }}</span><span>{{ typLabel }}</span></div>
      <h2 style="font:600 21px/1.5 'Space Grotesk',sans-serif;margin:0 0 20px;color:#EDF0F7;">{{ qText }}</h2>
      <div style="display:flex;flex-direction:column;gap:10px;">
       <sc-for list="{{ opts }}" as="o" hint-placeholder-count="4">
        <button onClick="{{ o.onClick }}" style="{{ o.style }}" style-hover="{{ o.hover }}" style-active="{{ o.press }}"><span style="{{ o.markStyle }}">{{ o.mark }}</span><span style="flex:1;">{{ o.text }}</span></button>
       </sc-for>
      </div>
-     <sc-if value="{{ showKbdHint }}" hint-placeholder-val="{{ true }}"><div style="margin-top:14px;font-size:12px;color:#626C84;text-align:center;">Klawisze 1–4 wybierają odpowiedź · Enter przechodzi dalej</div></sc-if>
+     <sc-if value="{{ showKbdHint }}" hint-placeholder-val="{{ true }}"><div style="margin-top:14px;font-size:12px;color:#626C84;text-align:center;">{{ kbdHint }}</div></sc-if>
      <sc-if value="{{ showCheck }}" hint-placeholder-val="{{ false }}">
       <button onClick="{{ onCheck }}" style="margin-top:16px;width:100%;padding:14px;border:none;border-radius:13px;background:#6C5AF5;color:#fff;font:700 15px 'Space Grotesk';cursor:pointer;box-shadow:0 12px 26px -14px rgba(124,108,255,.6);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;" style-hover="transform:translateY(-2px);box-shadow:0 18px 38px -14px rgba(124,108,255,.85);filter:brightness(1.08);" style-active="transform:translateY(0) scale(.985);filter:brightness(.96);">Sprawdź odpowiedź</button>
      </sc-if>
@@ -481,12 +481,14 @@ class Component extends DCLogic {
     const ans=this.state.answered; const sel=this.state.selected; const isMulti=q.t==='multi'; const letters=['A','B','C','D','E','F','G'];
     return order.map((oi,pos)=>{
       const o=q.a[oi]; const chosen=sel.indexOf(oi)>=0; const correct=o[1]===1;
-      let bd='#2A3145', bg='#171B2A', col=C.ink, mbg='#232A3E', mcol='#97A0B5', mark=letters[pos];
-      if(!ans){ if(chosen){ bd=C.brand; bg='#1D2138'; mbg=C.brand; mcol='#fff'; } }
+      const checkbox=isMulti&&!ans;
+      let bd='#2A3145', bg='#171B2A', col=C.ink, mbg='#232A3E', mcol='#97A0B5', mark=checkbox?(chosen?'✓':''):letters[pos], mbd='none';
+      if(checkbox && !chosen){ mbg='transparent'; mbd='2px solid #4A5474'; }
+      if(!ans){ if(chosen){ bd=C.brand; bg='#1D2138'; mbg=C.brand; mcol='#fff'; mbd='none'; } }
       else { if(correct){ bd=C.ok; bg=C.okBg; mbg=C.ok; mcol='#0E1A13'; mark='✓'; } else if(chosen){ bd=C.bad; bg=C.badBg; mbg=C.bad; mcol='#2A1113'; mark='✗'; col='#8B94A9'; } else { col='#6E7891'; bd='#222738'; } }
       const style={display:'flex',alignItems:'center',gap:'13px',width:'100%',textAlign:'left',padding:'15px 16px',borderRadius:'13px',border:'1.5px solid '+bd,background:bg,color:col,font:'500 15.5px/1.45 "Space Grotesk"',cursor:(ans&&!isMulti)?'default':'pointer',transition:'all .12s',boxShadow:(!ans&&chosen)?'0 4px 16px -6px rgba(124,108,255,.55)':'none'};
       if(ans && correct) style.animation='popIn .32s ease'; else if(ans && chosen && !correct) style.animation='shakeX .35s ease';
-      const markStyle={flex:'0 0 auto',width:'27px',height:'27px',borderRadius:(isMulti&&!ans)?'7px':'50%',background:mbg,color:mcol,display:'flex',alignItems:'center',justifyContent:'center',font:'700 13px "Space Grotesk"'};
+      const markStyle={flex:'0 0 auto',width:'27px',height:'27px',borderRadius:checkbox?'8px':'50%',background:mbg,color:mcol,border:mbd,boxSizing:'border-box',display:'flex',alignItems:'center',justifyContent:'center',font:'700 14px "Space Grotesk"'};
       const canHover=!ans||isMulti&&!ans; const hover=canHover?{borderColor:C.brand,background:'#1A2036',transform:'translateY(-2px)',boxShadow:'0 10px 24px -12px rgba(124,108,255,.55)'}:{};
       const press=canHover?{transform:'translateY(0) scale(.99)'}:{};
       return {text:o[0],mark,style,markStyle,hover,press,onClick:()=>this.pick(oi)};
@@ -520,18 +522,25 @@ class Component extends DCLogic {
     if(scr==='quiz'){
       const q=this.curQ(); const total=s.order.length; const pct=Math.round(s.pos/total*100);
       const poz=this.pozInfo(q.p); const ok=s.answered?this.wasCorrect():false; const isLast=s.pos===total-1;
-      const typLabel=q.t==='single'?'Jedna poprawna odpowiedź':(q.t==='multi'?'Zaznacz wszystkie poprawne':'Prawda czy fałsz');
+      const isMulti=q.t==='multi';
+      const typLabel=q.t==='single'?'Jedna poprawna odpowiedź':(isMulti?'Wielokrotny wybór — zaznacz wszystkie poprawne':'Prawda czy fałsz');
+      const typIcon=isMulti?'☑':(q.t==='tf'?'◐':'◉');
+      const typBadgeBase={display:'inline-flex',alignItems:'center',gap:'8px',padding:'6px 12px',borderRadius:'9px',letterSpacing:'.06em',textTransform:'uppercase',marginBottom:'14px'};
+      const typBadgeStyle=isMulti
+        ? Object.assign({},typBadgeBase,{background:'rgba(232,199,102,.14)',border:'1px solid rgba(232,199,102,.55)',color:'#F0D585',font:'700 11.5px "Space Grotesk"'})
+        : Object.assign({},typBadgeBase,{background:'rgba(124,108,255,.12)',border:'1px solid rgba(124,108,255,.30)',color:'#B7ADFF',font:'600 11.5px "Space Grotesk"'});
+      const kbdHint=isMulti?'Klawisze 1–'+q.a.length+' zaznaczają odpowiedzi · Enter sprawdza':'Klawisze 1–'+q.a.length+' wybierają odpowiedź · Enter przechodzi dalej';
       const st=s.streak; const streakStyle={padding:'2px 10px',borderRadius:'20px',font:'700 12px "Space Grotesk"',background: st>=5?'#2E2A18':'#142A1F',color: st>=5?'#F5D97B':'#3CCB7F'};
       return Object.assign(base,{
         onQuit:()=>this.toStart(),
         showProgress:this.props.showProgressBar!==false,
         showStreak: st>=2, streakLabel:'Seria: '+st, streakStyle,
-        showKbdHint: !s.answered,
+        showKbdHint: !s.answered, kbdHint,
         dzialLabel:this.dzialLabel(q.d),
         poziomLabel:poz.t, poziomBadgeStyle:{padding:'5px 11px',borderRadius:'8px',background:poz.bg,color:poz.c,font:'600 12px "Space Grotesk"'},
         counterLabel:'Pytanie '+(s.pos+1)+' / '+total, scoreLabel:'Punkty: '+s.score,
         progressStyle:{height:'100%',width:pct+'%',background:C.brand,borderRadius:'6px',transition:'width .3s'},
-        typLabel, qText:q.q, opts:this.optView(),
+        typLabel, typIcon, typBadgeStyle, qText:q.q, opts:this.optView(),
         showCheck: q.t==='multi' && !s.answered, onCheck:()=>this.check(),
         answered:s.answered, showExpl:this.props.showExplanations!==false,
         feedbackStyle:{marginTop:'18px',padding:'15px 17px',borderRadius:'13px',background: ok?C.okBg:C.badBg,border:'1px solid '+(ok?C.ok:C.bad)},
