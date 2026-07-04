@@ -46,20 +46,30 @@ body{margin:0;-webkit-font-smoothing:antialiased;}
 @keyframes nudgeY{0%,100%{transform:translateY(0);}50%{transform:translateY(3px);}}
 @keyframes riseIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
 @keyframes ringGlow{0%,100%{box-shadow:0 28px 56px -36px rgba(0,0,0,.85);}50%{box-shadow:0 28px 62px -34px rgba(0,0,0,.85), 0 0 40px -8px var(--ring-glow, rgba(124,108,255,.35));}}
+@keyframes auroraA{0%{transform:translate3d(-8%,-6%,0) scale(1.05) rotate(0deg);}50%{transform:translate3d(8%,6%,0) scale(1.28) rotate(160deg);}100%{transform:translate3d(-8%,-6%,0) scale(1.05) rotate(360deg);}}
+@keyframes auroraB{0%{transform:translate3d(6%,4%,0) scale(1.1) rotate(0deg);}50%{transform:translate3d(-6%,-4%,0) scale(1.32) rotate(-180deg);}100%{transform:translate3d(6%,4%,0) scale(1.1) rotate(-360deg);}}
+@keyframes titleShimmer{0%{background-position:0% 50%;}100%{background-position:200% 50%;}}
+@keyframes sheen{0%{background-position:-160% 0, 0 0;}55%,100%{background-position:230% 0, 0 0;}}
+@keyframes floatSlow{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
 button{font-family:inherit;}
 button:focus-visible, a:focus-visible{outline:2px solid #9A8DFF;outline-offset:2px;border-radius:12px;}
 input:focus-visible{outline:none;}
 @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}}
 </style>
 </helmet>
-<div style="min-height:100vh;background:radial-gradient(1000px 540px at 50% -12%, rgba(124,108,255,.18), transparent 62%), #0B0D12;color:#EDF0F7;font-family:'Space Grotesk',sans-serif;display:flex;justify-content:center;padding:clamp(18px,5vw,44px) clamp(12px,4vw,18px);position:relative;overflow:hidden;">
+<div style="min-height:100vh;background:radial-gradient(1100px 560px at 50% -14%, rgba(124,108,255,.20), transparent 60%), radial-gradient(900px 520px at 86% 112%, rgba(72,168,255,.11), transparent 60%), #0A0C11;color:#EDF0F7;font-family:'Space Grotesk',sans-serif;display:flex;justify-content:center;padding:clamp(18px,5vw,44px) clamp(12px,4vw,18px);position:relative;overflow:hidden;">
+ <div style="position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;">
+  <div style="position:absolute;top:-28%;left:-18%;width:72vw;height:72vw;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(124,108,255,.30), transparent 62%);filter:blur(64px);animation:auroraA 24s ease-in-out infinite;"></div>
+  <div style="position:absolute;bottom:-30%;right:-16%;width:66vw;height:66vw;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(64,176,255,.20), transparent 62%);filter:blur(72px);animation:auroraB 30s ease-in-out infinite;"></div>
+  <div style="position:absolute;top:30%;right:26%;width:34vw;height:34vw;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(155,110,255,.16), transparent 60%);filter:blur(58px);animation:auroraA 34s ease-in-out infinite reverse;"></div>
+ </div>
  <canvas ref="{{ bgCanvas }}" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none;"></canvas>
  <div style="width:100%;max-width:720px;position:relative;z-index:1;">
 
   <sc-if value="{{ isStart }}" hint-placeholder-val="{{ true }}">
    <div style="animation:qfade .4s ease;">
     <div style="text-align:center;margin:14px 0 36px;">
-     <h1 style="font:700 clamp(30px,8.5vw,44px)/1.15 'Unbounded',sans-serif;margin:0;letter-spacing:-.015em;color:#EDF0F7;">Quiz<br><span style="background:linear-gradient(90deg,#9A8DFF,#C9CBFF 55%,#8F82FF);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">{{ moduleTitle }}</span></h1>
+     <h1 style="font:700 clamp(30px,8.5vw,44px)/1.15 'Unbounded',sans-serif;margin:0;letter-spacing:-.015em;color:#EDF0F7;">Quiz<br><span style="background:linear-gradient(90deg,#9A8DFF,#C9CBFF 34%,#7CE0FF 58%,#9A8DFF 82%,#C9CBFF);background-size:220% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:titleShimmer 7s linear infinite;">{{ moduleTitle }}</span></h1>
     </div>
     <div style="display:flex;flex-wrap:wrap;gap:5px;background:#10141F;border:1px solid #232938;border-radius:16px;padding:5px;margin-bottom:22px;">
      <sc-for list="{{ moduleChips }}" as="m" hint-placeholder-count="2">
@@ -106,7 +116,7 @@ input:focus-visible{outline:none;}
        <button onClick="{{ c.onClick }}" style="{{ c.style }}" style-hover="{{ c.hover }}" style-active="{{ c.press }}">{{ c.label }}</button>
       </sc-for>
      </div>
-     <button onClick="{{ onStart }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:18px;border:none;border-radius:99px;background:linear-gradient(135deg,#9A8DFF,#6C5AF5 60%,#5B49E8);color:#fff;font:700 16px 'Space Grotesk';letter-spacing:.02em;cursor:pointer;box-shadow:0 18px 45px -14px rgba(124,108,255,.7), inset 0 1px 0 rgba(255,255,255,.25);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;" style-hover="transform:translateY(-2px);box-shadow:0 26px 60px -16px rgba(124,108,255,.95), inset 0 1px 0 rgba(255,255,255,.3);filter:brightness(1.06);" style-active="transform:translateY(0) scale(.985);filter:brightness(.96);"><span>{{ startLabel }}</span><span style="font-size:19px;line-height:1;">→</span></button>
+     <button onClick="{{ onStart }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:18px;border:none;border-radius:99px;background:linear-gradient(115deg,transparent 22%,rgba(255,255,255,.24) 40%,transparent 56%),linear-gradient(135deg,#9A8DFF,#6C5AF5 55%,#5B7CFF);background-size:230% 100%,100% 100%;background-repeat:no-repeat;color:#fff;font:700 16px 'Space Grotesk';letter-spacing:.02em;cursor:pointer;box-shadow:0 18px 45px -14px rgba(124,108,255,.7), inset 0 1px 0 rgba(255,255,255,.25);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;animation:sheen 5.5s ease-in-out infinite;" style-hover="transform:translateY(-2px);box-shadow:0 26px 60px -16px rgba(124,108,255,.95), inset 0 1px 0 rgba(255,255,255,.3);filter:brightness(1.06);" style-active="transform:translateY(0) scale(.985);filter:brightness(.96);"><span>{{ startLabel }}</span><span style="font-size:19px;line-height:1;">→</span></button>
      <sc-if value="{{ hasResume }}" hint-placeholder-val="{{ false }}">
       <button onClick="{{ onResume }}" style="width:100%;margin-top:10px;padding:15px;border:1px solid rgba(124,108,255,.45);border-radius:99px;background:rgba(124,108,255,.08);color:#C3C6FF;font:600 15px 'Space Grotesk';cursor:pointer;transition:transform .18s ease, background .18s ease, border-color .18s ease;" style-hover="background:rgba(124,108,255,.18);border-color:#8F82FF;transform:translateY(-2px);" style-active="transform:translateY(0) scale(.985);">{{ resumeLabel }}</button>
      </sc-if>
@@ -170,7 +180,7 @@ input:focus-visible{outline:none;}
         </div>
        </sc-if>
       </div>
-      <button onClick="{{ onNext }}" style="margin-top:16px;width:100%;padding:15px;border:none;border-radius:13px;background:linear-gradient(135deg,#8F82FF,#6C5AF5);color:#fff;font:700 15px 'Space Grotesk';cursor:pointer;box-shadow:0 12px 26px -14px rgba(124,108,255,.6);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;" style-hover="transform:translateY(-2px);box-shadow:0 18px 38px -14px rgba(124,108,255,.85);filter:brightness(1.07);" style-active="transform:translateY(0) scale(.985);filter:brightness(.96);">{{ nextLabel }}</button>
+      <button onClick="{{ onNext }}" style="margin-top:16px;width:100%;padding:15px;border:none;border-radius:13px;background:linear-gradient(135deg,#8F82FF,#6C5AF5 62%,#5B7CFF);color:#fff;font:700 15px 'Space Grotesk';cursor:pointer;box-shadow:0 12px 26px -14px rgba(124,108,255,.6);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;" style-hover="transform:translateY(-2px);box-shadow:0 18px 38px -14px rgba(124,108,255,.85);filter:brightness(1.07);" style-active="transform:translateY(0) scale(.985);filter:brightness(.96);">{{ nextLabel }}</button>
      </sc-if>
     </div>
    </div>
@@ -251,7 +261,7 @@ input:focus-visible{outline:none;}
      </div>
     </sc-if>
     <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-     <sc-if value="{{ hasWrong }}" hint-placeholder-val="{{ false }}"><button onClick="{{ onRetryWrong }}" style="padding:14px 22px;border:none;border-radius:13px;background:linear-gradient(135deg,#8F82FF,#6C5AF5);color:#fff;font:700 15px 'Space Grotesk';cursor:pointer;box-shadow:0 12px 26px -14px rgba(124,108,255,.6);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;" style-hover="transform:translateY(-2px);box-shadow:0 18px 38px -14px rgba(124,108,255,.85);filter:brightness(1.07);" style-active="transform:translateY(0) scale(.985);filter:brightness(.96);">{{ retryLabel }}</button></sc-if>
+     <sc-if value="{{ hasWrong }}" hint-placeholder-val="{{ false }}"><button onClick="{{ onRetryWrong }}" style="padding:14px 22px;border:none;border-radius:13px;background:linear-gradient(135deg,#8F82FF,#6C5AF5 62%,#5B7CFF);color:#fff;font:700 15px 'Space Grotesk';cursor:pointer;box-shadow:0 12px 26px -14px rgba(124,108,255,.6);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;" style-hover="transform:translateY(-2px);box-shadow:0 18px 38px -14px rgba(124,108,255,.85);filter:brightness(1.07);" style-active="transform:translateY(0) scale(.985);filter:brightness(.96);">{{ retryLabel }}</button></sc-if>
      <button onClick="{{ onRestart }}" style="padding:14px 22px;border:1.5px solid #7C6CFF;border-radius:13px;background:#1A1F30;color:#C3C6FF;font:700 15px 'Space Grotesk';cursor:pointer;transition:transform .18s ease, background .18s ease, border-color .18s ease;" style-hover="background:#232A4A;border-color:#8F82FF;transform:translateY(-2px);" style-active="transform:translateY(0) scale(.985);">Do menu</button>
     </div>
    </div>
@@ -564,9 +574,9 @@ class Component extends DCLogic {
   scopeCard(a){ return {padding:'14px 15px 12px',borderRadius:'16px',border:'1px solid '+(a?'#8F82FF':'#262D40'),background:a?'linear-gradient(160deg,rgba(124,108,255,.30),rgba(124,108,255,.08))':'#171B2A',color:a?'#EDF0F7':'#B9C0D4',cursor:'pointer',textAlign:'left',display:'flex',flexDirection:'column',gap:'5px',font:'600 14px "Space Grotesk"',transition:'all .18s ease',boxShadow:a?'0 12px 30px -16px rgba(124,108,255,.6)':'none'}; }
   scopeCount(a){ return {font:'500 12px "Space Grotesk"',color:a?'#C9CBFF':'#838DA8'}; }
   scopeHover(a){ return a?{transform:'translateY(-2px)',filter:'brightness(1.08)'}:{borderColor:'#8F82FF',color:'#EDF0F7',background:'#1D2138',transform:'translateY(-2px)'}; }
-  segStyle(a){ return {flex:'1',padding:'11px 0',borderRadius:'11px',border:'none',background:a?'linear-gradient(135deg,#8F82FF,#6C5AF5)':'transparent',color:a?'#fff':'#97A0B5',font:'600 14px "Space Grotesk"',cursor:'pointer',transition:'all .18s ease',boxShadow:a?'0 8px 20px -10px rgba(124,108,255,.7)':'none'}; }
+  segStyle(a){ return {flex:'1',padding:'11px 0',borderRadius:'11px',border:'none',background:a?'linear-gradient(135deg,#8F82FF,#6C5AF5 62%,#5B7CFF)':'transparent',color:a?'#fff':'#97A0B5',font:'600 14px "Space Grotesk"',cursor:'pointer',transition:'all .18s ease',boxShadow:a?'0 8px 20px -10px rgba(124,108,255,.7)':'none'}; }
   segHover(a){ return a?{filter:'brightness(1.08)'}:{color:'#EDF0F7',background:'#1D2138'}; }
-  modStyle(a){ const m=this.isMobile(); return {flex:'1 1 auto',minWidth:m?'86px':'0',padding:m?'9px 8px':'11px 6px',borderRadius:'11px',border:'none',background:a?'linear-gradient(135deg,#8F82FF,#6C5AF5)':'transparent',color:a?'#fff':'#97A0B5',font:(m?'600 12.5px':'600 14px')+' "Space Grotesk"',cursor:'pointer',whiteSpace:'nowrap',transition:'all .18s ease',boxShadow:a?'0 8px 20px -10px rgba(124,108,255,.7)':'none'}; }
+  modStyle(a){ const m=this.isMobile(); return {flex:'1 1 auto',minWidth:m?'86px':'0',padding:m?'9px 8px':'11px 6px',borderRadius:'11px',border:'none',background:a?'linear-gradient(135deg,#8F82FF,#6C5AF5 62%,#5B7CFF)':'transparent',color:a?'#fff':'#97A0B5',font:(m?'600 12.5px':'600 14px')+' "Space Grotesk"',cursor:'pointer',whiteSpace:'nowrap',transition:'all .18s ease',boxShadow:a?'0 8px 20px -10px rgba(124,108,255,.7)':'none'}; }
   plural(n){ if(n===1)return 'pytanie'; const m=n%10,h=n%100; return (m>=2&&m<=4&&!(h>=12&&h<=14))?'pytania':'pytań'; }
   chipPress(){ return {transform:'translateY(0) scale(.97)'}; }
 
