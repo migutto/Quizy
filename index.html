@@ -413,7 +413,7 @@ class Component extends DCLogic {
     const name=this.normalizePlayerName(this.state.nick);
     if(!name) return; // bez nicku nie zapisujemy do rankingu (ale quiz działa)
     const total=this.state.order.length, score=this.state.score;
-    if(!(total>0) || score<0 || score>total || total>200) return;
+    if(!(total>0) || score<0 || score>total || total>500) return;
     if(total<RANK_MIN_TOTAL) return; // krótkie sesje nie trafiają do publicznego rankingu
     if(sessionId) this._submitted.add(sessionId);
     try{
