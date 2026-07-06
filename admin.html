@@ -121,21 +121,36 @@ function barList(items, opts){ // items: [{k, v, sub?}]
 }
 
 // sparkline/bar chart (SVG) dla aktywności dziennej
+function windowTotal(map, days){
+  const today=new Date(); let t=0;
+  for(let i=0;i<days;i++){ const d=new Date(today); d.setDate(d.getDate()-i); t+=(map[d.toISOString().slice(0,10)]||0); }
+  return t;
+}
 function svgDays(map, days){
-  const today=new Date(); const labels=[]; const vals=[];
-  for(let i=days-1;i>=0;i--){ const d=new Date(today); d.setDate(d.getDate()-i); const k=d.toISOString().slice(0,10);
-    labels.push(k); vals.push(map[k]||0); }
-  const max=Math.max(1,...vals); const W=Math.max(320, days*10), H=110, pad=6, bw=(W-pad*2)/days;
+  const today=new Date(); const labels=[], vals=[];
+  for(let i=days-1;i>=0;i--){ const d=new Date(today); d.setDate(d.getDate()-i); const k=d.toISOString().slice(0,10); labels.push(k); vals.push(map[k]||0); }
+  const total=vals.reduce((a,b)=>a+b,0);
+  const rawMax=Math.max(1,...vals);
+  const niceMax = rawMax<=4 ? rawMax : Math.ceil(rawMax/5)*5;
+  const VW=760, VH=190, mL=42, mR=14, mT=14, mB=28;
+  const pw=VW-mL-mR, ph=VH-mT-mB, base=mT+ph, bw=pw/days;
+  // siatka pozioma + oś Y
+  let grid='';
+  for(let g=0; g<=2; g++){ const frac=g/2; const val=Math.round(niceMax*frac); const y=base-frac*ph;
+    grid+=`<line x1="${mL}" y1="${y.toFixed(1)}" x2="${VW-mR}" y2="${y.toFixed(1)}" stroke="#20263a" stroke-width="1"/>`;
+    grid+=`<text x="${mL-9}" y="${(y+4).toFixed(1)}" font-size="13" fill="#6b7591" text-anchor="end">${val}</text>`; }
+  // słupki (zaokrąglone, min. 3px gdy >0)
   let bars='';
-  vals.forEach((v,i)=>{ const h=Math.round(v/max*(H-24)); const x=pad+i*bw; const y=H-16-h;
-    bars+=`<rect x="${x+1}" y="${y}" width="${bw-2}" height="${h}" rx="2" fill="url(#g)"><title>${labels[i]}: ${v}</title></rect>`; });
-  // etykiety co ~7 dni
+  vals.forEach((v,i)=>{ if(v<=0) return; const h=Math.max(3, v/niceMax*ph); const x=mL+i*bw; const y=base-h;
+    bars+=`<rect x="${(x+bw*0.16).toFixed(1)}" y="${y.toFixed(1)}" width="${(bw*0.68).toFixed(1)}" height="${h.toFixed(1)}" rx="3.5" fill="url(#gd)"><title>${labels[i]}: ${v}</title></rect>`; });
+  // etykiety osi X (co ~7 dni + ostatni)
   let ticks='';
-  labels.forEach((k,i)=>{ if(i%7===0||i===labels.length-1){ const x=pad+i*bw+bw/2;
-    ticks+=`<text x="${x}" y="${H-3}" font-size="9" fill="#96a0bd" text-anchor="middle">${k.slice(5)}</text>`; }});
-  return `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" preserveAspectRatio="none" style="overflow:visible">
-    <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7CE0FF"/><stop offset="1" stop-color="#6C5AF5"/></linearGradient></defs>
-    ${bars}${ticks}</svg>`;
+  labels.forEach((k,i)=>{ if(i%7===0||i===labels.length-1){ const x=mL+i*bw+bw/2; const dd=k.slice(8,10)+'.'+k.slice(5,7);
+    ticks+=`<text x="${x.toFixed(1)}" y="${VH-8}" font-size="13" fill="#96a0bd" text-anchor="middle">${dd}</text>`; }});
+  const empty = total===0 ? `<text x="${VW/2}" y="${(base-ph/2).toFixed(1)}" font-size="15" fill="#6b7591" text-anchor="middle">Brak aktywności w tym okresie</text>` : '';
+  return `<svg viewBox="0 0 ${VW} ${VH}" width="100%" style="display:block;height:auto;max-height:230px" role="img" aria-label="Aktywność w czasie">
+    <defs><linearGradient id="gd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7CE0FF"/><stop offset="1" stop-color="#6C5AF5"/></linearGradient></defs>
+    ${grid}${bars}${ticks}${empty}</svg>`;
 }
 
 // ── Ładowanie danych ───────────────────────────────────────────────────────
@@ -229,7 +244,8 @@ function render({scores, events}){
 
   // Panel: aktywność dzienna
   html += `<div class="card" style="grid-column:1/-1">
-    <h2><span class="dot"></span>Aktywność — ostatnie 30 dni ${E.length?'<span class="pill">zdarzenia</span>':'<span class="pill">zapisane wyniki</span>'}</h2>
+    <h2><span class="dot"></span>Aktywność — ostatnie 30 dni ${E.length?'<span class="pill">zdarzenia</span>':'<span class="pill">zapisane wyniki</span>'}
+      <span style="margin-left:auto;color:var(--mut);font-weight:600;font-size:13px">razem: <b style="color:var(--txt)">${num(windowTotal(dayMap,30))}</b></span></h2>
     ${svgDays(dayMap,30)}</div>`;
 
   // Panel: lejek (events)
