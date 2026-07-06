@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Quizy — panel administratora</title>
+<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+<!-- Supabase JS v2 (ta sama wersja co aplikacja) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.0/dist/umd/supabase.min.js"></script>
+<style>
+  :root{
+    --bg:#0A0C11; --panel:#111521; --panel2:#161B2B; --line:#232a3d;
+    --txt:#E7EAF3; --mut:#96a0bd; --vio:#8F82FF; --vio2:#6C5AF5; --blue:#5B7CFF; --cyan:#7CE0FF;
+    --good:#43d17a; --warn:#ffcf5c; --bad:#ff6b6b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:
+    radial-gradient(1100px 560px at 50% -14%, rgba(124,108,255,.16), transparent 60%),
+    radial-gradient(900px 520px at 88% 112%, rgba(72,168,255,.10), transparent 60%), var(--bg);
+    color:var(--txt); font-family:'Space Grotesk',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    min-height:100vh; -webkit-font-smoothing:antialiased;}
+  a{color:var(--cyan)}
+  .wrap{max-width:1120px;margin:0 auto;padding:clamp(18px,4vw,34px) clamp(12px,4vw,22px)}
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+  .brand{display:flex;align-items:baseline;gap:12px}
+  h1{font:700 clamp(24px,5vw,34px)/1.1 'Space Grotesk';margin:0;
+     background:linear-gradient(90deg,#9A8DFF,#C9CBFF 34%,#7CE0FF 58%,#9A8DFF 82%);
+     -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .sub{color:var(--mut);font-size:13px}
+  .btn{cursor:pointer;border:1px solid var(--line);background:var(--panel2);color:var(--txt);
+       font:600 13px 'Space Grotesk';padding:9px 15px;border-radius:10px;transition:.15s}
+  .btn:hover{border-color:var(--vio);background:#1b2136}
+  .btn.primary{background:linear-gradient(135deg,#8F82FF,#6C5AF5 60%,#5B7CFF);border:none;color:#fff}
+  .grid{display:grid;gap:14px}
+  .kpis{grid-template-columns:repeat(auto-fit,minmax(160px,1fr));margin-bottom:16px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 18px}
+  .kpi .lbl{color:var(--mut);font-size:12px;letter-spacing:.05em;text-transform:uppercase}
+  .kpi .val{font:700 30px 'Space Grotesk';margin-top:6px;line-height:1}
+  .kpi .val small{font-size:14px;color:var(--mut);font-weight:600}
+  .panels{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+  .card h2{font:600 15px 'Space Grotesk';margin:0 0 14px;display:flex;align-items:center;gap:8px}
+  .card h2 .dot{width:8px;height:8px;border-radius:50%;background:var(--vio)}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
+  th{color:var(--mut);font-weight:600;font-size:11px;letter-spacing:.04em;text-transform:uppercase}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .pill{display:inline-block;padding:2px 8px;border-radius:7px;background:#1b2136;color:var(--mut);font-size:11px}
+  .bar-row{display:flex;align-items:center;gap:10px;margin:7px 0}
+  .bar-row .k{width:150px;flex:0 0 150px;font-size:12.5px;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bar-track{flex:1;height:16px;background:#0d1120;border-radius:6px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--vio2),var(--blue))}
+  .bar-row .v{width:78px;flex:0 0 78px;text-align:right;font-size:12px;color:var(--mut);font-variant-numeric:tabular-nums}
+  .banner{border:1px solid #4a3d1a;background:#221c0d;color:#ffe08a;border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:13px;line-height:1.5}
+  .banner code{display:block;white-space:pre-wrap;background:#0d1120;color:#cfe;border:1px solid var(--line);border-radius:8px;padding:10px;margin-top:8px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px}
+  .muted{color:var(--mut)}
+  .funnel{display:flex;flex-direction:column;gap:8px}
+  .foot{margin-top:26px;color:var(--mut);font-size:12px;text-align:center}
+  /* gate */
+  #gate{position:fixed;inset:0;background:rgba(6,8,13,.92);display:flex;align-items:center;justify-content:center;z-index:50}
+  #gate .box{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:26px;width:min(360px,92vw);text-align:center}
+  #gate input{width:100%;margin:14px 0;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:#0d1120;color:var(--txt);font-size:16px;text-align:center}
+  #gate .err{color:var(--bad);font-size:13px;min-height:18px}
+  .spin{color:var(--mut);text-align:center;padding:40px}
+</style>
+</head>
+<body>
+<div id="gate">
+  <div class="box">
+    <div style="font:700 20px 'Space Grotesk'">🔒 Panel administratora</div>
+    <div class="muted" style="font-size:13px;margin-top:6px">Podaj hasło dostępu</div>
+    <input id="gpass" type="password" placeholder="hasło" autocomplete="off">
+    <div class="err" id="gerr"></div>
+    <button class="btn primary" style="width:100%" id="gbtn">Wejdź</button>
+  </div>
+</div>
+
+<div class="wrap" id="app" style="display:none">
+  <header class="top">
+    <div class="brand">
+      <h1>Quizy · Admin</h1>
+      <span class="sub" id="updated"></span>
+    </div>
+    <div style="display:flex;gap:10px">
+      <a class="btn" href="./index.html">← Do quizu</a>
+      <button class="btn primary" id="refresh">↻ Odśwież</button>
+    </div>
+  </header>
+
+  <div id="content"><div class="spin">Ładowanie danych…</div></div>
+
+  <div class="foot">Dane z Supabase (RLS). Panel tylko do odczytu · <span id="clientnote"></span></div>
+</div>
+
+<script>
+"use strict";
+// ── Konfiguracja ───────────────────────────────────────────────────────────
+// Te same publiczne (publishable) klucze co aplikacja — chronione przez RLS.
+const SUPABASE_URL = "https://xjlupiohhihtzhqjgtma.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_35E-8urxsuFV4WqxeUfz0Q_VIrJBJNR";
+// Lekka bramka (obfuskacja, nie zabezpieczenie — dane rankingu są i tak publiczne).
+// Zmień na własne hasło:
+const ADMIN_PASS = "eko-admin";
+
+const MODULE_LABEL = { ekologia:'Ekologia', marketing:'Marketing', zywnosc:'Żywność roślinna' };
+const EVENT_LABEL  = { page_view:'Wejścia', quiz_start:'Rozpoczęte', quiz_complete:'Ukończone' };
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+const $ = s => document.querySelector(s);
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pct = n => (n==null||isNaN(n))?'—':(Math.round(n*10)/10)+'%';
+const num = n => (n==null||isNaN(n))?'—':n.toLocaleString('pl-PL');
+function dayKey(iso){ const d=new Date(iso); if(isNaN(d))return null; return d.toISOString().slice(0,10); }
+function fmtDate(iso){ const d=new Date(iso); if(isNaN(d))return '—'; return d.toLocaleString('pl-PL',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); }
+
+function barList(items, opts){ // items: [{k, v, sub?}]
+  opts=opts||{}; const max=Math.max(1,...items.map(i=>i.v));
+  return items.map(i=>`<div class="bar-row"><div class="k" title="${esc(i.k)}">${esc(i.k)}</div>`
+    +`<div class="bar-track"><div class="bar-fill" style="width:${Math.round(i.v/max*100)}%"></div></div>`
+    +`<div class="v">${esc(opts.fmt?opts.fmt(i):i.v)}</div></div>`).join('');
+}
+
+// sparkline/bar chart (SVG) dla aktywności dziennej
+function svgDays(map, days){
+  const today=new Date(); const labels=[]; const vals=[];
+  for(let i=days-1;i>=0;i--){ const d=new Date(today); d.setDate(d.getDate()-i); const k=d.toISOString().slice(0,10);
+    labels.push(k); vals.push(map[k]||0); }
+  const max=Math.max(1,...vals); const W=Math.max(320, days*10), H=110, pad=6, bw=(W-pad*2)/days;
+  let bars='';
+  vals.forEach((v,i)=>{ const h=Math.round(v/max*(H-24)); const x=pad+i*bw; const y=H-16-h;
+    bars+=`<rect x="${x+1}" y="${y}" width="${bw-2}" height="${h}" rx="2" fill="url(#g)"><title>${labels[i]}: ${v}</title></rect>`; });
+  // etykiety co ~7 dni
+  let ticks='';
+  labels.forEach((k,i)=>{ if(i%7===0||i===labels.length-1){ const x=pad+i*bw+bw/2;
+    ticks+=`<text x="${x}" y="${H-3}" font-size="9" fill="#96a0bd" text-anchor="middle">${k.slice(5)}</text>`; }});
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" preserveAspectRatio="none" style="overflow:visible">
+    <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7CE0FF"/><stop offset="1" stop-color="#6C5AF5"/></linearGradient></defs>
+    ${bars}${ticks}</svg>`;
+}
+
+// ── Ładowanie danych ───────────────────────────────────────────────────────
+let sb=null;
+function client(){ if(sb)return sb; const g=window.supabase; if(!g||!g.createClient)return null;
+  sb=g.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{persistSession:false,autoRefreshToken:false}}); return sb; }
+
+async function fetchAll(){
+  const c=client(); if(!c) throw new Error('Supabase CDN niezaładowane');
+  const scoresQ = c.from('quiz_scores')
+    .select('player_name,score,total,percent,scope,module,session_length,best_streak,created_at')
+    .order('created_at',{ascending:false}).limit(5000);
+  const eventsQ = c.from('quiz_events')
+    .select('event_type,session_id,scope,session_length,score,total,created_at')
+    .order('created_at',{ascending:false}).limit(20000);
+  const [scores, events] = await Promise.all([scoresQ, eventsQ]);
+  return { scores, events };
+}
+
+// ── Render ─────────────────────────────────────────────────────────────────
+function render({scores, events}){
+  const S = (scores&&scores.data)||[];
+  const evErr = events&&events.error;
+  const E = (events&&events.data)||[];
+  const eventsBlocked = (!!evErr) || (E.length===0 && S.length>0);
+
+  // ---- KPI ze scores ----
+  const uniquePlayers = new Set(S.map(r=>(r.player_name||'').trim().toLowerCase()).filter(Boolean)).size;
+  const avgPct = S.length? S.reduce((a,r)=>a+(r.percent!=null?+r.percent:(r.total?r.score/r.total*100:0)),0)/S.length : null;
+  const bestStreak = S.reduce((m,r)=>Math.max(m, r.best_streak||0),0);
+  const perfect = S.filter(r=>r.total>0 && r.score===r.total).length;
+
+  // ---- KPI z events ----
+  const views = E.filter(e=>e.event_type==='page_view').length;
+  const starts = E.filter(e=>e.event_type==='quiz_start').length;
+  const completes = E.filter(e=>e.event_type==='quiz_complete').length;
+  const uniqSessions = new Set(E.map(e=>e.session_id).filter(Boolean)).size;
+  const complRate = starts? completes/starts*100 : null;
+
+  const kpis = [
+    ['Zapisane wyniki', num(S.length), ''],
+    ['Unikalni gracze', num(uniquePlayers), ''],
+    ['Średni wynik', pct(avgPct), ''],
+    ['Wyniki 100%', num(perfect), S.length?('z '+S.length):''],
+    ['Najlepsza seria', num(bestStreak), 'z rzędu'],
+    eventsBlocked ? ['Wejścia (odsłony)','—',''] : ['Wejścia (odsłony)', num(views), uniqSessions?(num(uniqSessions)+' sesji'):''],
+    eventsBlocked ? ['Ukończalność','—',''] : ['Ukończalność', pct(complRate), starts?(completes+'/'+starts):''],
+  ];
+
+  let html = `<div class="grid kpis">` + kpis.map(k=>
+    `<div class="card kpi"><div class="lbl">${esc(k[0])}</div><div class="val">${k[1]} <small>${esc(k[2])}</small></div></div>`
+  ).join('') + `</div>`;
+
+  if(eventsBlocked){
+    html += `<div class="banner">⚠️ <b>Brak odczytu tabeli <code style="display:inline;padding:1px 5px">quiz_events</code></b> (RLS blokuje SELECT dla anon${evErr?': '+esc(evErr.message||evErr.code||''):''}).
+      Analityka zdarzeń (wejścia, ukończalność) będzie pusta. Aby ją włączyć, uruchom w Supabase SQL Editor:
+      <code>create policy "anon read quiz_events"\n  on public.quiz_events for select\n  to anon using (true);</code>
+      (Wyniki z <code style="display:inline;padding:1px 5px">quiz_scores</code> działają niezależnie.)</div>`;
+  }
+
+  // ---- helpers agregujące ----
+  const countBy = (arr,f)=>{ const m={}; arr.forEach(x=>{const k=f(x); if(k==null)return; m[k]=(m[k]||0)+1;}); return m; };
+  const avgByGroup = (arr,gf,vf)=>{ const s={},n={}; arr.forEach(x=>{const g=gf(x); if(g==null)return; const v=vf(x); if(v==null||isNaN(v))return; s[g]=(s[g]||0)+v; n[g]=(n[g]||0)+1;}); const o={}; Object.keys(s).forEach(g=>o[g]=s[g]/n[g]); return o; };
+
+  // rozklad sesji po module (scores)
+  const byModule = countBy(S, r=>r.module||'—');
+  const avgPctModule = avgByGroup(S, r=>r.module||'—', r=>r.percent!=null?+r.percent:(r.total?r.score/r.total*100:null));
+  const moduleItems = Object.keys(byModule).sort((a,b)=>byModule[b]-byModule[a])
+    .map(m=>({k:MODULE_LABEL[m]||m, v:byModule[m], sub:avgPctModule[m]}));
+
+  // top zakresy (scope) w scores
+  const byScope = countBy(S, r=>r.scope||'—');
+  const scopeItems = Object.keys(byScope).sort((a,b)=>byScope[b]-byScope[a]).slice(0,10).map(s=>({k:s, v:byScope[s]}));
+
+  // dlugosc sesji
+  const byLen = countBy(S, r=>r.session_length||'—');
+
+  // aktywnosc dzienna (scores + events razem, wg dostepnosci)
+  const activitySrc = E.length? E : S;
+  const dayMap = countBy(activitySrc, x=>dayKey(x.created_at));
+
+  // top 10 wynikow
+  const top = S.slice().sort((a,b)=> (b.percent-a.percent) || (b.score-a.score) )
+    .slice(0,10);
+
+  // starty wg scope (events)
+  const startsByScope = countBy(E.filter(e=>e.event_type==='quiz_start'), e=>e.scope||'—');
+  const startScopeItems = Object.keys(startsByScope).sort((a,b)=>startsByScope[b]-startsByScope[a]).slice(0,10).map(s=>({k:s,v:startsByScope[s]}));
+
+  html += `<div class="grid panels">`;
+
+  // Panel: aktywność dzienna
+  html += `<div class="card" style="grid-column:1/-1">
+    <h2><span class="dot"></span>Aktywność — ostatnie 30 dni ${E.length?'<span class="pill">zdarzenia</span>':'<span class="pill">zapisane wyniki</span>'}</h2>
+    ${svgDays(dayMap,30)}</div>`;
+
+  // Panel: lejek (events)
+  if(!eventsBlocked){
+    const fmax=Math.max(1,views,starts,completes);
+    const frow=(lbl,v,col)=>`<div class="bar-row"><div class="k">${lbl}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(v/fmax*100)}%;background:${col}"></div></div><div class="v">${num(v)}</div></div>`;
+    html += `<div class="card"><h2><span class="dot"></span>Lejek konwersji</h2><div class="funnel">
+      ${frow('Wejścia',views,'linear-gradient(90deg,#5B7CFF,#7CE0FF)')}
+      ${frow('Rozpoczęte quizy',starts,'linear-gradient(90deg,#6C5AF5,#5B7CFF)')}
+      ${frow('Ukończone quizy',completes,'linear-gradient(90deg,#8F82FF,#6C5AF5)')}
+      </div>
+      <div class="muted" style="margin-top:12px;font-size:12.5px">Start→ukończenie: <b style="color:var(--txt)">${pct(complRate)}</b>${uniqSessions?` · unikalne sesje: <b style="color:var(--txt)">${num(uniqSessions)}</b>`:''}</div></div>`;
+  }
+
+  // Panel: sesje po module
+  html += `<div class="card"><h2><span class="dot"></span>Zapisane wyniki wg modułu</h2>
+    ${moduleItems.length?barList(moduleItems,{fmt:i=>i.v+(i.sub!=null?`  ·  ${pct(i.sub)}`:'')}):'<div class="muted">Brak danych</div>'}</div>`;
+
+  // Panel: top zakresy
+  html += `<div class="card"><h2><span class="dot"></span>Najczęstsze zakresy (wyniki)</h2>
+    ${scopeItems.length?barList(scopeItems):'<div class="muted">Brak danych</div>'}</div>`;
+
+  // Panel: starty wg zakresu (events)
+  if(!eventsBlocked && startScopeItems.length){
+    html += `<div class="card"><h2><span class="dot"></span>Rozpoczęcia wg zakresu</h2>${barList(startScopeItems)}</div>`;
+  }
+
+  // Panel: dlugosc sesji
+  const lenOrder=['10','20','40','Wszystkie'];
+  const lenItems=Object.keys(byLen).sort((a,b)=>{const ia=lenOrder.indexOf(a),ib=lenOrder.indexOf(b);return (ia<0?9:ia)-(ib<0?9:ib);}).map(l=>({k:l+(l==='Wszystkie'?'':' pytań'),v:byLen[l]}));
+  html += `<div class="card"><h2><span class="dot"></span>Długość sesji</h2>
+    ${lenItems.length?barList(lenItems):'<div class="muted">Brak danych</div>'}</div>`;
+
+  // Panel: TOP 10 wyników
+  html += `<div class="card" style="grid-column:1/-1"><h2><span class="dot"></span>Top 10 wyników</h2>
+    <table><thead><tr><th style="width:34px">#</th><th>Gracz</th><th>Moduł</th><th>Zakres</th><th class="num">Wynik</th><th class="num">%</th><th class="num">Seria</th><th>Data</th></tr></thead><tbody>
+    ${top.map((r,i)=>`<tr><td class="num">${i+1}</td><td>${esc(r.player_name)}</td>
+      <td><span class="pill">${esc(MODULE_LABEL[r.module]||r.module||'—')}</span></td>
+      <td class="muted">${esc(r.scope||'—')}</td>
+      <td class="num">${r.score}/${r.total}</td><td class="num">${pct(r.percent!=null?+r.percent:(r.total?r.score/r.total*100:null))}</td>
+      <td class="num">${r.best_streak||0}</td><td class="muted">${fmtDate(r.created_at)}</td></tr>`).join('')||'<tr><td colspan="8" class="muted">Brak wyników</td></tr>'}
+    </tbody></table></div>`;
+
+  html += `</div>`;
+
+  $('#content').innerHTML = html;
+  $('#updated').textContent = 'zaktualizowano '+new Date().toLocaleTimeString('pl-PL');
+}
+
+async function load(){
+  $('#content').innerHTML = '<div class="spin">Ładowanie danych…</div>';
+  try{
+    const data = await fetchAll();
+    if(data.scores && data.scores.error) throw data.scores.error;
+    render(data);
+  }catch(e){
+    $('#content').innerHTML = `<div class="banner">❌ Nie udało się pobrać danych: ${esc(e.message||e.code||String(e))}<br>
+      Sprawdź połączenie oraz czy tabela <code style="display:inline;padding:1px 5px">quiz_scores</code> ma politykę SELECT dla anon.</div>`;
+  }
+}
+
+// ── Bramka ─────────────────────────────────────────────────────────────────
+function unlock(){ $('#gate').style.display='none'; $('#app').style.display='block';
+  $('#clientnote').textContent = SUPABASE_URL.replace('https://','').split('.')[0];
+  load(); }
+function tryPass(){ const v=$('#gpass').value; if(v===ADMIN_PASS){ try{sessionStorage.setItem('quizy_admin_ok','1');}catch(e){} unlock(); }
+  else { $('#gerr').textContent='Nieprawidłowe hasło'; } }
+$('#gbtn').addEventListener('click', tryPass);
+$('#gpass').addEventListener('keydown', e=>{ if(e.key==='Enter') tryPass(); });
+$('#refresh').addEventListener('click', load);
+
+// pamiętaj odblokowanie w obrębie sesji karty
+try{ if(sessionStorage.getItem('quizy_admin_ok')==='1'){ unlock(); } else { setTimeout(()=>$('#gpass').focus(),80); } }catch(e){ setTimeout(()=>$('#gpass').focus(),80); }
+</script>
+</body>
+</html>
