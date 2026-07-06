@@ -118,6 +118,7 @@ input:focus-visible{outline:none;}
       </sc-for>
      </div>
      <button onClick="{{ onStart }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:18px;border:none;border-radius:99px;background:linear-gradient(115deg,transparent 22%,rgba(255,255,255,.24) 40%,transparent 56%),linear-gradient(135deg,#9A8DFF,#6C5AF5 55%,#5B7CFF);background-size:230% 100%,100% 100%;background-repeat:no-repeat;color:#fff;font:700 16px 'Space Grotesk';letter-spacing:.02em;cursor:pointer;box-shadow:0 18px 45px -14px rgba(124,108,255,.7), inset 0 1px 0 rgba(255,255,255,.25);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;animation:sheen 5.5s ease-in-out infinite;" style-hover="transform:translateY(-2px);box-shadow:0 26px 60px -16px rgba(124,108,255,.95), inset 0 1px 0 rgba(255,255,255,.3);filter:brightness(1.06);" style-active="transform:translateY(0) scale(.985);filter:brightness(.96);"><span>{{ startLabel }}</span><span style="font-size:19px;line-height:1;">→</span></button>
+     <button onClick="{{ onFlash }}" style="width:100%;margin-top:10px;padding:15px;border:1px solid rgba(124,108,255,.4);border-radius:99px;background:rgba(124,108,255,.06);color:#C3C6FF;font:600 15px 'Space Grotesk';cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:transform .18s ease, background .18s ease, border-color .18s ease;" style-hover="background:rgba(124,108,255,.15);border-color:#8F82FF;transform:translateY(-2px);" style-active="transform:translateY(0) scale(.985);"><span style="font-size:17px;">🗂️</span>Przeglądaj pytania (fiszki)</button>
      <sc-if value="{{ hasResume }}" hint-placeholder-val="{{ false }}">
       <button onClick="{{ onResume }}" style="width:100%;margin-top:10px;padding:15px;border:1px solid rgba(124,108,255,.45);border-radius:99px;background:rgba(124,108,255,.08);color:#C3C6FF;font:600 15px 'Space Grotesk';cursor:pointer;transition:transform .18s ease, background .18s ease, border-color .18s ease;" style-hover="background:rgba(124,108,255,.18);border-color:#8F82FF;transform:translateY(-2px);" style-active="transform:translateY(0) scale(.985);">{{ resumeLabel }}</button>
      </sc-if>
@@ -159,7 +160,7 @@ input:focus-visible{outline:none;}
     </sc-if>
     <div style="background:#151926;border:1px solid #262D40;border-radius:22px;padding:clamp(18px,4.5vw,26px) clamp(18px,4.5vw,26px) clamp(18px,4vw,24px);box-shadow:0 22px 44px -34px rgba(0,0,0,.85);">
      <div style="{{ typBadgeStyle }}"><span style="font-size:14px;line-height:1;">{{ typIcon }}</span><span>{{ typLabel }}</span></div>
-     <h2 style="font:600 21px/1.5 'Space Grotesk',sans-serif;margin:0 0 20px;color:#EDF0F7;">{{ qText }}</h2>
+     <h2 ref="{{ qHead }}" tabIndex="-1" style="font:600 21px/1.5 'Space Grotesk',sans-serif;margin:0 0 20px;color:#EDF0F7;outline:none;">{{ qText }}</h2>
      <div style="display:flex;flex-direction:column;gap:10px;">
       <sc-for list="{{ opts }}" as="o" hint-placeholder-count="4">
        <button onClick="{{ o.onClick }}" style="{{ o.style }}" style-hover="{{ o.hover }}" style-active="{{ o.press }}"><span style="{{ o.markStyle }}">{{ o.mark }}</span><span style="flex:1;">{{ o.text }}</span></button>
@@ -170,7 +171,7 @@ input:focus-visible{outline:none;}
       <button onClick="{{ onCheck }}" style="margin-top:16px;width:100%;padding:14px;border:none;border-radius:13px;background:#6C5AF5;color:#fff;font:700 15px 'Space Grotesk';cursor:pointer;box-shadow:0 12px 26px -14px rgba(124,108,255,.6);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;" style-hover="transform:translateY(-2px);box-shadow:0 18px 38px -14px rgba(124,108,255,.85);filter:brightness(1.08);" style-active="transform:translateY(0) scale(.985);filter:brightness(.96);">{{ checkLabel }}</button>
      </sc-if>
      <sc-if value="{{ answered }}" hint-placeholder-val="{{ false }}">
-      <div style="{{ feedbackStyle }}">
+      <div role="status" aria-live="polite" style="{{ feedbackStyle }}">
        <div style="{{ feedbackTitleStyle }}">{{ feedbackTitle }}</div>
        <sc-if value="{{ showExpl }}" hint-placeholder-val="{{ true }}"><div style="font-size:14.5px;line-height:1.55;color:#C6CCDC;">{{ explanation }}</div></sc-if>
        <sc-if value="{{ hasLink }}" hint-placeholder-val="{{ false }}">
@@ -268,6 +269,50 @@ input:focus-visible{outline:none;}
    </div>
   </sc-if>
 
+  <sc-if value="{{ isFlash }}" hint-placeholder-val="{{ false }}">
+   <div style="animation:qfade .3s ease;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:10px;">
+     <button onClick="{{ onFlashExit }}" style="background:none;border:none;color:#929BB3;font:600 14px 'Space Grotesk';cursor:pointer;padding:6px 0;transition:color .15s ease, transform .15s ease;" style-hover="color:#C3C6FF;transform:translateX(-3px);">‹ Wróć</button>
+     <div style="display:flex;gap:8px;align-items:center;">
+      <span style="padding:5px 11px;border-radius:8px;background:#222840;color:#A9B2CC;font:600 12px 'Space Grotesk';">{{ flashDzial }}</span>
+      <span style="{{ flashPozStyle }}">{{ flashPoz }}</span>
+     </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;font:600 13px 'Space Grotesk';color:#97A0B5;margin-bottom:8px;"><span>{{ flashCounter }}</span><span>{{ flashModeLabel }}</span></div>
+    <div style="height:8px;background:#232938;border-radius:6px;overflow:hidden;margin-bottom:24px;"><div style="{{ flashProgress }}"></div></div>
+    <div style="background:#151926;border:1px solid #262D40;border-radius:22px;padding:clamp(18px,4.5vw,26px);box-shadow:0 22px 44px -34px rgba(0,0,0,.85);">
+     <div style="{{ flashTypBadge }}"><span style="font-size:14px;line-height:1;">{{ flashTypIcon }}</span><span>{{ flashTypLabel }}</span></div>
+     <h2 ref="{{ qHead }}" tabIndex="-1" style="font:600 21px/1.5 'Space Grotesk',sans-serif;margin:0 0 20px;color:#EDF0F7;outline:none;">{{ flashQ }}</h2>
+     <div style="display:flex;flex-direction:column;gap:10px;">
+      <sc-for list="{{ flashOpts }}" as="o" hint-placeholder-count="4">
+       <div style="{{ o.style }}"><span style="{{ o.markStyle }}">{{ o.mark }}</span><span style="flex:1;">{{ o.text }}</span></div>
+      </sc-for>
+     </div>
+     <sc-if value="{{ flashCanReveal }}" hint-placeholder-val="{{ true }}">
+      <button onClick="{{ onFlashReveal }}" style="margin-top:16px;width:100%;padding:14px;border:none;border-radius:13px;background:#6C5AF5;color:#fff;font:700 15px 'Space Grotesk';cursor:pointer;box-shadow:0 12px 26px -14px rgba(124,108,255,.6);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;" style-hover="transform:translateY(-2px);box-shadow:0 18px 38px -14px rgba(124,108,255,.85);filter:brightness(1.08);" style-active="transform:translateY(0) scale(.985);">Pokaż odpowiedź</button>
+     </sc-if>
+     <sc-if value="{{ flashShow }}" hint-placeholder-val="{{ false }}">
+      <div role="status" aria-live="polite" style="margin-top:18px;padding:15px 17px;border-radius:13px;background:rgba(124,108,255,.09);border:1px solid rgba(124,108,255,.3);">
+       <div style="font:700 12px 'Space Grotesk';color:#B7ADFF;text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px;">Wyjaśnienie</div>
+       <div style="font-size:14.5px;line-height:1.55;color:#C6CCDC;">{{ flashExpl }}</div>
+       <sc-if value="{{ flashHasLink }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:11px;">
+         <sc-for list="{{ flashLinks }}" as="ln" hint-placeholder-count="2">
+          <a href="{{ ln.href }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;color:#8F82FF;font:600 13.5px 'Space Grotesk';text-decoration:none;transition:color .15s ease;" style-hover="color:#C9CBFF;text-decoration:underline;">{{ ln.label }} ↗</a>
+         </sc-for>
+        </div>
+       </sc-if>
+      </div>
+     </sc-if>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:space-between;margin-top:16px;">
+     <button onClick="{{ onFlashPrev }}" style="{{ flashPrevStyle }}" style-hover="filter:brightness(1.08);" style-active="transform:scale(.985);">← Poprzednie</button>
+     <button onClick="{{ onFlashNext }}" style="{{ flashNextStyle }}" style-hover="filter:brightness(1.08);transform:translateY(-2px);" style-active="transform:scale(.985);">{{ flashNextLabel }}</button>
+    </div>
+    <div style="text-align:center;margin-top:14px;font-size:12px;color:#838DA8;">Strzałki ← → nawigują · spacja odsłania · Esc wychodzi</div>
+   </div>
+  </sc-if>
+
  </div>
 </div>
 </x-dc>
@@ -282,8 +327,9 @@ const SUPABASE_ANON_KEY = "sb_publishable_35E-8urxsuFV4WqxeUfz0Q_VIrJBJNR";
 const RANK_MIN_TOTAL = 20;
 
 class Component extends DCLogic {
-  state = { module:'ekologia', screen:'start', scope:'all', length:'20', order:[], pos:0, score:0, selected:[], answered:false, wrongIdx:[], resumable:null, streak:0, bestStreak:0, results:[], nick:'', leaderboard:[], lbLoading:false, lastSessionId:null, endCount:0, myPos:null, myHasQ:false };
+  state = { module:'ekologia', screen:'start', scope:'all', length:'20', order:[], pos:0, score:0, selected:[], answered:false, wrongIdx:[], resumable:null, streak:0, bestStreak:0, results:[], flashList:[], flashPos:0, flashShow:false, nick:'', leaderboard:[], lbLoading:false, lastSessionId:null, endCount:0, myPos:null, myHasQ:false };
   bgCanvas = React.createRef();
+  qHead = React.createRef();
 
   componentDidMount(){
     try{ const s=JSON.parse(localStorage.getItem('quizmkt_session')||'null'); if(s&&s.order&&s.order.length&&s.pos<s.order.length){ this.setState({resumable:s}); } }catch(e){}
@@ -534,6 +580,13 @@ class Component extends DCLogic {
   }
 
   handleKey(e){
+    if(this.state.screen==='flash'){
+      if(e.key==='ArrowRight'){ e.preventDefault(); this.flashNav(1); return; }
+      if(e.key==='ArrowLeft'){ e.preventDefault(); this.flashNav(-1); return; }
+      if(e.key==='Enter'||e.key===' '){ e.preventDefault(); if(this.state.flashShow) this.flashNav(1); else this.setState({flashShow:true}); return; }
+      if(e.key==='Escape'){ e.preventDefault(); this.flashExit(); return; }
+      return;
+    }
     if(this.state.screen!=='quiz') return; const q=this.curQ(); if(!q) return;
     const order=this._optOrder&&this._optOrder.length?this._optOrder:q.a.map((_,i)=>i);
     if(e.key==='Enter'||e.key===' '){ if(this.state.answered){ e.preventDefault(); this.next(); } else if(q.t==='multi'){ e.preventDefault(); this.check(); } return; }
@@ -604,7 +657,7 @@ class Component extends DCLogic {
   check(){ const q=this.curQ(); if(q.t!=='multi'||this.state.answered)return; const sel=this.state.selected; let ok=true; q.a.forEach((o,i)=>{ const should=o[1]===1; const has=sel.indexOf(i)>=0; if(should!==has) ok=false; }); const wrong=this.state.wrongIdx.slice(); if(!ok) wrong.push(this.state.order[this.state.pos]); const ns=ok?this.state.streak+1:0; this.setState({answered:true,score:this.state.score+(ok?1:0),wrongIdx:wrong,streak:ns,bestStreak:Math.max(this.state.bestStreak,ns),results:this.state.results.concat([{d:q.d,ok:ok}])}); }
   wasCorrect(){ const q=this.curQ(); const sel=this.state.selected; if(q.t==='multi'){ let ok=true; q.a.forEach((o,i)=>{ const s=o[1]===1; const h=sel.indexOf(i)>=0; if(s!==h)ok=false; }); return ok; } return sel.length>0 && q.a[sel[0]][1]===1; }
 
-  next(){ const np=this.state.pos+1; if(np>=this.state.order.length){ this.finish(); return; } this._optOrder=this.optOrderFor(this.bank()[this.state.order[np]]); this.setState({pos:np,selected:[],answered:false}, ()=>this.save()); }
+  next(){ const np=this.state.pos+1; if(np>=this.state.order.length){ this.finish(); return; } this._optOrder=this.optOrderFor(this.bank()[this.state.order[np]]); this.setState({pos:np,selected:[],answered:false}, ()=>{ this.save(); this.focusQ(); }); }
 
   finish(){ const total=this.state.order.length; const pct=Math.round(this.state.score/total*100); const results=this.state.results;
     try{ const prev=JSON.parse(localStorage.getItem('quizmkt_best')||'null'); const best=(prev&&prev.pct>pct)?prev:{pct,score:this.state.score,total}; localStorage.setItem('quizmkt_best',JSON.stringify(best)); localStorage.setItem('quizmkt_last',JSON.stringify({pct,score:this.state.score,total}));
@@ -634,6 +687,18 @@ class Component extends DCLogic {
 
   retryWrong(){ const order=this.shuffle(this.state.wrongIdx.slice()); if(!order.length){ this.toStart(); return; } this._optOrder=this.optOrderFor(this.bank()[order[0]]); this.setState({screen:'quiz',order,pos:0,score:0,selected:[],answered:false,wrongIdx:[],streak:0,bestStreak:0,results:[]}); this.trackQuizEvent('quiz_start', { scope:this.state.scope, session_length:String(order.length) }); }
   toStart(){ this.setState({screen:'start'}); }
+  focusQ(){ try{ const el=this.qHead && this.qHead.current; if(el && typeof el.focus==='function') el.focus(); }catch(e){} }
+  // ---- Tryb fiszek / przeglądarka pytań ------------------------------------
+  openFlash(){ const list=this.filtered(this.state.scope); if(!list.length) return; this.setState({screen:'flash', flashList:list, flashPos:0, flashShow:false}, ()=>this.focusQ()); }
+  flashCur(){ return this.bank()[this.state.flashList[this.state.flashPos]]; }
+  flashNav(d){ const n=this.state.flashPos+d; if(n<0) return; if(n>=this.state.flashList.length){ this.flashExit(); return; } this.setState({flashPos:n, flashShow:false}, ()=>this.focusQ()); }
+  flashExit(){ this.setState({screen:'start'}); }
+  flashOptView(){ const C=this.C(); const q=this.flashCur(); if(!q) return []; const show=this.state.flashShow; const letters=['A','B','C','D','E','F','G'];
+    return q.a.map((o,i)=>{ const correct=o[1]===1; let bd='#2A3145', bg='#171B2A', col=C.ink, mbg='#232A3E', mcol='#97A0B5', mark=letters[i];
+      if(show){ if(correct){ bd=C.ok; bg=C.okBg; mbg=C.ok; mcol='#0E1A13'; mark='✓'; } else { col='#7E8AA0'; bd='#222738'; } }
+      const style={display:'flex',alignItems:'center',gap:'13px',width:'100%',textAlign:'left',padding:'14px 16px',borderRadius:'13px',border:'1.5px solid '+bd,background:bg,color:col,font:'500 15.5px/1.45 "Space Grotesk"',transition:'all .15s'};
+      const markStyle={flex:'0 0 auto',width:'27px',height:'27px',borderRadius:'50%',background:mbg,color:mcol,display:'flex',alignItems:'center',justifyContent:'center',font:'700 14px "Space Grotesk"'};
+      return {text:o[0],mark,style,markStyle}; }); }
   clearProgress(){ try{ localStorage.removeItem('quizmkt_session'); localStorage.removeItem('quizmkt_best'); localStorage.removeItem('quizmkt_last'); localStorage.removeItem('quizmkt_mastery'); }catch(e){} this.setState({resumable:null}); }
   pctColor(p){ return p>=80?'#3CCB7F':(p>=50?'#E8C766':'#FF6B6B'); }
   clearHistory(){ try{ localStorage.removeItem('quizmkt_history'); }catch(e){} this.forceUpdate(); }
@@ -675,7 +740,7 @@ class Component extends DCLogic {
 
   renderVals(){
     const C=this.C(); const s=this.state; const scr=s.screen;
-    const base={ isStart:scr==='start', isQuiz:scr==='quiz', isEnd:scr==='end', bgCanvas:this.bgCanvas };
+    const base={ isStart:scr==='start', isQuiz:scr==='quiz', isEnd:scr==='end', isFlash:scr==='flash', bgCanvas:this.bgCanvas, qHead:this.qHead };
     if(scr==='start'){
       const moduleChips=this.modules().map(x=>{ const act=s.module===x[0]; return {label:x[1],style:this.modStyle(act),hover:this.segHover(act),press:this.chipPress(),onClick:()=>this.setModule(x[0])};});
       const scopes=this.scopesFor(s.module);
@@ -691,6 +756,7 @@ class Component extends DCLogic {
         poolLabel:'Pytań w wybranym zakresie: '+pool,
         startLabel:'Rozpocznij quiz',
         onStart:()=>this.start(s.scope,s.length),
+        onFlash:()=>this.openFlash(),
         hasResume, onResume:()=>this.resume(), resumeLabel: hasResume?('Kontynuuj sesję ('+(s.resumable.pos+1)+' / '+s.resumable.order.length+')'):'',
         nick:s.nick||'', onNick:(e)=>this.onNickInput(e),
         onClear:()=>this.clearProgress(),
@@ -728,6 +794,30 @@ class Component extends DCLogic {
         feedbackTitle: ok?'Dobrze!':'Niepoprawnie', explanation:q.e,
         hasLink:qLinks.length>0, qLinks,
         onNext:()=>this.next(), nextLabel: isLast?'Zakończ i zobacz wynik':'Następne pytanie'
+      });
+    }
+    if(scr==='flash'){
+      const q=this.flashCur(); const total=s.flashList.length; const pos=s.flashPos;
+      const poz=this.pozInfo(q.p); const isMulti=q.t==='multi';
+      const typLabel=q.t==='single'?'Jedna poprawna odpowiedź':(isMulti?'Wielokrotny wybór':'Prawda / fałsz');
+      const typIcon=isMulti?'☑':(q.t==='tf'?'◐':'◉');
+      const typBase={display:'inline-flex',alignItems:'center',gap:'8px',padding:'6px 12px',borderRadius:'9px',letterSpacing:'.06em',textTransform:'uppercase',marginBottom:'14px'};
+      const typBadge=isMulti?Object.assign({},typBase,{background:'rgba(232,199,102,.14)',border:'1px solid rgba(232,199,102,.55)',color:'#F0D585',font:'700 11.5px "Space Grotesk"'}):Object.assign({},typBase,{background:'rgba(124,108,255,.12)',border:'1px solid rgba(124,108,255,.30)',color:'#B7ADFF',font:'600 11.5px "Space Grotesk"'});
+      const links=this.questionLinks(q); const atFirst=pos===0, atLast=pos===total-1;
+      const navBtn=(muted)=>({padding:'13px 18px',border:'1.5px solid '+(muted?'#2A3145':'#7C6CFF'),borderRadius:'13px',background:muted?'#141826':'#1A1F30',color:muted?'#5C6580':'#C3C6FF',font:'700 14px "Space Grotesk"',cursor:muted?'default':'pointer',flex:'1',transition:'all .18s ease'});
+      return Object.assign(base,{
+        onFlashExit:()=>this.flashExit(),
+        flashDzial:this.dzialLabel(q.d),
+        flashPoz:poz.t, flashPozStyle:{padding:'5px 11px',borderRadius:'8px',background:poz.bg,color:poz.c,font:'600 12px "Space Grotesk"'},
+        flashCounter:'Karta '+(pos+1)+' / '+total, flashModeLabel:'Tryb przeglądania',
+        flashProgress:{height:'100%',width:Math.round((pos+1)/total*100)+'%',background:C.brand,borderRadius:'6px',transition:'width .3s'},
+        flashTypBadge:typBadge, flashTypIcon:typIcon, flashTypLabel:typLabel,
+        flashQ:q.q, flashOpts:this.flashOptView(),
+        flashShow:s.flashShow, flashCanReveal:!s.flashShow, onFlashReveal:()=>this.setState({flashShow:true}),
+        flashExpl:q.e, flashHasLink:links.length>0, flashLinks:links,
+        onFlashPrev:()=>this.flashNav(-1), onFlashNext:()=>this.flashNav(1),
+        flashPrevStyle:navBtn(atFirst), flashNextStyle:navBtn(false),
+        flashNextLabel: atLast?'Zakończ przegląd ✓':'Następne →'
       });
     }
     let last=null; try{last=JSON.parse(localStorage.getItem('quizmkt_last')||'null');}catch(e){}
