@@ -188,6 +188,12 @@ function render({scores, events}){
   const views = E.filter(e=>e.event_type==='page_view').length;
   const todayLocal = localDayKey(new Date().toISOString());
   const viewsToday = E.filter(e=>e.event_type==='page_view' && localDayKey(e.created_at)===todayLocal).length;
+  // Realne wejścia = page_view z hosta produkcyjnego, z pominięciem 'dev'
+  // (przeglądarki z otwartym panelem) oraz hostów testowych (localhost/podgląd/file).
+  const isRealVisit = e => e.event_type==='page_view' && !!e.scope && e.scope!=='dev'
+    && !/localhost|127\.0\.0\.1|0\.0\.0\.0|::1|^file$|preview/i.test(e.scope);
+  const viewsReal = E.filter(isRealVisit).length;
+  const viewsRealToday = E.filter(e=>isRealVisit(e) && localDayKey(e.created_at)===todayLocal).length;
   const starts = E.filter(e=>e.event_type==='quiz_start').length;
   const completes = E.filter(e=>e.event_type==='quiz_complete').length;
   const uniqSessions = new Set(E.map(e=>e.session_id).filter(Boolean)).size;
@@ -201,12 +207,17 @@ function render({scores, events}){
     ['Najlepsza seria', num(bestStreak), 'z rzędu'],
     eventsBlocked ? ['Wejścia (ogółem)','—',''] : ['Wejścia (ogółem)', num(views), uniqSessions?(num(uniqSessions)+' sesji'):''],
     eventsBlocked ? ['Wejścia dziś','—',''] : ['Wejścia dziś', num(viewsToday), ''],
+    eventsBlocked ? ['Wejścia bez nas','—',''] : ['Wejścia bez nas', num(viewsReal), 'ogółem'],
+    eventsBlocked ? ['Wejścia dziś (bez nas)','—',''] : ['Wejścia dziś (bez nas)', num(viewsRealToday), ''],
     eventsBlocked ? ['Ukończalność','—',''] : ['Ukończalność', pct(complRate), starts?(completes+'/'+starts):''],
   ];
 
   let html = `<div class="grid kpis">` + kpis.map(k=>
     `<div class="card kpi"><div class="lbl">${esc(k[0])}</div><div class="val">${k[1]} <small>${esc(k[2])}</small></div></div>`
   ).join('') + `</div>`;
+  if(!eventsBlocked){
+    html += `<div class="muted" style="font-size:12px;margin:-6px 2px 16px">„Bez nas" pomija wejścia z przeglądarek, w których otwierano ten panel, oraz z hostów testowych (localhost, podgląd). Liczone od wdrożenia tej zmiany — starsze wejścia trafiają tylko do liczników surowych.</div>`;
+  }
 
   if(eventsBlocked){
     html += `<div class="banner">⚠️ <b>Brak odczytu tabeli <code style="display:inline;padding:1px 5px">quiz_events</code></b> (RLS blokuje SELECT dla anon${evErr?': '+esc(evErr.message||evErr.code||''):''}).
@@ -313,6 +324,9 @@ async function load(){
 
 // ── Bramka ─────────────────────────────────────────────────────────────────
 function unlock(){ $('#gate').style.display='none'; $('#app').style.display='block';
+  // Oznacz tę przeglądarkę jako deweloperską (ten sam origin co quiz) —
+  // jej przyszłe wejścia będą tagowane 'dev' i pomijane w licznikach „bez nas".
+  try{ localStorage.setItem('quizy_dev','1'); }catch(e){}
   $('#clientnote').textContent = SUPABASE_URL.replace('https://','').split('.')[0];
   load(); }
 function tryPass(){ const v=$('#gpass').value; if(v===ADMIN_PASS){ try{sessionStorage.setItem('quizy_admin_ok','1');}catch(e){} unlock(); }

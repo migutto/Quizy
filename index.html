@@ -407,6 +407,13 @@ class Component extends DCLogic {
     try{
       const row={ event_type:eventType, session_id:this.getQuizSessionId() };
       if(data.scope!=null) row.scope=String(data.scope);
+      // Znacznik źródła wejścia (w nieużywanym dla page_view polu scope):
+      // 'dev' dla oznaczonej przeglądarki (otwarto panel admina), inaczej host.
+      if(eventType==='page_view' && row.scope==null){
+        let dev=false; try{ dev=(localStorage.getItem('quizy_dev')==='1'); }catch(e){}
+        let host='file'; try{ host=(location.hostname||'file'); }catch(e){}
+        row.scope = dev ? 'dev' : host;
+      }
       if(data.session_length!=null) row.session_length=String(data.session_length);
       if(data.score!=null) row.score=data.score;
       if(data.total!=null) row.total=data.total;
