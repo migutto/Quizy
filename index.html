@@ -703,15 +703,15 @@ class Component extends DCLogic {
     return order.map((oi,pos)=>{
       const o=q.a[oi]; const chosen=sel.indexOf(oi)>=0; const correct=o[1]===1;
       const checkbox=isMulti&&!ans;
-      let bd='#2A3145', bg='#171B2A', col=C.ink, mbg='#232A3E', mcol='#97A0B5', mark=checkbox?(chosen?'✓':''):letters[pos], mbd='none';
-      if(checkbox && !chosen){ mbg='transparent'; mbd='2px solid #4A5474'; }
-      if(!ans){ if(chosen){ bd=C.brand; bg='#1D2138'; mbg=C.brand; mcol='#fff'; mbd='none'; } }
-      else { if(correct){ bd=C.ok; bg=C.okBg; mbg=C.ok; mcol='#0E1A13'; mark='✓'; } else if(chosen){ bd=C.bad; bg=C.badBg; mbg=C.bad; mcol='#2A1113'; mark='✗'; col='#8B94A9'; } else { col='#6E7891'; bd='#222738'; } }
-      const style={display:'flex',alignItems:'center',gap:'13px',width:'100%',textAlign:'left',padding:'15px 16px',borderRadius:'13px',border:'1.5px solid '+bd,background:bg,color:col,font:'500 15.5px/1.45 "Space Grotesk"',cursor:(ans&&!isMulti)?'default':'pointer',transition:'all .12s',boxShadow:(!ans&&chosen)?'0 4px 16px -6px rgba(124,108,255,.55)':'none'};
+      let bd='#2A3145', bg='transparent', col='#D7DCEA', mbg='transparent', mcol='#97A0B5', mark=checkbox?(chosen?'✓':''):letters[pos], mbd='1.5px solid #4A5474';
+      const mrad=checkbox?'8px':'50%';
+      if(!ans){ if(chosen){ bd=C.brand; bg='rgba(124,108,255,.10)'; col=C.ink; mbg=C.brand; mcol='#fff'; mbd='none'; } }
+      else { if(correct){ bd=C.ok; bg=C.okBg; col=C.ink; mbg=C.ok; mcol='#0E1A13'; mbd='none'; mark='✓'; } else if(chosen){ bd=C.bad; bg=C.badBg; mbg=C.bad; mcol='#2A1113'; mbd='none'; mark='✗'; col='#8B94A9'; } else { col='#6E7891'; bd='#222738'; mcol='#5A6480'; mbd='1.5px solid #333B52'; } }
+      const style={display:'flex',alignItems:'center',gap:'13px',width:'100%',textAlign:'left',padding:'15px 16px',borderRadius:'13px',border:'1.5px solid '+bd,background:bg,color:col,font:'500 15.5px/1.45 "Space Grotesk"',cursor:(ans&&!isMulti)?'default':'pointer',transition:'border-color .16s ease, background .16s ease, color .16s ease'};
       if(ans && correct) style.animation='popIn .32s ease'; else if(ans && chosen && !correct) style.animation='shakeX .35s ease';
-      const markStyle={flex:'0 0 auto',width:'27px',height:'27px',borderRadius:checkbox?'8px':'50%',background:mbg,color:mcol,border:mbd,boxSizing:'border-box',display:'flex',alignItems:'center',justifyContent:'center',font:'700 14px "Space Grotesk"'};
-      const canHover=!ans||isMulti&&!ans; const hover=canHover?{borderColor:C.brand,background:'#1A2036',transform:'translateY(-2px)',boxShadow:'0 10px 24px -12px rgba(124,108,255,.55)'}:{};
-      const press=canHover?{transform:'translateY(0) scale(.99)'}:{};
+      const markStyle={flex:'0 0 auto',width:'28px',height:'28px',borderRadius:mrad,background:mbg,color:mcol,border:mbd,boxSizing:'border-box',display:'flex',alignItems:'center',justifyContent:'center',font:'700 13.5px "Space Grotesk"',transition:'border-color .16s ease, color .16s ease, background .16s ease'};
+      const canHover=!ans||isMulti&&!ans; const hover=canHover?{borderColor:C.brand,background:'rgba(124,108,255,.07)',color:C.ink}:{};
+      const press=canHover?{background:'rgba(124,108,255,.14)'}:{};
       return {text:o[0],mark,style,markStyle,hover,press,onClick:()=>this.pick(oi)};
     });
   }
