@@ -111,6 +111,7 @@ const esc = s => String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&l
 const pct = n => (n==null||isNaN(n))?'—':(Math.round(n*10)/10)+'%';
 const num = n => (n==null||isNaN(n))?'—':n.toLocaleString('pl-PL');
 function dayKey(iso){ const d=new Date(iso); if(isNaN(d))return null; return d.toISOString().slice(0,10); }
+function localDayKey(iso){ const d=new Date(iso); if(isNaN(d))return null; return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
 function fmtDate(iso){ const d=new Date(iso); if(isNaN(d))return '—'; return d.toLocaleString('pl-PL',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); }
 
 function barList(items, opts){ // items: [{k, v, sub?}]
@@ -185,6 +186,8 @@ function render({scores, events}){
 
   // ---- KPI z events ----
   const views = E.filter(e=>e.event_type==='page_view').length;
+  const todayLocal = localDayKey(new Date().toISOString());
+  const viewsToday = E.filter(e=>e.event_type==='page_view' && localDayKey(e.created_at)===todayLocal).length;
   const starts = E.filter(e=>e.event_type==='quiz_start').length;
   const completes = E.filter(e=>e.event_type==='quiz_complete').length;
   const uniqSessions = new Set(E.map(e=>e.session_id).filter(Boolean)).size;
@@ -196,7 +199,8 @@ function render({scores, events}){
     ['Średni wynik', pct(avgPct), ''],
     ['Wyniki 100%', num(perfect), S.length?('z '+S.length):''],
     ['Najlepsza seria', num(bestStreak), 'z rzędu'],
-    eventsBlocked ? ['Wejścia (odsłony)','—',''] : ['Wejścia (odsłony)', num(views), uniqSessions?(num(uniqSessions)+' sesji'):''],
+    eventsBlocked ? ['Wejścia (ogółem)','—',''] : ['Wejścia (ogółem)', num(views), uniqSessions?(num(uniqSessions)+' sesji'):''],
+    eventsBlocked ? ['Wejścia dziś','—',''] : ['Wejścia dziś', num(viewsToday), ''],
     eventsBlocked ? ['Ukończalność','—',''] : ['Ukończalność', pct(complRate), starts?(completes+'/'+starts):''],
   ];
 
