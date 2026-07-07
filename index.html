@@ -105,12 +105,25 @@ input:focus-visible{outline:none;}
      </div>
     </sc-if>
     <div style="background:rgba(21,25,38,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(124,108,255,.22);border-radius:26px;padding:clamp(18px,5vw,28px);box-shadow:0 30px 80px -40px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.05);">
-     <div style="font:600 11.5px 'Space Grotesk';color:#929BB3;text-transform:uppercase;letter-spacing:.16em;margin-bottom:13px;">Zakres materiału</div>
-     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(150px,100%),1fr));gap:10px;margin-bottom:26px;">
-      <sc-for list="{{ dzialChips }}" as="c" hint-placeholder-count="6">
-       <button onClick="{{ c.onClick }}" style="{{ c.style }}" style-hover="{{ c.hover }}" style-active="{{ c.press }}"><span style="{{ c.iconStyle }}">{{ c.icon }}</span><span style="display:flex;flex-direction:column;gap:2px;min-width:0;"><span style="line-height:1.25;">{{ c.label }}</span><span style="{{ c.countStyle }}">{{ c.count }}</span></span></button>
-      </sc-for>
-     </div>
+     <sc-if value="{{ showTopScopes }}" hint-placeholder-val="{{ true }}">
+      <div style="font:600 11.5px 'Space Grotesk';color:#929BB3;text-transform:uppercase;letter-spacing:.16em;margin-bottom:13px;">Zakres materiału</div>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:26px;">
+       <sc-for list="{{ topChips }}" as="c" hint-placeholder-count="2">
+        <button onClick="{{ c.onClick }}" style="{{ c.style }}" style-hover="{{ c.hover }}" style-active="{{ c.press }}"><span style="{{ c.iconStyle }}">{{ c.icon }}</span><span style="display:flex;flex-direction:column;gap:2px;min-width:0;"><span style="line-height:1.25;">{{ c.label }}</span><span style="{{ c.countStyle }}">{{ c.count }}</span></span></button>
+       </sc-for>
+      </div>
+     </sc-if>
+     <sc-if value="{{ catOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:13px;">
+       <button onClick="{{ onCatBack }}" style="background:none;border:none;color:#929BB3;font:600 13px 'Space Grotesk';cursor:pointer;padding:4px 0;transition:color .15s ease, transform .15s ease;" style-hover="color:#C3C6FF;transform:translateX(-3px);">‹ Wróć</button>
+       <div style="font:600 11.5px 'Space Grotesk';color:#929BB3;text-transform:uppercase;letter-spacing:.16em;">Wybierz kategorię</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(150px,100%),1fr));gap:10px;margin-bottom:26px;">
+       <sc-for list="{{ catChips }}" as="c" hint-placeholder-count="6">
+        <button onClick="{{ c.onClick }}" style="{{ c.style }}" style-hover="{{ c.hover }}" style-active="{{ c.press }}"><span style="{{ c.iconStyle }}">{{ c.icon }}</span><span style="display:flex;flex-direction:column;gap:2px;min-width:0;"><span style="line-height:1.25;">{{ c.label }}</span><span style="{{ c.countStyle }}">{{ c.count }}</span></span></button>
+       </sc-for>
+      </div>
+     </sc-if>
      <div style="font:600 11.5px 'Space Grotesk';color:#929BB3;text-transform:uppercase;letter-spacing:.16em;margin-bottom:13px;">Liczba pytań w sesji</div>
      <div style="display:flex;gap:4px;background:#10141F;border:1px solid #232938;border-radius:15px;padding:4px;margin-bottom:26px;">
       <sc-for list="{{ lengthChips }}" as="c" hint-placeholder-count="4">
@@ -318,7 +331,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_35E-8urxsuFV4WqxeUfz0Q_VIrJBJNR";
 const RANK_MIN_TOTAL = 20;
 
 class Component extends DCLogic {
-  state = { module:'ekologia', screen:'start', scope:'all', length:'20', order:[], pos:0, score:0, selected:[], answered:false, wrongIdx:[], resumable:null, streak:0, bestStreak:0, results:[], flashList:[], flashQuery:'', flashOpen:{}, nick:'', leaderboard:[], lbLoading:false, lastSessionId:null, endCount:0, myPos:null, myHasQ:false };
+  state = { module:'ekologia', screen:'start', scope:'all', length:'20', order:[], pos:0, score:0, selected:[], answered:false, wrongIdx:[], resumable:null, streak:0, bestStreak:0, results:[], flashList:[], flashQuery:'', flashOpen:{}, catOpen:false, nick:'', leaderboard:[], lbLoading:false, lastSessionId:null, endCount:0, myPos:null, myHasQ:false };
   bgCanvas = React.createRef();
   qHead = React.createRef();
 
@@ -607,7 +620,7 @@ class Component extends DCLogic {
     if(m==='ekologia') return [['all','Wszystkie'],['E-Podstawy','Podstawy ekologii'],['E-Populacja','Populacja'],['E-Zaleznosci','Zależności międzygat.'],['E-Ekosystem','Ekosystem i troficzność'],['E-Obiegi','Obiegi biogeochemiczne'],['E-Biomy','Biomy i formacje'],['E-Biosfera','Biosfera i sfery Ziemi'],['E-Ochrona','Ochrona środowiska'],['E-Zagrozenia','Zagrożenia i katastrofy'],['E-Zarzadzanie','Zarządzanie środowiskowe']];
     return [['all','Wszystkie'],['W1-2','Geneza i trendy'],['W3','Zachowania nabywców'],['W4','Badania'],['W5-6','Produkt i cena'],['Promocja','Promocja'],['links','Pytania z linków']]; }
   dzialOrder(m){ return this.scopesFor(m).filter(x=>x[0]!=='all'&&x[0]!=='links'); }
-  setModule(m){ if(m===this.state.module) return; this.setState({module:m, scope:'all'}, ()=>this.loadLeaderboard()); }
+  setModule(m){ if(m===this.state.module) return; this.setState({module:m, scope:'all', catOpen:false}, ()=>this.loadLeaderboard()); }
   pozInfo(p){ return [null,{t:'łatwe',c:'#3CCB7F',bg:'#142A1F'},{t:'średnie',c:'#E8C766',bg:'#2A2415'},{t:'trudne',c:'#FF6B6B',bg:'#2C1A1C'}][p]||{t:'',c:'#97A0B5',bg:'#222840'}; }
 
   hexA(h,a){ const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16); return 'rgba('+r+','+g+','+b+','+a+')'; }
@@ -674,7 +687,7 @@ class Component extends DCLogic {
   }
 
   retryWrong(){ const order=this.shuffle(this.state.wrongIdx.slice()); if(!order.length){ this.toStart(); return; } this._optOrder=this.optOrderFor(this.bank()[order[0]]); this.setState({screen:'quiz',order,pos:0,score:0,selected:[],answered:false,wrongIdx:[],streak:0,bestStreak:0,results:[]}); this.trackQuizEvent('quiz_start', { scope:this.state.scope, session_length:String(order.length) }); }
-  toStart(){ this.setState({screen:'start'}); }
+  toStart(){ this.setState({screen:'start', catOpen:false}); }
   focusQ(){ try{ const el=this.qHead && this.qHead.current; if(el && typeof el.focus==='function') el.focus(); }catch(e){} }
   // ---- Tryb fiszek: lista pytań (harmonijki) + wyszukiwarka ----------------
   openFlash(){ const list=this.filtered(this.state.scope); if(!list.length) return; this.setState({screen:'flash', flashList:list, flashQuery:'', flashOpen:{}}); }
@@ -725,7 +738,14 @@ class Component extends DCLogic {
     if(scr==='start'){
       const moduleChips=this.modules().map(x=>{ const act=s.module===x[0]; return {label:x[1],style:this.modStyle(act),hover:this.segHover(act),press:this.chipPress(),onClick:()=>this.setModule(x[0])};});
       const scopes=this.scopesFor(s.module);
-      const dzialChips=scopes.map(x=>{ const n=this.filtered(x[0]).length; const act=s.scope===x[0]; const th=this.dzialTheme(x[0]); return {label:x[1],count:n+' '+this.plural(n),icon:th.icon,iconStyle:this.scopeIcon(th),style:this.scopeCard(act,th),countStyle:this.scopeCount(act),hover:this.scopeHover(act,th.color),press:this.chipPress(),onClick:()=>this.setState({scope:x[0]})};});
+      const catList=scopes.filter(x=>x[0]!=='all');
+      const catChips=catList.map(x=>{ const n=this.filtered(x[0]).length; const act=s.scope===x[0]; const th=this.dzialTheme(x[0]); return {label:x[1],count:n+' '+this.plural(n),icon:th.icon,iconStyle:this.scopeIcon(th),style:this.scopeCard(act,th),countStyle:this.scopeCount(act),hover:this.scopeHover(act,th.color),press:this.chipPress(),onClick:()=>this.setState({scope:x[0],catOpen:false})};});
+      const allTh=this.dzialTheme('all'); const allN=this.filtered('all').length; const allAct=s.scope==='all';
+      const allChip={label:'Wszystkie',count:allN+' '+this.plural(allN),icon:allTh.icon,iconStyle:this.scopeIcon(allTh),style:this.scopeCard(allAct,allTh),countStyle:this.scopeCount(allAct),hover:this.scopeHover(allAct,allTh.color),press:this.chipPress(),onClick:()=>this.setState({scope:'all',catOpen:false})};
+      const selCat=!allAct; const catTh=selCat?this.dzialTheme(s.scope):{icon:'🗂️',color:'#9A8DFF',bg:this.hexA('#9A8DFF',.15)};
+      const cn=catList.length; const catCountLabel=selCat?(this.filtered(s.scope).length+' '+this.plural(this.filtered(s.scope).length)):(cn+' '+((cn%10>=2&&cn%10<=4&&!(cn%100>=12&&cn%100<=14))?'kategorie':'kategorii'));
+      const catChip={label:selCat?this.dzialLabel(s.scope):'Kategorie',count:catCountLabel,icon:catTh.icon,iconStyle:this.scopeIcon(catTh),style:this.scopeCard(selCat,catTh),countStyle:this.scopeCount(selCat),hover:this.scopeHover(selCat,catTh.color),press:this.chipPress(),onClick:()=>this.setState({catOpen:true})};
+      const topChips=[allChip,catChip];
       const lens=[['10','10'],['20','20'],['40','40'],['all','Wszystkie']];
       const lengthChips=lens.map(x=>({label:x[1],style:this.segStyle(s.length===x[0]),hover:this.segHover(s.length===x[0]),press:this.chipPress(),onClick:()=>this.setState({length:x[0]})}));
       const pool=this.filtered(s.scope).length;
@@ -733,7 +753,8 @@ class Component extends DCLogic {
       const history=this.loadHistory().filter(h=>(h.module||'marketing')===s.module);
       return Object.assign(base,{
         moduleChips, moduleTitle:this.moduleTitle(),
-        dzialChips, lengthChips,
+        topChips, catChips, catOpen:s.catOpen, showTopScopes:!s.catOpen, onCatBack:()=>this.setState({catOpen:false}),
+        lengthChips,
         poolLabel:'Pytań w wybranym zakresie: '+pool,
         startLabel:'Rozpocznij quiz',
         onStart:()=>this.start(s.scope,s.length),
