@@ -757,9 +757,10 @@ class Component extends DCLogic {
       const catChip={label:selCat?this.dzialLabel(s.scope):'Kategorie',count:catCountLabel,icon:catTh.icon,iconStyle:this.scopeIcon(catTh),style:this.scopeCard(selCat,catTh),countStyle:this.scopeCount(selCat),hover:this.scopeHover(selCat,catTh.color),press:this.chipPress(),onClick:()=>this.setState({catOpen:true})};
       const gotTh=this.dzialTheme('gotowiec'); const gotN=this.filtered('gotowiec').length;
       const gotGloss='linear-gradient(115deg,transparent 34%,rgba(255,240,205,.34) 48%,transparent 62%)';
-      const gotBase='linear-gradient(160deg,'+this.hexA(gotTh.color,.22)+','+this.hexA(gotTh.color,.06)+')';
-      const gotStyle=Object.assign(this.scopeCard(true,gotTh),{background:gotGloss+', '+gotBase,backgroundSize:'230% 100%, 100% 100%',backgroundRepeat:'no-repeat',animation:'sheen 5s ease-in-out infinite'});
-      const gotChip={label:'Pytania z gotowca',count:gotN+' '+this.plural(gotN),icon:gotTh.icon,iconStyle:this.scopeIcon(gotTh),style:gotStyle,countStyle:this.scopeCount(true),hover:this.scopeHover(true,gotTh.color),press:this.chipPress(),onClick:()=>this.setState({scope:'gotowiec',catOpen:false})};
+      const gotBase='linear-gradient(160deg,'+this.hexA(gotTh.color,gotAct?.38:.20)+','+this.hexA(gotTh.color,gotAct?.13:.05)+')';
+      const gotStyle=Object.assign(this.scopeCard(true,gotTh),{background:gotGloss+', '+gotBase,backgroundSize:'230% 100%, 100% 100%',backgroundRepeat:'no-repeat',animation:'sheen 5s ease-in-out infinite',border:'1.5px solid '+this.hexA(gotTh.color,gotAct?1:.7),boxShadow:gotAct?('0 0 0 3px '+this.hexA(gotTh.color,.34)+', 0 16px 40px -14px '+this.hexA(gotTh.color,.65)):('0 12px 30px -16px '+this.hexA(gotTh.color,.5))});
+      const gotIcon=Object.assign(this.scopeIcon(gotTh),{background:this.hexA(gotTh.color,gotAct?.32:.15)});
+      const gotChip={label:'Pytania z gotowca',count:gotN+' '+this.plural(gotN),icon:gotTh.icon,iconStyle:gotIcon,style:gotStyle,countStyle:this.scopeCount(true),hover:this.scopeHover(true,gotTh.color),press:this.chipPress(),onClick:()=>this.setState({scope:'gotowiec',catOpen:false})};
       const topChips=[allChip,catChip,gotChip];
       const lens=[['10','10'],['20','20'],['40','40'],['all','Wszystkie']];
       const lengthChips=lens.map(x=>({label:x[1],style:this.segStyle(s.length===x[0]),hover:this.segHover(s.length===x[0]),press:this.chipPress(),onClick:()=>this.setState({length:x[0]})}));
