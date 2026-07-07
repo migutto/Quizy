@@ -182,6 +182,9 @@ input:focus-visible{outline:none;}
       </sc-for>
      </div>
      <sc-if value="{{ showKbdHint }}" hint-placeholder-val="{{ true }}"><div style="margin-top:14px;font-size:12px;color:#838DA8;text-align:center;">{{ kbdHint }}</div></sc-if>
+     <sc-if value="{{ showReveal }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ onReveal }}" style="width:100%;padding:14px;border:1px solid rgba(232,199,102,.5);border-radius:13px;background:rgba(232,199,102,.10);color:#F0D585;font:700 15px 'Space Grotesk';cursor:pointer;transition:transform .18s ease, background .18s ease;" style-hover="background:rgba(232,199,102,.18);transform:translateY(-2px);" style-active="transform:translateY(0) scale(.985);">Pokaż odpowiedź</button>
+     </sc-if>
      <sc-if value="{{ showCheck }}" hint-placeholder-val="{{ false }}">
       <button onClick="{{ onCheck }}" style="margin-top:16px;width:100%;padding:14px;border:none;border-radius:13px;background:#6C5AF5;color:#fff;font:700 15px 'Space Grotesk';cursor:pointer;box-shadow:0 12px 26px -14px rgba(124,108,255,.6);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;" style-hover="transform:translateY(-2px);box-shadow:0 18px 38px -14px rgba(124,108,255,.85);filter:brightness(1.08);" style-active="transform:translateY(0) scale(.985);filter:brightness(.96);">{{ checkLabel }}</button>
      </sc-if>
@@ -591,7 +594,7 @@ class Component extends DCLogic {
     if(this.state.screen==='flash'){ if(e.key==='Escape'){ this.flashExit(); } return; }
     if(this.state.screen!=='quiz') return; const q=this.curQ(); if(!q) return;
     const order=this._optOrder&&this._optOrder.length?this._optOrder:q.a.map((_,i)=>i);
-    if(e.key==='Enter'||e.key===' '){ if(this.state.answered){ e.preventDefault(); this.next(); } else if(q.t==='multi'){ e.preventDefault(); this.check(); } return; }
+    if(e.key==='Enter'||e.key===' '){ if(this.state.answered){ e.preventDefault(); this.next(); } else if(q.t==='multi'){ e.preventDefault(); this.check(); } else if(q.t==='open'){ e.preventDefault(); this.reveal(); } return; }
     const n=parseInt(e.key,10); if(!isNaN(n)&&n>=1&&n<=order.length){ e.preventDefault(); this.pick(order[n-1]); }
   }
 
@@ -611,7 +614,6 @@ class Component extends DCLogic {
     return out;
   }
   filtered(scope){ const b=this.bank(); const idx=[]; b.forEach((q,i)=>{ if(scope==='all'){ if(q.d!=='gotowiec') idx.push(i); } else if(scope==='links'){ if(this.questionLinks(q).length>0) idx.push(i); } else if(q.d===scope){ idx.push(i); } }); return idx; }
-  quizIdx(scope){ return this.filtered(scope).filter(i=>this.bank()[i].t!=='open'); }
 
   shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
 
@@ -641,7 +643,7 @@ class Component extends DCLogic {
   chipPress(){ return {transform:'translateY(0) scale(.97)'}; }
 
   start(scope,length){
-    let idx=this.shuffle(this.quizIdx(scope));
+    let idx=this.shuffle(this.filtered(scope));
     if(length!=='all'){ idx=idx.slice(0,parseInt(length,10)); }
     this._optOrder=this.optOrderFor(this.bank()[idx[0]]);
     this.setState({screen:'quiz',scope,length,order:idx,pos:0,score:0,selected:[],answered:false,wrongIdx:[],streak:0,bestStreak:0,results:[]}, ()=>this.save());
@@ -663,9 +665,10 @@ class Component extends DCLogic {
   check(){ const q=this.curQ(); if(q.t!=='multi'||this.state.answered)return; const sel=this.state.selected; let ok=true; q.a.forEach((o,i)=>{ const should=o[1]===1; const has=sel.indexOf(i)>=0; if(should!==has) ok=false; }); const wrong=this.state.wrongIdx.slice(); if(!ok) wrong.push(this.state.order[this.state.pos]); const ns=ok?this.state.streak+1:0; this.setState({answered:true,score:this.state.score+(ok?1:0),wrongIdx:wrong,streak:ns,bestStreak:Math.max(this.state.bestStreak,ns),results:this.state.results.concat([{d:q.d,ok:ok}])}); }
   wasCorrect(){ const q=this.curQ(); const sel=this.state.selected; if(q.t==='multi'){ let ok=true; q.a.forEach((o,i)=>{ const s=o[1]===1; const h=sel.indexOf(i)>=0; if(s!==h)ok=false; }); return ok; } return sel.length>0 && q.a[sel[0]][1]===1; }
 
+  reveal(){ if(this.state.answered) return; const q=this.curQ(); if(q.t!=='open') return; this.setState({answered:true}); }
   next(){ const np=this.state.pos+1; if(np>=this.state.order.length){ this.finish(); return; } this._optOrder=this.optOrderFor(this.bank()[this.state.order[np]]); this.setState({pos:np,selected:[],answered:false}, ()=>{ this.save(); this.focusQ(); }); }
 
-  finish(){ const total=this.state.order.length; const pct=Math.round(this.state.score/total*100); const results=this.state.results;
+  finish(){ const total=this.state.order.filter(i=>this.bank()[i].t!=='open').length; const pct= total>0?Math.round(this.state.score/total*100):0; const results=this.state.results;
     try{ const prev=JSON.parse(localStorage.getItem('quizmkt_best')||'null'); const best=(prev&&prev.pct>pct)?prev:{pct,score:this.state.score,total}; localStorage.setItem('quizmkt_best',JSON.stringify(best)); localStorage.setItem('quizmkt_last',JSON.stringify({pct,score:this.state.score,total}));
       const byD={}; results.forEach(r=>{ (byD[r.d]=byD[r.d]||{c:0,t:0}); byD[r.d].t++; if(r.ok)byD[r.d].c++; });
       const m=JSON.parse(localStorage.getItem('quizmkt_mastery')||'{}'); Object.keys(byD).forEach(d=>{ const p=Math.round(byD[d].c/byD[d].t*100); m[d]=Math.max(m[d]||0,p); }); localStorage.setItem('quizmkt_mastery',JSON.stringify(m));
@@ -751,7 +754,7 @@ class Component extends DCLogic {
       const selCat=!allAct && !gotAct; const catTh=selCat?this.dzialTheme(s.scope):{icon:'🗂️',color:'#9A8DFF',bg:this.hexA('#9A8DFF',.15)};
       const cn=catList.length; const catCountLabel=selCat?(this.filtered(s.scope).length+' '+this.plural(this.filtered(s.scope).length)):(cn+' '+((cn%10>=2&&cn%10<=4&&!(cn%100>=12&&cn%100<=14))?'kategorie':'kategorii'));
       const catChip={label:selCat?this.dzialLabel(s.scope):'Kategorie',count:catCountLabel,icon:catTh.icon,iconStyle:this.scopeIcon(catTh),style:this.scopeCard(selCat,catTh),countStyle:this.scopeCount(selCat),hover:this.scopeHover(selCat,catTh.color),press:this.chipPress(),onClick:()=>this.setState({catOpen:true})};
-      const gotTh=this.dzialTheme('gotowiec'); const gotN=this.quizIdx('gotowiec').length;
+      const gotTh=this.dzialTheme('gotowiec'); const gotN=this.filtered('gotowiec').length;
       const gotGloss='linear-gradient(115deg,transparent 34%,rgba(255,240,205,.34) 48%,transparent 62%)';
       const gotBase=gotAct?('linear-gradient(160deg,'+this.hexA(gotTh.color,.22)+','+this.hexA(gotTh.color,.06)+')'):'linear-gradient(0deg,#171B2A,#171B2A)';
       const gotStyle=Object.assign(this.scopeCard(gotAct,gotTh),{background:gotGloss+', '+gotBase,backgroundSize:'230% 100%, 100% 100%',backgroundRepeat:'no-repeat',animation:'sheen 5s ease-in-out infinite'});
@@ -759,7 +762,7 @@ class Component extends DCLogic {
       const topChips=[allChip,catChip,gotChip];
       const lens=[['10','10'],['20','20'],['40','40'],['all','Wszystkie']];
       const lengthChips=lens.map(x=>({label:x[1],style:this.segStyle(s.length===x[0]),hover:this.segHover(s.length===x[0]),press:this.chipPress(),onClick:()=>this.setState({length:x[0]})}));
-      const pool=this.quizIdx(s.scope).length;
+      const pool=this.filtered(s.scope).length;
       const hasResume=!!s.resumable && (s.resumable.module||'marketing')===s.module;
       const history=this.loadHistory().filter(h=>(h.module||'marketing')===s.module);
       return Object.assign(base,{
@@ -778,12 +781,12 @@ class Component extends DCLogic {
     }
     if(scr==='quiz'){
       const q=this.curQ(); const total=s.order.length; const pct=Math.round(s.pos/total*100);
-      const poz=this.pozInfo(q.p); const ok=s.answered?this.wasCorrect():false; const isLast=s.pos===total-1;
-      const isMulti=q.t==='multi';
-      const typLabel=q.t==='single'?'Jedna poprawna odpowiedź':(isMulti?'Wielokrotny wybór — zaznacz wszystkie poprawne':'Prawda czy fałsz');
-      const typIcon=isMulti?'☑':(q.t==='tf'?'◐':'◉');
+      const isOpen=q.t==='open'; const isMulti=q.t==='multi';
+      const poz=this.pozInfo(q.p); const ok=(s.answered && !isOpen)?this.wasCorrect():false; const isLast=s.pos===total-1;
+      const typLabel=isOpen?'Pytanie otwarte — powtórka (bez oceny)':(q.t==='single'?'Jedna poprawna odpowiedź':(isMulti?'Wielokrotny wybór — zaznacz wszystkie poprawne':'Prawda czy fałsz'));
+      const typIcon=isOpen?'📝':(isMulti?'☑':(q.t==='tf'?'◐':'◉'));
       const typBadgeBase={display:'inline-flex',alignItems:'center',gap:'8px',padding:'6px 12px',borderRadius:'9px',letterSpacing:'.06em',textTransform:'uppercase',marginBottom:'14px'};
-      const typBadgeStyle=isMulti
+      const typBadgeStyle=(isMulti||isOpen)
         ? Object.assign({},typBadgeBase,{background:'rgba(232,199,102,.14)',border:'1px solid rgba(232,199,102,.55)',color:'#F0D585',font:'700 11.5px "Space Grotesk"'})
         : Object.assign({},typBadgeBase,{background:'rgba(124,108,255,.12)',border:'1px solid rgba(124,108,255,.30)',color:'#B7ADFF',font:'600 11.5px "Space Grotesk"'});
       const kbdHint=isMulti?'Klawisze 1–'+q.a.length+' zaznaczają odpowiedzi · Enter sprawdza':'Klawisze 1–'+q.a.length+' wybierają odpowiedź · Enter przechodzi dalej';
@@ -793,19 +796,20 @@ class Component extends DCLogic {
         onQuit:()=>this.toStart(),
         showProgress:this.props.showProgressBar!==false,
         showStreak: st>=2, streakLabel:'Seria: '+st, streakStyle,
-        showKbdHint: !s.answered, kbdHint,
+        showKbdHint: !s.answered && !isOpen, kbdHint,
         dzialLabel:this.dzialLabel(q.d), dzialIcon:this.dzialTheme(q.d).icon,
         dzialBadgeStyle:(function(t){ return {display:'inline-flex',alignItems:'center',gap:'6px',padding:'5px 11px',borderRadius:'8px',background:t.bg,color:t.color,border:'1px solid '+this.hexA(t.color,.35),font:'600 12px "Space Grotesk"'}; }).call(this,this.dzialTheme(q.d)),
-        poziomLabel:poz.t, poziomBadgeStyle:{padding:'5px 11px',borderRadius:'8px',background:poz.bg,color:poz.c,font:'600 12px "Space Grotesk"'},
+        poziomLabel:isOpen?'powtórka':poz.t, poziomBadgeStyle:isOpen?{padding:'5px 11px',borderRadius:'8px',background:'rgba(232,199,102,.16)',color:'#F0D585',font:'600 12px "Space Grotesk"'}:{padding:'5px 11px',borderRadius:'8px',background:poz.bg,color:poz.c,font:'600 12px "Space Grotesk"'},
         counterLabel:'Pytanie '+(s.pos+1)+' / '+total, scoreLabel:'Punkty: '+s.score,
         progressStyle:{height:'100%',width:pct+'%',background:C.brand,borderRadius:'6px',transition:'width .3s'},
         typLabel, typIcon, typBadgeStyle, qText:q.q, opts:this.optView(),
         showCheck: q.t==='multi' && !s.answered, onCheck:()=>this.check(),
         checkLabel: 'Sprawdź odpowiedź'+(s.selected.length? ' · zaznaczono '+s.selected.length : ''),
-        answered:s.answered, showExpl:this.props.showExplanations!==false,
-        feedbackStyle:{marginTop:'18px',padding:'15px 17px',borderRadius:'13px',background: ok?C.okBg:C.badBg,border:'1px solid '+(ok?C.ok:C.bad)},
-        feedbackTitleStyle:{font:'700 15px "Space Grotesk"',margin:'0 0 6px',color: ok?C.ok:C.bad},
-        feedbackTitle: ok?'Dobrze!':'Niepoprawnie', explanation:q.e,
+        showReveal: isOpen && !s.answered, onReveal:()=>this.reveal(),
+        answered:s.answered, showExpl: isOpen?true:(this.props.showExplanations!==false),
+        feedbackStyle: isOpen?{marginTop:'18px',padding:'15px 17px',borderRadius:'13px',background:'rgba(232,199,102,.10)',border:'1px solid rgba(232,199,102,.45)'}:{marginTop:'18px',padding:'15px 17px',borderRadius:'13px',background: ok?C.okBg:C.badBg,border:'1px solid '+(ok?C.ok:C.bad)},
+        feedbackTitleStyle: isOpen?{font:'700 15px "Space Grotesk"',margin:'0 0 6px',color:'#F0D585'}:{font:'700 15px "Space Grotesk"',margin:'0 0 6px',color: ok?C.ok:C.bad},
+        feedbackTitle: isOpen?'Odpowiedź':(ok?'Dobrze!':'Niepoprawnie'), explanation:q.e,
         hasLink:qLinks.length>0, qLinks,
         onNext:()=>this.next(), nextLabel: isLast?'Zakończ i zobacz wynik':'Następne pytanie'
       });
