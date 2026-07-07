@@ -124,15 +124,15 @@ input:focus-visible{outline:none;}
        </sc-for>
       </div>
      </sc-if>
-     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:7px;">
-      <span style="font:600 11.5px 'Space Grotesk';color:#929BB3;text-transform:uppercase;letter-spacing:.14em;">Liczba pytań</span>
-      <div style="display:flex;gap:4px;background:#10141F;border:1px solid #232938;border-radius:13px;padding:4px;">
-       <sc-for list="{{ lengthChips }}" as="c" hint-placeholder-count="4">
-        <button onClick="{{ c.onClick }}" style="{{ c.style }}" style-hover="{{ c.hover }}" style-active="{{ c.press }}">{{ c.label }}</button>
-       </sc-for>
-      </div>
+     <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:11px;">
+      <span style="font:600 11.5px 'Space Grotesk';color:#929BB3;text-transform:uppercase;letter-spacing:.16em;">Liczba pytań</span>
+      <span style="font:600 12.5px 'Space Grotesk';color:#838DA8;">{{ poolLabel }}</span>
      </div>
-     <div style="text-align:right;margin-bottom:22px;"><span style="font:600 12.5px 'Space Grotesk';color:#838DA8;">{{ poolLabel }}</span></div>
+     <div style="display:flex;gap:4px;background:#10141F;border:1px solid #232938;border-radius:13px;padding:4px;margin-bottom:24px;">
+      <sc-for list="{{ lengthChips }}" as="c" hint-placeholder-count="4">
+       <button onClick="{{ c.onClick }}" style="{{ c.style }}" style-hover="{{ c.hover }}" style-active="{{ c.press }}">{{ c.label }}</button>
+      </sc-for>
+     </div>
      <div style="display:flex;flex-wrap:wrap;gap:10px;">
       <button onClick="{{ onStart }}" style="flex:1 1 165px;display:flex;align-items:center;justify-content:center;gap:9px;padding:15px 16px;border:none;border-radius:99px;background:linear-gradient(115deg,transparent 22%,rgba(255,255,255,.24) 40%,transparent 56%),linear-gradient(135deg,#9A8DFF,#6C5AF5 55%,#5B7CFF);background-size:230% 100%,100% 100%;background-repeat:no-repeat;color:#fff;font:700 15px 'Space Grotesk';letter-spacing:.02em;cursor:pointer;box-shadow:0 14px 34px -16px rgba(124,108,255,.7), inset 0 1px 0 rgba(255,255,255,.25);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;animation:sheen 5.5s ease-in-out infinite;" style-hover="transform:translateY(-2px);box-shadow:0 20px 46px -18px rgba(124,108,255,.95), inset 0 1px 0 rgba(255,255,255,.3);filter:brightness(1.06);" style-active="transform:translateY(0) scale(.985);filter:brightness(.96);"><span>{{ startLabel }}</span><span style="font-size:18px;line-height:1;">→</span></button>
       <sc-if value="{{ hasResume }}" hint-placeholder-val="{{ false }}">
@@ -631,7 +631,7 @@ class Component extends DCLogic {
   scopeCard(a,th){ const c=th?th.color:'#8F82FF'; return {display:'flex',flexDirection:'row',alignItems:'center',gap:'11px',padding:'11px 12px',borderRadius:'15px',border:(a?'1.5px':'1px')+' solid '+(a?c:'#262D40'),background:a?('linear-gradient(160deg,'+this.hexA(c,.20)+','+this.hexA(c,.05)+')'):'#171B2A',color:a?'#EDF0F7':'#B9C0D4',cursor:'pointer',textAlign:'left',font:'600 13.5px "Space Grotesk"',transition:'all .18s ease',boxShadow:a?'0 12px 30px -16px '+this.hexA(c,.6):'none'}; }
   scopeCount(a){ return {font:'500 11.5px "Space Grotesk"',color:a?'#C9CBFF':'#838DA8'}; }
   scopeHover(a,c){ return a?{transform:'translateY(-2px)',filter:'brightness(1.06)'}:{borderColor:c||'#8F82FF',color:'#EDF0F7',background:'#1D2138',transform:'translateY(-2px)'}; }
-  segStyle(a){ return {padding:'9px 16px',borderRadius:'10px',border:'none',background:a?'linear-gradient(135deg,#8F82FF,#6C5AF5 62%,#5B7CFF)':'transparent',color:a?'#fff':'#97A0B5',font:'600 13.5px "Space Grotesk"',cursor:'pointer',whiteSpace:'nowrap',transition:'all .18s ease',boxShadow:a?'0 8px 20px -10px rgba(124,108,255,.7)':'none'}; }
+  segStyle(a){ return {flex:'1',padding:'10px 0',borderRadius:'10px',border:'none',background:a?'linear-gradient(135deg,#8F82FF,#6C5AF5 62%,#5B7CFF)':'transparent',color:a?'#fff':'#97A0B5',font:'600 13.5px "Space Grotesk"',cursor:'pointer',transition:'all .18s ease',boxShadow:a?'0 8px 20px -10px rgba(124,108,255,.7)':'none'}; }
   segHover(a){ return a?{filter:'brightness(1.08)'}:{color:'#EDF0F7',background:'#1D2138'}; }
   modStyle(a){ const m=this.isMobile(); return {flex:'1 1 auto',minWidth:m?'86px':'0',padding:m?'9px 8px':'11px 6px',borderRadius:'11px',border:'none',background:a?'linear-gradient(135deg,#8F82FF,#6C5AF5 62%,#5B7CFF)':'transparent',color:a?'#fff':'#97A0B5',font:(m?'600 12.5px':'600 14px')+' "Space Grotesk"',cursor:'pointer',whiteSpace:'nowrap',transition:'all .18s ease',boxShadow:a?'0 8px 20px -10px rgba(124,108,255,.7)':'none'}; }
   plural(n){ if(n===1)return 'pytanie'; const m=n%10,h=n%100; return (m>=2&&m<=4&&!(h>=12&&h<=14))?'pytania':'pytań'; }
