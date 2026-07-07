@@ -40,10 +40,6 @@
 *{box-sizing:border-box;}
 body{margin:0;-webkit-font-smoothing:antialiased;}
 @keyframes qfade{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
-@keyframes qEnterA{from{opacity:0;transform:translateY(16px) scale(.992);}to{opacity:1;transform:none;}}
-@keyframes qEnterB{from{opacity:0;transform:translateY(16px) scale(.992);}to{opacity:1;transform:none;}}
-@keyframes optRise0{from{opacity:0;transform:translateY(9px);}to{opacity:1;transform:none;}}
-@keyframes optRise1{from{opacity:0;transform:translateY(9px);}to{opacity:1;transform:none;}}
 @keyframes popIn{0%{transform:scale(1);}40%{transform:scale(1.035);}100%{transform:scale(1);}}
 @keyframes shakeX{0%,100%{transform:translateX(0);}20%{transform:translateX(-5px);}40%{transform:translateX(5px);}60%{transform:translateX(-3px);}80%{transform:translateX(3px);}}
 @keyframes livePulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.45;transform:scale(.78);}}
@@ -150,7 +146,7 @@ input:focus-visible{outline:none;}
   </sc-if>
 
   <sc-if value="{{ isQuiz }}" hint-placeholder-val="{{ false }}">
-   <div>
+   <div style="animation:qfade .3s ease;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:10px;">
      <button onClick="{{ onQuit }}" style="background:none;border:none;color:#929BB3;font:600 14px 'Space Grotesk';cursor:pointer;padding:6px 0;transition:color .15s ease, transform .15s ease;" style-hover="color:#C3C6FF;transform:translateX(-3px);">‹ Zakończ</button>
      <div style="display:flex;gap:8px;align-items:center;">
@@ -162,7 +158,7 @@ input:focus-visible{outline:none;}
      <div style="display:flex;justify-content:space-between;align-items:center;font:600 13px 'Space Grotesk';color:#97A0B5;margin-bottom:8px;"><span>{{ counterLabel }}</span><span style="display:flex;gap:8px;align-items:center;"><sc-if value="{{ showStreak }}" hint-placeholder-val="{{ false }}"><span style="{{ streakStyle }}">{{ streakLabel }}</span></sc-if><span>{{ scoreLabel }}</span></span></div>
      <div style="height:8px;background:#232938;border-radius:6px;overflow:hidden;margin-bottom:24px;"><div style="{{ progressStyle }}"></div></div>
     </sc-if>
-    <div style="{{ qCardStyle }}">
+    <div style="background:#151926;border:1px solid #262D40;border-radius:22px;padding:clamp(18px,4.5vw,26px) clamp(18px,4.5vw,26px) clamp(18px,4vw,24px);box-shadow:0 22px 44px -34px rgba(0,0,0,.85);">
      <div style="{{ typBadgeStyle }}"><span style="font-size:14px;line-height:1;">{{ typIcon }}</span><span>{{ typLabel }}</span></div>
      <h2 ref="{{ qHead }}" tabIndex="-1" style="font:600 21px/1.5 'Space Grotesk',sans-serif;margin:0 0 20px;color:#EDF0F7;outline:none;">{{ qText }}</h2>
      <div style="display:flex;flex-direction:column;gap:10px;">
@@ -711,13 +707,11 @@ class Component extends DCLogic {
       if(checkbox && !chosen){ mbg='transparent'; mbd='2px solid #4A5474'; }
       if(!ans){ if(chosen){ bd=C.brand; bg='#1D2138'; mbg=C.brand; mcol='#fff'; mbd='none'; } }
       else { if(correct){ bd=C.ok; bg=C.okBg; mbg=C.ok; mcol='#0E1A13'; mark='✓'; } else if(chosen){ bd=C.bad; bg=C.badBg; mbg=C.bad; mcol='#2A1113'; mark='✗'; col='#8B94A9'; } else { col='#6E7891'; bd='#222738'; } }
-      const style={display:'flex',alignItems:'center',gap:'13px',width:'100%',textAlign:'left',padding:'15px 16px',borderRadius:'13px',border:'1.5px solid '+bd,background:bg,color:col,font:'500 15.5px/1.45 "Space Grotesk"',cursor:(ans&&!isMulti)?'default':'pointer',transition:'transform .16s cubic-bezier(.34,1.35,.5,1), border-color .18s ease, background .18s ease, box-shadow .2s ease, color .18s ease',boxShadow:(!ans&&chosen)?'0 4px 16px -6px rgba(124,108,255,.55)':'none'};
-      if(ans && correct) style.animation='popIn .32s ease';
-      else if(ans && chosen && !correct) style.animation='shakeX .35s ease';
-      else if(!ans){ style.animation=('optRise'+(this.state.pos%2))+' .34s cubic-bezier(.22,1,.36,1) backwards'; style.animationDelay=(0.04+pos*0.055).toFixed(3)+'s'; }
-      const markStyle={flex:'0 0 auto',width:'27px',height:'27px',borderRadius:checkbox?'8px':'50%',background:mbg,color:mcol,border:mbd,boxSizing:'border-box',display:'flex',alignItems:'center',justifyContent:'center',font:'700 14px "Space Grotesk"',transition:'transform .16s cubic-bezier(.34,1.35,.5,1), background .18s ease, color .18s ease'};
-      const canHover=!ans||isMulti&&!ans; const hover=canHover?{borderColor:C.brand,background:'#1A2036',transform:'translateY(-2px) scale(1.012)',boxShadow:'0 12px 26px -12px rgba(124,108,255,.6)'}:{};
-      const press=canHover?{transform:'translateY(0) scale(.975)'}:{};
+      const style={display:'flex',alignItems:'center',gap:'13px',width:'100%',textAlign:'left',padding:'15px 16px',borderRadius:'13px',border:'1.5px solid '+bd,background:bg,color:col,font:'500 15.5px/1.45 "Space Grotesk"',cursor:(ans&&!isMulti)?'default':'pointer',transition:'all .12s',boxShadow:(!ans&&chosen)?'0 4px 16px -6px rgba(124,108,255,.55)':'none'};
+      if(ans && correct) style.animation='popIn .32s ease'; else if(ans && chosen && !correct) style.animation='shakeX .35s ease';
+      const markStyle={flex:'0 0 auto',width:'27px',height:'27px',borderRadius:checkbox?'8px':'50%',background:mbg,color:mcol,border:mbd,boxSizing:'border-box',display:'flex',alignItems:'center',justifyContent:'center',font:'700 14px "Space Grotesk"'};
+      const canHover=!ans||isMulti&&!ans; const hover=canHover?{borderColor:C.brand,background:'#1A2036',transform:'translateY(-2px)',boxShadow:'0 10px 24px -12px rgba(124,108,255,.55)'}:{};
+      const press=canHover?{transform:'translateY(0) scale(.99)'}:{};
       return {text:o[0],mark,style,markStyle,hover,press,onClick:()=>this.pick(oi)};
     });
   }
@@ -768,8 +762,7 @@ class Component extends DCLogic {
         dzialLabel:this.dzialLabel(q.d),
         poziomLabel:poz.t, poziomBadgeStyle:{padding:'5px 11px',borderRadius:'8px',background:poz.bg,color:poz.c,font:'600 12px "Space Grotesk"'},
         counterLabel:'Pytanie '+(s.pos+1)+' / '+total, scoreLabel:'Punkty: '+s.score,
-        progressStyle:{height:'100%',width:pct+'%',background:C.brand,borderRadius:'6px',transition:'width .45s cubic-bezier(.22,1,.36,1)'},
-        qCardStyle:{background:'#151926',border:'1px solid #262D40',borderRadius:'22px',padding:'clamp(18px,4.5vw,26px) clamp(18px,4.5vw,26px) clamp(18px,4vw,24px)',boxShadow:'0 22px 44px -34px rgba(0,0,0,.85)',animation:('qEnter'+(s.pos%2?'A':'B'))+' .38s cubic-bezier(.22,1,.36,1)'},
+        progressStyle:{height:'100%',width:pct+'%',background:C.brand,borderRadius:'6px',transition:'width .3s'},
         typLabel, typIcon, typBadgeStyle, qText:q.q, opts:this.optView(),
         showCheck: q.t==='multi' && !s.answered, onCheck:()=>this.check(),
         checkLabel: 'Sprawdź odpowiedź'+(s.selected.length? ' · zaznaczono '+s.selected.length : ''),
