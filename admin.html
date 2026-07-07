@@ -32,6 +32,8 @@
        font:600 13px 'Space Grotesk';padding:9px 15px;border-radius:10px;transition:.15s}
   .btn:hover{border-color:var(--vio);background:#1b2136}
   .btn.primary{background:linear-gradient(135deg,#8F82FF,#6C5AF5 60%,#5B7CFF);border:none;color:#fff}
+  .btn.danger{border-color:#5a2b2b;background:#221417;color:#ffb4b4}
+  .btn.danger:hover{border-color:var(--bad);background:#2c1a1c}
   .grid{display:grid;gap:14px}
   .kpis{grid-template-columns:repeat(auto-fit,minmax(160px,1fr));margin-bottom:16px}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 18px}
@@ -162,7 +164,7 @@ function client(){ if(sb)return sb; const g=window.supabase; if(!g||!g.createCli
 async function fetchAll(){
   const c=client(); if(!c) throw new Error('Supabase CDN niezaładowane');
   const scoresQ = c.from('quiz_scores')
-    .select('player_name,score,total,percent,scope,module,session_length,best_streak,created_at')
+    .select('id,player_name,score,total,percent,scope,module,session_length,best_streak,created_at')
     .order('created_at',{ascending:false}).limit(5000);
   const eventsQ = c.from('quiz_events')
     .select('event_type,session_id,scope,session_length,score,total,created_at')
@@ -294,6 +296,15 @@ function render({scores, events}){
   html += `<div class="card"><h2><span class="dot"></span>Długość sesji</h2>
     ${lenItems.length?barList(lenItems):'<div class="muted">Brak danych</div>'}</div>`;
 
+  // Panel: reset rankingów per moduł (usuwa wszystkie wyniki modułu)
+  const resetItems = Object.keys(byModule).sort((a,b)=>byModule[b]-byModule[a]).map(m=>
+    `<div class="bar-row"><div class="k" style="flex:1">${esc(MODULE_LABEL[m]||m)}</div>`
+    +`<div class="v" style="width:auto;flex:0 0 auto;margin-right:8px">${byModule[m]} wyn.</div>`
+    +`<button class="btn danger" data-reset="${esc(m)}">Resetuj</button></div>`).join('');
+  html += `<div class="card"><h2><span class="dot" style="background:var(--bad)"></span>Reset rankingów</h2>
+    ${resetItems||'<div class="muted">Brak danych</div>'}
+    <div class="muted" style="margin-top:10px;font-size:12px">Usuwa wszystkie wyniki wybranego modułu. Nieodwracalne. Wymaga funkcji SQL <code style="display:inline;padding:1px 5px">admin_reset_module</code>.</div></div>`;
+
   // Panel: TOP 10 wyników
   html += `<div class="card" style="grid-column:1/-1"><h2><span class="dot"></span>Top 10 wyników</h2>
     <table><thead><tr><th style="width:34px">#</th><th>Gracz</th><th>Moduł</th><th>Zakres</th><th class="num">Wynik</th><th class="num">%</th><th class="num">Seria</th><th>Data</th></tr></thead><tbody>
@@ -303,6 +314,21 @@ function render({scores, events}){
       <td class="num">${r.score}/${r.total}</td><td class="num">${pct(r.percent!=null?+r.percent:(r.total?r.score/r.total*100:null))}</td>
       <td class="num">${r.best_streak||0}</td><td class="muted">${fmtDate(r.created_at)}</td></tr>`).join('')||'<tr><td colspan="8" class="muted">Brak wyników</td></tr>'}
     </tbody></table></div>`;
+
+  // Panel: zarządzanie pojedynczymi wynikami (usuwanie)
+  const allSorted = S.slice().sort((a,b)=> new Date(b.created_at)-new Date(a.created_at));
+  html += `<div class="card" style="grid-column:1/-1"><h2><span class="dot"></span>Zarządzanie wynikami <span class="pill">${S.length}</span></h2>
+    <input id="scoreFilter" placeholder="Filtruj po nicku…" oninput="filterScoreRows(this.value)" autocomplete="off"
+      style="width:100%;max-width:320px;margin-bottom:10px;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:#0d1120;color:var(--txt);font:600 13px 'Space Grotesk'">
+    <div style="max-height:440px;overflow:auto"><table><thead><tr><th>Gracz</th><th>Moduł</th><th>Zakres</th><th class="num">Wynik</th><th class="num">%</th><th>Data</th><th style="width:44px"></th></tr></thead><tbody>
+    ${allSorted.map(r=>`<tr data-name="${esc((r.player_name||'').toLowerCase())}"><td>${esc(r.player_name)}</td>
+      <td><span class="pill">${esc(MODULE_LABEL[r.module]||r.module||'—')}</span></td>
+      <td class="muted">${esc(r.scope||'—')}</td>
+      <td class="num">${r.score}/${r.total}</td><td class="num">${pct(r.percent!=null?+r.percent:(r.total?r.score/r.total*100:null))}</td>
+      <td class="muted">${fmtDate(r.created_at)}</td>
+      <td class="num">${r.id?`<button class="btn danger" data-del="${esc(r.id)}" title="Usuń ten wynik" style="padding:5px 9px">🗑</button>`:'—'}</td></tr>`).join('')||'<tr><td colspan="7" class="muted">Brak wyników</td></tr>'}
+    </tbody></table></div>
+    <div class="muted" style="margin-top:10px;font-size:12px">🗑 usuwa pojedynczy wynik (nieodwracalne). Wymaga funkcji SQL <code style="display:inline;padding:1px 5px">admin_delete_score</code>.</div></div>`;
 
   html += `</div>`;
 
@@ -334,6 +360,30 @@ function tryPass(){ const v=$('#gpass').value; if(v===ADMIN_PASS){ try{sessionSt
 $('#gbtn').addEventListener('click', tryPass);
 $('#gpass').addEventListener('keydown', e=>{ if(e.key==='Enter') tryPass(); });
 $('#refresh').addEventListener('click', load);
+
+// ── Usuwanie / reset (przez funkcje RPC chronione hasłem) ────────────────────
+async function deleteScore(id){
+  if(!id) return;
+  if(!confirm('Usunąć ten wynik? Operacja nieodwracalna.')) return;
+  const c=client(); if(!c){ alert('Brak połączenia z Supabase'); return; }
+  const { error } = await c.rpc('admin_delete_score', { p_id:id, p_pass:ADMIN_PASS });
+  if(error){ alert('Nie udało się usunąć: '+(error.message||error.code||'')+'\n\nCzy uruchomiłeś w Supabase SQL funkcje admin_delete_score / admin_reset_module?'); return; }
+  load();
+}
+async function resetModule(mod){
+  if(!mod) return;
+  if(!confirm('Wyczyścić CAŁY ranking modułu „'+(MODULE_LABEL[mod]||mod)+'"?\nUsunie wszystkie jego wyniki. Nieodwracalne.')) return;
+  const c=client(); if(!c){ alert('Brak połączenia z Supabase'); return; }
+  const { data, error } = await c.rpc('admin_reset_module', { p_module:mod, p_pass:ADMIN_PASS });
+  if(error){ alert('Nie udało się zresetować: '+(error.message||error.code||'')+'\n\nCzy uruchomiłeś w Supabase SQL funkcje admin_*?'); return; }
+  alert('Usunięto '+(data==null?'':data+' ')+'wyników.');
+  load();
+}
+function filterScoreRows(v){ v=(v||'').toLowerCase().trim(); document.querySelectorAll('tr[data-name]').forEach(tr=>{ tr.style.display=(!v||tr.getAttribute('data-name').indexOf(v)>=0)?'':'none'; }); }
+$('#content').addEventListener('click', e=>{
+  const del=e.target.closest('[data-del]'); if(del){ deleteScore(del.getAttribute('data-del')); return; }
+  const rst=e.target.closest('[data-reset]'); if(rst){ resetModule(rst.getAttribute('data-reset')); return; }
+});
 
 // pamiętaj odblokowanie w obrębie sesji karty
 try{ if(sessionStorage.getItem('quizy_admin_ok')==='1'){ unlock(); } else { setTimeout(()=>$('#gpass').focus(),80); } }catch(e){ setTimeout(()=>$('#gpass').focus(),80); }
