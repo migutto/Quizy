@@ -200,7 +200,7 @@ input:focus-visible{outline:none;}
         </div>
        </sc-if>
       </div>
-      <button onClick="{{ onNext }}" style="margin-top:16px;width:100%;padding:15px;border:none;border-radius:13px;background:linear-gradient(135deg,#8F82FF,#6C5AF5 62%,#5B7CFF);color:#fff;font:700 15px 'Space Grotesk';cursor:pointer;box-shadow:0 12px 26px -14px rgba(124,108,255,.6);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;" style-hover="transform:translateY(-2px);box-shadow:0 18px 38px -14px rgba(124,108,255,.85);filter:brightness(1.07);" style-active="transform:translateY(0) scale(.985);filter:brightness(.96);">{{ nextLabel }}</button>
+      <button onClick="{{ onNext }}" disabled="{{ nextDisabled }}" style="{{ nextButtonStyle }}" style-hover="{{ nextHoverStyle }}" style-active="{{ nextActiveStyle }}">{{ nextLabel }}</button>
      </sc-if>
     </div>
    </div>
@@ -336,9 +336,10 @@ const SUPABASE_ANON_KEY = "sb_publishable_35E-8urxsuFV4WqxeUfz0Q_VIrJBJNR";
 // Minimalna liczba pytań w sesji, aby wynik liczył się do publicznego rankingu.
 // Krótkie sesje (np. 6/6 = 100%) nie powinny wypierać pełnych sesji z top 10.
 const RANK_MIN_TOTAL = 10;
+const OPEN_NEXT_DELAY_MS = 5000;
 
 class Component extends DCLogic {
-  state = { module:'ekologia', screen:'start', scope:'all', length:'20', order:[], pos:0, score:0, selected:[], answered:false, wrongIdx:[], resumable:null, streak:0, bestStreak:0, results:[], flashList:[], flashQuery:'', flashOpen:{}, catOpen:false, nick:'', leaderboard:[], lbLoading:false, lastSessionId:null, endCount:0, myPos:null, myHasQ:false };
+  state = { module:'ekologia', screen:'start', scope:'all', length:'20', order:[], pos:0, score:0, selected:[], answered:false, wrongIdx:[], resumable:null, streak:0, bestStreak:0, results:[], flashList:[], flashQuery:'', flashOpen:{}, catOpen:false, nick:'', leaderboard:[], lbLoading:false, lastSessionId:null, endCount:0, myPos:null, myHasQ:false, openWaitLeft:0 };
   bgCanvas = React.createRef();
   qHead = React.createRef();
 
@@ -355,6 +356,7 @@ class Component extends DCLogic {
     if(this._onKey) window.removeEventListener('keydown',this._onKey);
     if(this._onVw){ window.removeEventListener('resize',this._onVw); clearTimeout(this._vwT); }
     clearTimeout(this._posT);
+    this.clearOpenGate(false);
     if(this._raf) cancelAnimationFrame(this._raf);
     if(this._countRaf) cancelAnimationFrame(this._countRaf);
     if(this._onResize) window.removeEventListener('resize',this._onResize);
@@ -611,6 +613,30 @@ class Component extends DCLogic {
 
   bank(){ const m=this.state.module||'marketing'; this._banks=this._banks||{}; if(!this._banks[m]) this._banks[m]=(m==='zywnosc'?this.buildBankZywnosc():(m==='ekologia'?this.buildBankEkologia():this.buildBank())); return this._banks[m]; }
 
+  clearOpenGate(updateState){
+    if(this._openNextTimer){ clearInterval(this._openNextTimer); this._openNextTimer=null; }
+    this._openReadyAt=0;
+    if(updateState && this.state.openWaitLeft){ this.setState({openWaitLeft:0}); }
+  }
+
+  armOpenGate(q){
+    this.clearOpenGate(false);
+    if(!q || q.t!=='open'){ if(this.state.openWaitLeft) this.setState({openWaitLeft:0}); return; }
+    this._openReadyAt=Date.now()+OPEN_NEXT_DELAY_MS;
+    const tick=()=>{
+      const left=Math.max(0,Math.ceil((this._openReadyAt-Date.now())/1000));
+      if(left!==this.state.openWaitLeft) this.setState({openWaitLeft:left});
+      if(left<=0) this.clearOpenGate(false);
+    };
+    this.setState({openWaitLeft:Math.ceil(OPEN_NEXT_DELAY_MS/1000)});
+    this._openNextTimer=setInterval(tick,200);
+  }
+
+  openNextBlocked(){
+    const q=this.curQ();
+    return !!(q && q.t==='open' && (this.state.openWaitLeft||0)>0);
+  }
+
   questionLinks(q){
     const out=[];
     if(q && Array.isArray(q.links)){
@@ -652,14 +678,16 @@ class Component extends DCLogic {
   chipPress(){ return {transform:'translateY(0) scale(.97)'}; }
 
   start(scope,length){
+    this.clearOpenGate(false);
     let idx=this.shuffle(this.filtered(scope));
     if(length!=='all'){ idx=idx.slice(0,parseInt(length,10)); }
-    this._optOrder=this.optOrderFor(this.bank()[idx[0]]);
-    const firstOpen=!!(this.bank()[idx[0]]&&this.bank()[idx[0]].t==='open');
-    this.setState({screen:'quiz',scope,length,order:idx,pos:0,score:0,selected:[],answered:firstOpen,wrongIdx:[],streak:0,bestStreak:0,results:[]}, ()=>{ this.save(); try{window.scrollTo(0,0);}catch(e){} });
+    const firstQ=this.bank()[idx[0]];
+    this._optOrder=this.optOrderFor(firstQ);
+    const firstOpen=!!(firstQ&&firstQ.t==='open');
+    this.setState({screen:'quiz',scope,length,order:idx,pos:0,score:0,selected:[],answered:firstOpen,wrongIdx:[],streak:0,bestStreak:0,results:[],openWaitLeft:0}, ()=>{ this.save(); this.armOpenGate(firstQ); try{window.scrollTo(0,0);}catch(e){} });
     this.trackQuizEvent('quiz_start', { scope:scope, session_length:String(length) });
   }
-  resume(){ const s=this.state.resumable; if(!s)return; const mod=s.module||'marketing'; this.setState({module:mod}, ()=>{ this._optOrder=this.optOrderFor(this.bank()[s.order[s.pos]]); this.setState({screen:'quiz',scope:s.scope,length:s.length,order:s.order,pos:s.pos,score:s.score,selected:[],answered:((this.bank()[s.order[s.pos]]||{}).t==='open'),wrongIdx:s.wrongIdx||[],streak:0,bestStreak:0,results:[]}); }); }
+  resume(){ const s=this.state.resumable; if(!s)return; const mod=s.module||'marketing'; this.clearOpenGate(false); this.setState({module:mod}, ()=>{ const q=this.bank()[s.order[s.pos]]; this._optOrder=this.optOrderFor(q); this.setState({screen:'quiz',scope:s.scope,length:s.length,order:s.order,pos:s.pos,score:s.score,selected:[],answered:((q||{}).t==='open'),wrongIdx:s.wrongIdx||[],streak:0,bestStreak:0,results:[],openWaitLeft:0},()=>this.armOpenGate(q)); }); }
   save(){ const {order,pos,score,scope,length,wrongIdx,module}=this.state; try{ localStorage.setItem('quizmkt_session',JSON.stringify({order,pos,score,scope,length,wrongIdx,module})); }catch(e){} }
 
   curQ(){ return this.bank()[this.state.order[this.state.pos]]; }
@@ -676,9 +704,9 @@ class Component extends DCLogic {
   wasCorrect(){ const q=this.curQ(); const sel=this.state.selected; if(q.t==='multi'){ let ok=true; q.a.forEach((o,i)=>{ const s=o[1]===1; const h=sel.indexOf(i)>=0; if(s!==h)ok=false; }); return ok; } return sel.length>0 && q.a[sel[0]][1]===1; }
 
   reveal(){ if(this.state.answered) return; const q=this.curQ(); if(q.t!=='open') return; this.setState({answered:true}); }
-  next(){ const np=this.state.pos+1; if(np>=this.state.order.length){ this.finish(); return; } const nq=this.bank()[this.state.order[np]]; this._optOrder=this.optOrderFor(nq); this.setState({pos:np,selected:[],answered:!!(nq&&nq.t==='open')}, ()=>{ this.save(); this.focusQ(); }); }
+  next(){ if(this.openNextBlocked()) return; const np=this.state.pos+1; if(np>=this.state.order.length){ this.finish(); return; } const nq=this.bank()[this.state.order[np]]; this._optOrder=this.optOrderFor(nq); this.setState({pos:np,selected:[],answered:!!(nq&&nq.t==='open'),openWaitLeft:0}, ()=>{ this.save(); this.focusQ(); this.armOpenGate(nq); }); }
 
-  finish(){ const total=this.state.order.filter(i=>this.bank()[i].t!=='open').length; const pct= total>0?Math.round(this.state.score/total*100):0; const results=this.state.results;
+  finish(){ this.clearOpenGate(false); const total=this.state.order.filter(i=>this.bank()[i].t!=='open').length; const pct= total>0?Math.round(this.state.score/total*100):0; const results=this.state.results;
     try{ const prev=JSON.parse(localStorage.getItem('quizmkt_best')||'null'); const best=(prev&&prev.pct>pct)?prev:{pct,score:this.state.score,total}; localStorage.setItem('quizmkt_best',JSON.stringify(best)); localStorage.setItem('quizmkt_last',JSON.stringify({pct,score:this.state.score,total}));
       const byD={}; results.forEach(r=>{ (byD[r.d]=byD[r.d]||{c:0,t:0}); byD[r.d].t++; if(r.ok)byD[r.d].c++; });
       const m=JSON.parse(localStorage.getItem('quizmkt_mastery')||'{}'); Object.keys(byD).forEach(d=>{ const p=Math.round(byD[d].c/byD[d].t*100); m[d]=Math.max(m[d]||0,p); }); localStorage.setItem('quizmkt_mastery',JSON.stringify(m));
@@ -704,11 +732,11 @@ class Component extends DCLogic {
     this._countRaf=requestAnimationFrame(step);
   }
 
-  retryWrong(){ const order=this.shuffle(this.state.wrongIdx.slice()); if(!order.length){ this.toStart(); return; } this._optOrder=this.optOrderFor(this.bank()[order[0]]); this.setState({screen:'quiz',order,pos:0,score:0,selected:[],answered:false,wrongIdx:[],streak:0,bestStreak:0,results:[]}); this.trackQuizEvent('quiz_start', { scope:this.state.scope, session_length:String(order.length) }); }
-  toStart(){ this.setState({screen:'start', catOpen:false}, ()=>{ try{window.scrollTo(0,0);}catch(e){} }); }
+  retryWrong(){ this.clearOpenGate(false); const order=this.shuffle(this.state.wrongIdx.slice()); if(!order.length){ this.toStart(); return; } const q=this.bank()[order[0]]; this._optOrder=this.optOrderFor(q); this.setState({screen:'quiz',order,pos:0,score:0,selected:[],answered:!!(q&&q.t==='open'),wrongIdx:[],streak:0,bestStreak:0,results:[],openWaitLeft:0},()=>this.armOpenGate(q)); this.trackQuizEvent('quiz_start', { scope:this.state.scope, session_length:String(order.length) }); }
+  toStart(){ this.clearOpenGate(false); this.setState({screen:'start', catOpen:false, openWaitLeft:0}, ()=>{ try{window.scrollTo(0,0);}catch(e){} }); }
   focusQ(){ try{ const el=this.qHead && this.qHead.current; if(el && typeof el.focus==='function') el.focus(); }catch(e){} }
   // ---- Tryb fiszek: lista pytań (harmonijki) + wyszukiwarka ----------------
-  openFlash(){ const list=this.filtered(this.state.scope); if(!list.length) return; this.setState({screen:'flash', flashList:list, flashQuery:'', flashOpen:{}}, ()=>{ try{window.scrollTo(0,0);}catch(e){} }); }
+  openFlash(){ const list=this.filtered(this.state.scope); if(!list.length) return; this.clearOpenGate(false); this.setState({screen:'flash', flashList:list, flashQuery:'', flashOpen:{}, openWaitLeft:0}, ()=>{ try{window.scrollTo(0,0);}catch(e){} }); }
   flashExit(){ this.setState({screen:'start'}, ()=>{ try{window.scrollTo(0,0);}catch(e){} }); }
   flashToggle(bi){ const o=Object.assign({}, this.state.flashOpen); if(o[bi]) delete o[bi]; else o[bi]=true; this.setState({flashOpen:o}); }
   clearProgress(){ try{ localStorage.removeItem('quizmkt_session'); localStorage.removeItem('quizmkt_best'); localStorage.removeItem('quizmkt_last'); localStorage.removeItem('quizmkt_mastery'); }catch(e){} this.setState({resumable:null}); }
@@ -803,6 +831,13 @@ class Component extends DCLogic {
       const kbdHint=isMulti?'Klawisze 1–'+q.a.length+' zaznaczają odpowiedzi · Enter sprawdza':'Klawisze 1–'+q.a.length+' wybierają odpowiedź · Enter przechodzi dalej';
       const st=s.streak; const streakStyle={padding:'2px 10px',borderRadius:'20px',font:'700 12px "Space Grotesk"',background: st>=5?'#2E2A18':'#142A1F',color: st>=5?'#F5D97B':'#3CCB7F'};
       const qLinks=this.questionLinks(q);
+      const openWaitLeft=s.openWaitLeft||0;
+      const nextDisabled=isOpen&&openWaitLeft>0;
+      const nextBaseStyle={marginTop:'16px',width:'100%',padding:'15px',border:'none',borderRadius:'13px',background:'linear-gradient(135deg,#8F82FF,#6C5AF5 62%,#5B7CFF)',color:'#fff',font:'700 15px "Space Grotesk"',cursor:'pointer',boxShadow:'0 12px 26px -14px rgba(124,108,255,.6)',transition:'transform .18s ease, box-shadow .18s ease, filter .18s ease, opacity .18s ease, background .18s ease'};
+      const nextButtonStyle=nextDisabled?Object.assign({},nextBaseStyle,{background:'#30364A',color:'#97A0B5',cursor:'not-allowed',boxShadow:'none',opacity:.86}):nextBaseStyle;
+      const nextHoverStyle=nextDisabled?{}:{transform:'translateY(-2px)',boxShadow:'0 18px 38px -14px rgba(124,108,255,.85)',filter:'brightness(1.07)'};
+      const nextActiveStyle=nextDisabled?{}:{transform:'translateY(0) scale(.985)',filter:'brightness(.96)'};
+      const nextLabel=nextDisabled?('Dalej za '+openWaitLeft+' s'):(isLast?'Zakończ i zobacz wynik':'Następne pytanie');
       return Object.assign(base,{
         onQuit:()=>this.toStart(),
         showProgress:this.props.showProgressBar!==false,
@@ -822,7 +857,7 @@ class Component extends DCLogic {
         feedbackTitleStyle: isOpen?{font:'700 15px "Space Grotesk"',margin:'0 0 6px',color:'#F0D585'}:{font:'700 15px "Space Grotesk"',margin:'0 0 6px',color: ok?C.ok:C.bad},
         feedbackTitle: isOpen?'Odpowiedź':(ok?'Dobrze!':'Niepoprawnie'), explanation:q.e,
         hasLink:qLinks.length>0, qLinks,
-        onNext:()=>this.next(), nextLabel: isLast?'Zakończ i zobacz wynik':'Następne pytanie'
+        onNext:()=>this.next(), nextDisabled, nextButtonStyle, nextHoverStyle, nextActiveStyle, nextLabel
       });
     }
     if(scr==='flash'){
