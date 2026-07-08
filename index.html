@@ -335,7 +335,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_35E-8urxsuFV4WqxeUfz0Q_VIrJBJNR";
 
 // Minimalna liczba pytań w sesji, aby wynik liczył się do publicznego rankingu.
 // Krótkie sesje (np. 6/6 = 100%) nie powinny wypierać pełnych sesji z top 10.
-const RANK_MIN_TOTAL = 20;
+const RANK_MIN_TOTAL = 10;
 
 class Component extends DCLogic {
   state = { module:'ekologia', screen:'start', scope:'all', length:'20', order:[], pos:0, score:0, selected:[], answered:false, wrongIdx:[], resumable:null, streak:0, bestStreak:0, results:[], flashList:[], flashQuery:'', flashOpen:{}, catOpen:false, nick:'', leaderboard:[], lbLoading:false, lastSessionId:null, endCount:0, myPos:null, myHasQ:false };
@@ -487,7 +487,7 @@ class Component extends DCLogic {
     if(sessionId && this._submitted.has(sessionId)) return; // brak podwójnego wysłania
     const name=this.normalizePlayerName(this.state.nick);
     if(!name) return; // bez nicku nie zapisujemy do rankingu (ale quiz działa)
-    const total=this.state.order.length, score=this.state.score;
+    const total=this.state.order.filter(i=>this.bank()[i].t!=='open').length, score=this.state.score;
     if(!(total>0) || score<0 || score>total || total>500) return;
     if(total<RANK_MIN_TOTAL) return; // krótkie sesje nie trafiają do publicznego rankingu
     if(sessionId) this._submitted.add(sessionId);

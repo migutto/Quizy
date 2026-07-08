@@ -1,0 +1,4940 @@
+{
+  "total_questions": 280,
+  "pdf_pages": [
+    {
+      "pdf": "egz eko (1).pdf",
+      "pages": 20
+    },
+    {
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "pages": 72
+    },
+    {
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "pages": 89
+    },
+    {
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "pages": 114
+    },
+    {
+      "pdf": "EZS-NS-W7.pdf",
+      "pages": 46
+    }
+  ],
+  "by_type": {
+    "single": 222,
+    "tf": 8,
+    "multi": 50
+  },
+  "by_category": {
+    "E-Podstawy": 33,
+    "E-Populacja": 29,
+    "E-Zaleznosci": 36,
+    "E-Ekosystem": 37,
+    "E-Obiegi": 34,
+    "E-Biomy": 14,
+    "E-Biosfera": 7,
+    "E-Ochrona": 38,
+    "E-Zagrozenia": 20,
+    "E-Zarzadzanie": 32
+  },
+  "by_difficulty": {
+    "1": 26,
+    "2": 122,
+    "3": 132
+  },
+  "bad_correct_counts": [],
+  "length_stats": {
+    "single_count": 222,
+    "multi_count": 50,
+    "tf_count": 8,
+    "single_source_correct_position": {
+      "1": 222
+    },
+    "single_correct_is_longest_count": 27,
+    "single_correct_is_longest_pct": 12.2,
+    "single_suspicious_long_correct": [
+      {
+        "idx": 71,
+        "ratio": 5.0,
+        "correct_len": 60,
+        "max_incorrect_len": 15,
+        "q": "Konsumentami III rzędu są:",
+        "correct": "Organizmy odżywiające się mięsożernymi konsumentami II rzędu"
+      },
+      {
+        "idx": 89,
+        "ratio": 2.16,
+        "correct_len": 23,
+        "max_incorrect_len": 12,
+        "q": "Poziom troficzny producentów w łańcuchu pokarmowym stanowią:",
+        "correct": "Organizmy autotroficzne"
+      },
+      {
+        "idx": 104,
+        "ratio": 1.66,
+        "correct_len": 61,
+        "max_incorrect_len": 39,
+        "q": "Recykling materiałowy polega na:",
+        "correct": "Ponownym przetwarzaniu odpadów w produkt o wartości użytkowej"
+      },
+      {
+        "idx": 106,
+        "ratio": 2.19,
+        "correct_len": 76,
+        "max_incorrect_len": 41,
+        "q": "Dlaczego biochemiczne zapotrzebowanie na tlen oznacza się w ciągu 5 dni (BZT5)?",
+        "correct": "Bo szybkość biologicznego utleniania jest największa w początkowych 5 dniach"
+      },
+      {
+        "idx": 108,
+        "ratio": 1.5,
+        "correct_len": 62,
+        "max_incorrect_len": 43,
+        "q": "Skrót RLM (równoważna liczba mieszkańców) opiera się na założeniu, że:",
+        "correct": "1 mieszkaniec wytwarza ładunek odpowiadający 60 g BZT5 na dobę"
+      },
+      {
+        "idx": 110,
+        "ratio": 3.59,
+        "correct_len": 103,
+        "max_incorrect_len": 37,
+        "q": "Roztwór zerowy (ślepa próba) to:",
+        "correct": "Próba wykonana z tymi samymi odczynnikami, ale bez oznaczanego składnika — uwzględnia wpływ odczynników"
+      },
+      {
+        "idx": 111,
+        "ratio": 2.16,
+        "correct_len": 49,
+        "max_incorrect_len": 23,
+        "q": "Jakie powinno być stężenie tlenu rozpuszczonego w wodzie do picia?",
+        "correct": "Bliskie 100% stanu nasycenia w danej temperaturze"
+      },
+      {
+        "idx": 231,
+        "ratio": 2.93,
+        "correct_len": 45,
+        "max_incorrect_len": 29,
+        "q": "Hałas o częstotliwości drgań niższej niż 20 Hz to hałas:",
+        "correct": "Infradźwiękowy (niesłyszalny, ale odczuwalny)"
+      }
+    ],
+    "single_avg_correct_len": 39.1,
+    "single_avg_incorrect_len": 31.9,
+    "multi_grouped_correct_first_count": 50,
+    "multi_grouped_correct_first_pct": 100.0,
+    "tf_correct_labels": {
+      "falsz": 2,
+      "prawda": 6
+    },
+    "tf_first_option_correct_count": 6,
+    "tf_first_option_correct_pct": 75.0
+  },
+  "duplicates": {
+    "exact": {},
+    "similar": [
+      {
+        "idx1": 125,
+        "idx2": 126,
+        "ratio": 0.981,
+        "q1": "Krzywa przeżywania typu A jest charakterystyczna dla:",
+        "q2": "Krzywa przeżywania typu C jest charakterystyczna dla:"
+      },
+      {
+        "idx1": 103,
+        "idx2": 182,
+        "ratio": 0.957,
+        "q1": "Do biomów słodkowodnych zalicza się:",
+        "q2": "Do biomów słonowodnych zalicza się:"
+      },
+      {
+        "idx1": 50,
+        "idx2": 53,
+        "ratio": 0.954,
+        "q1": "Komensalizm to zależność, w której:",
+        "q2": "Amensalizm to zależność, w której:"
+      },
+      {
+        "idx1": 48,
+        "idx2": 55,
+        "ratio": 0.921,
+        "q1": "Mutualizm to zależność, w której:",
+        "q2": "Neutralizm to zależność, w której:"
+      },
+      {
+        "idx1": 103,
+        "idx2": 170,
+        "ratio": 0.892,
+        "q1": "Do biomów słodkowodnych zalicza się:",
+        "q2": "Do biomów lądowych zalicza się:"
+      },
+      {
+        "idx1": 48,
+        "idx2": 53,
+        "ratio": 0.889,
+        "q1": "Mutualizm to zależność, w której:",
+        "q2": "Amensalizm to zależność, w której:"
+      },
+      {
+        "idx1": 48,
+        "idx2": 50,
+        "ratio": 0.875,
+        "q1": "Mutualizm to zależność, w której:",
+        "q2": "Komensalizm to zależność, w której:"
+      },
+      {
+        "idx1": 53,
+        "idx2": 55,
+        "ratio": 0.875,
+        "q1": "Amensalizm to zależność, w której:",
+        "q2": "Neutralizm to zależność, w której:"
+      },
+      {
+        "idx1": 170,
+        "idx2": 182,
+        "ratio": 0.875,
+        "q1": "Do biomów lądowych zalicza się:",
+        "q2": "Do biomów słonowodnych zalicza się:"
+      },
+      {
+        "idx1": 252,
+        "idx2": 253,
+        "ratio": 0.869,
+        "q1": "Funkcja bodźcowa (stymulacyjna) instrumentów ekonomicznych polega na:",
+        "q2": "Funkcja regulacyjna instrumentów ekonomicznych polega na:"
+      },
+      {
+        "idx1": 50,
+        "idx2": 55,
+        "ratio": 0.862,
+        "q1": "Komensalizm to zależność, w której:",
+        "q2": "Neutralizm to zależność, w której:"
+      }
+    ]
+  },
+  "source_stats": {
+    "best_source_by_pdf": {
+      "egz eko (1).pdf": 66,
+      "EZS-NS-W1-W2.pdf": 78,
+      "EZS-NS-W3-W4.pdf": 57,
+      "EZS-NS-W5-W6.pdf": 47,
+      "EZS-NS-W7.pdf": 32
+    },
+    "low_support_count": 0,
+    "weak_support_count": 1,
+    "strong_support_count": 267,
+    "low_support": []
+  },
+  "low_support_examples": [],
+  "matches": [
+    {
+      "idx": 0,
+      "score": 0.682,
+      "pdf": "egz eko (1).pdf",
+      "page": 1,
+      "hits": [
+        "1869",
+        "haeckel",
+        "roku",
+        "termin",
+        "wieku",
+        "wprowadzil"
+      ]
+    },
+    {
+      "idx": 1,
+      "score": 0.897,
+      "pdf": "egz eko (1).pdf",
+      "page": 1,
+      "hits": [
+        "greckich",
+        "logos",
+        "miejsce",
+        "nauka",
+        "oikos",
+        "pochodzi",
+        "slow",
+        "slowo",
+        "termin",
+        "zycia"
+      ]
+    },
+    {
+      "idx": 2,
+      "score": 0.519,
+      "pdf": "egz eko (1).pdf",
+      "page": 1,
+      "hits": [
+        "liczebnosc",
+        "nauka",
+        "organizmami",
+        "organizmow",
+        "rozmieszczenie",
+        "zaleznosci",
+        "zaleznosciach",
+        "zycia"
+      ]
+    },
+    {
+      "idx": 3,
+      "score": 0.408,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 2,
+      "hits": [
+        "nauka",
+        "organizmow",
+        "pojecie",
+        "zaleznosciach"
+      ]
+    },
+    {
+      "idx": 4,
+      "score": 0.513,
+      "pdf": "egz eko (1).pdf",
+      "page": 6,
+      "hits": [
+        "abiotyczne",
+        "biocenozy",
+        "biotop",
+        "fizyczne",
+        "siedlisko",
+        "zycia"
+      ]
+    },
+    {
+      "idx": 5,
+      "score": 0.476,
+      "pdf": "egz eko (1).pdf",
+      "page": 3,
+      "hits": [
+        "biocenoza",
+        "gatunkow",
+        "organizmow",
+        "populacji",
+        "powiazanych",
+        "roznych",
+        "wszystkich",
+        "wzajemnymi",
+        "zaleznosciami",
+        "zespol"
+      ]
+    },
+    {
+      "idx": 6,
+      "score": 0.559,
+      "pdf": "egz eko (1).pdf",
+      "page": 7,
+      "hits": [
+        "biocenoza",
+        "biotop",
+        "ekosystem",
+        "energii",
+        "materii",
+        "organizmy"
+      ]
+    },
+    {
+      "idx": 7,
+      "score": 0.381,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 2,
+      "hits": [
+        "biogeocenoza",
+        "biotopem",
+        "ekosystemu",
+        "ukladu"
+      ]
+    },
+    {
+      "idx": 8,
+      "score": 0.611,
+      "pdf": "egz eko (1).pdf",
+      "page": 5,
+      "hits": [
+        "czasie",
+        "gatunku",
+        "jednogatunkowy",
+        "krzyzujacych",
+        "obszar",
+        "okreslony",
+        "okreslonym",
+        "organizmow",
+        "populacja",
+        "swobodnie",
+        "zbior"
+      ]
+    },
+    {
+      "idx": 9,
+      "score": 0.594,
+      "pdf": "egz eko (1).pdf",
+      "page": 16,
+      "hits": [
+        "caloksztalt",
+        "definicja",
+        "ekologicznej",
+        "gatunku",
+        "niszy",
+        "potrzeb",
+        "siedlisko",
+        "warunkow",
+        "zyciowych"
+      ]
+    },
+    {
+      "idx": 10,
+      "score": 0.765,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 20,
+      "hits": [
+        "areal",
+        "osobnika",
+        "pojedynczego",
+        "populacje",
+        "przestrzen",
+        "siedlisko",
+        "zajmowana"
+      ]
+    },
+    {
+      "idx": 11,
+      "score": 0.69,
+      "pdf": "egz eko (1).pdf",
+      "page": 5,
+      "hits": [
+        "biocenotyczny",
+        "biologicznej",
+        "ekosystemalny",
+        "organizacji",
+        "osobniczy",
+        "populacyjny",
+        "poziom",
+        "poziomow",
+        "wyroznia"
+      ]
+    },
+    {
+      "idx": 12,
+      "score": 0.69,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 5,
+      "hits": [
+        "bada",
+        "gatunku",
+        "grupy",
+        "osobnikow",
+        "populacji",
+        "samego",
+        "samym",
+        "teren",
+        "zamieszkujacych"
+      ]
+    },
+    {
+      "idx": 13,
+      "score": 0.662,
+      "pdf": "egz eko (1).pdf",
+      "page": 3,
+      "hits": [
+        "bada",
+        "biocenoz",
+        "czasie",
+        "okreslony",
+        "organizmow",
+        "samym",
+        "teren",
+        "wielogatunkowy",
+        "zajmuje",
+        "zespol"
+      ]
+    },
+    {
+      "idx": 14,
+      "score": 0.619,
+      "pdf": "egz eko (1).pdf",
+      "page": 9,
+      "hits": [
+        "behawioralna",
+        "prawidlowosci",
+        "rzadzacych",
+        "wyjasnieniem",
+        "zachowaniem",
+        "zajmuje",
+        "zwierzat"
+      ]
+    },
+    {
+      "idx": 15,
+      "score": 0.748,
+      "pdf": "egz eko (1).pdf",
+      "page": 16,
+      "hits": [
+        "entomologia",
+        "nauka",
+        "owadach"
+      ]
+    },
+    {
+      "idx": 16,
+      "score": 0.572,
+      "pdf": "egz eko (1).pdf",
+      "page": 17,
+      "hits": [
+        "eury",
+        "organizm",
+        "szerokim",
+        "tolerancji",
+        "zakresie"
+      ]
+    },
+    {
+      "idx": 17,
+      "score": 0.472,
+      "pdf": "egz eko (1).pdf",
+      "page": 6,
+      "hits": [
+        "autotrofy",
+        "ktorych",
+        "nieorganiczne",
+        "odzywiania",
+        "organiczna",
+        "organizmy",
+        "podstawa",
+        "zwiazki"
+      ]
+    },
+    {
+      "idx": 18,
+      "score": 0.466,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 69,
+      "hits": [
+        "gotowej",
+        "heterotroficzne",
+        "konsumenci",
+        "materii",
+        "organiczna",
+        "organicznej",
+        "organizmy",
+        "producentow"
+      ]
+    },
+    {
+      "idx": 19,
+      "score": 0.578,
+      "pdf": "egz eko (1).pdf",
+      "page": 7,
+      "hits": [
+        "czlowiek",
+        "gotowej",
+        "konsumentem",
+        "materii",
+        "organicznej"
+      ]
+    },
+    {
+      "idx": 20,
+      "score": 0.654,
+      "pdf": "egz eko (1).pdf",
+      "page": 17,
+      "hits": [
+        "bialku",
+        "ekosfera",
+        "gwiazde",
+        "istnieja",
+        "ktorym",
+        "obszar",
+        "opartego",
+        "otaczajacy",
+        "strefa",
+        "warunki",
+        "zycia"
+      ]
+    },
+    {
+      "idx": 21,
+      "score": 0.758,
+      "pdf": "egz eko (1).pdf",
+      "page": 14,
+      "hits": [
+        "nazywa",
+        "obrebie",
+        "osobnikow",
+        "populacji",
+        "struktura",
+        "wewnetrzne",
+        "zroznicowanie"
+      ]
+    },
+    {
+      "idx": 22,
+      "score": 0.47,
+      "pdf": "egz eko (1).pdf",
+      "page": 16,
+      "hits": [
+        "biologiczny",
+        "biom",
+        "duzy",
+        "kuli",
+        "latwy",
+        "region",
+        "ziemskiej"
+      ]
+    },
+    {
+      "idx": 23,
+      "score": 0.621,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 37,
+      "hits": [
+        "borealne",
+        "glownie",
+        "iglaste",
+        "lasy",
+        "polozonych",
+        "strefy",
+        "tajga",
+        "wysoko"
+      ]
+    },
+    {
+      "idx": 24,
+      "score": 0.567,
+      "pdf": "egz eko (1).pdf",
+      "page": 4,
+      "hits": [
+        "liczebnosc",
+        "poprzez",
+        "populacji",
+        "rozmieszczenie",
+        "rozrodczosc",
+        "smiertelnosc",
+        "struktura",
+        "strukture",
+        "zageszczenie"
+      ]
+    },
+    {
+      "idx": 25,
+      "score": 0.674,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 22,
+      "hits": [
+        "dana",
+        "liczba",
+        "liczebnosc",
+        "obszar",
+        "osobnikow",
+        "populacje",
+        "populacji",
+        "zajety",
+        "zasiedlajacych"
+      ]
+    },
+    {
+      "idx": 26,
+      "score": 0.622,
+      "pdf": "egz eko (1).pdf",
+      "page": 10,
+      "hits": [
+        "jednostke",
+        "liczba",
+        "liczebnosc",
+        "osobnikow",
+        "populacja",
+        "populacji",
+        "przestrzeni",
+        "przypadajaca"
+      ]
+    },
+    {
+      "idx": 27,
+      "score": 0.604,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 28,
+      "hits": [
+        "calej",
+        "liczby",
+        "liczebnosci",
+        "osobnikow",
+        "populacji",
+        "smiertelnosc",
+        "stosunek",
+        "umierajacych"
+      ]
+    },
+    {
+      "idx": 28,
+      "score": 0.822,
+      "pdf": "egz eko (1).pdf",
+      "page": 8,
+      "hits": [
+        "calej",
+        "liczby",
+        "liczebnosci",
+        "nowo",
+        "osobnikow",
+        "populacja",
+        "populacji",
+        "rozrodczosc",
+        "stosunek",
+        "urodzonych"
+      ]
+    },
+    {
+      "idx": 29,
+      "score": 0.452,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 31,
+      "hits": [
+        "genetyczna",
+        "kategoriach",
+        "plci",
+        "populacji",
+        "przestrzennej",
+        "socjalnej",
+        "struktura",
+        "wieku"
+      ]
+    },
+    {
+      "idx": 30,
+      "score": 0.686,
+      "pdf": "egz eko (1).pdf",
+      "page": 10,
+      "hits": [
+        "dynamika",
+        "populacja",
+        "populacji",
+        "rozrodczosci",
+        "smiertelnosci",
+        "szybkosc",
+        "uwarunkowana",
+        "wzrostu"
+      ]
+    },
+    {
+      "idx": 31,
+      "score": 0.737,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 24,
+      "hits": [
+        "danym",
+        "liczebnosc",
+        "moglaby",
+        "nieskonczonosc",
+        "pojemnosc",
+        "populacji",
+        "srodowisku",
+        "taka",
+        "utrzymac",
+        "wielkosc"
+      ]
+    },
+    {
+      "idx": 32,
+      "score": 0.87,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 20,
+      "hits": [
+        "arealow",
+        "obszar",
+        "osobnikow",
+        "populacja",
+        "populacji",
+        "poszczegolnych",
+        "przestrzenny",
+        "suma",
+        "zasieg"
+      ]
+    },
+    {
+      "idx": 33,
+      "score": 0.619,
+      "pdf": "egz eko (1).pdf",
+      "page": 2,
+      "hits": [
+        "losowe",
+        "osobnikow",
+        "podstawowe",
+        "przestrzennych",
+        "rownomierne",
+        "skupiskowe",
+        "stadne",
+        "struktur",
+        "typy"
+      ]
+    },
+    {
+      "idx": 34,
+      "score": 0.668,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 34,
+      "hits": [
+        "czesciej",
+        "czlowieka",
+        "ekosystemach",
+        "naturalnych",
+        "obserwuje",
+        "przestrzenna",
+        "rownomierna",
+        "struktura",
+        "strukture",
+        "sztucznych",
+        "tworzonych"
+      ]
+    },
+    {
+      "idx": 35,
+      "score": 0.483,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 28,
+      "hits": [
+        "cechami",
+        "opieki",
+        "osobniczymi",
+        "pokarmu",
+        "populacji",
+        "populacyjnymi",
+        "potomstwem",
+        "smiertelnosc",
+        "srodowiskowymi",
+        "tlenu",
+        "wlasciwosciami"
+      ]
+    },
+    {
+      "idx": 36,
+      "score": 0.755,
+      "pdf": "egz eko (1).pdf",
+      "page": 11,
+      "hits": [
+        "brak",
+        "cecha",
+        "opieki",
+        "osobnicza",
+        "osobnikow",
+        "potomstwem",
+        "smiertelnosc",
+        "warunkujaca"
+      ]
+    },
+    {
+      "idx": 37,
+      "score": 0.555,
+      "pdf": "egz eko (1).pdf",
+      "page": 5,
+      "hits": [
+        "czasie",
+        "ilustruje",
+        "krzywa",
+        "osobnikow",
+        "populacja",
+        "populacji",
+        "przezywania",
+        "smiertelnosci"
+      ]
+    },
+    {
+      "idx": 38,
+      "score": 0.587,
+      "pdf": "egz eko (1).pdf",
+      "page": 6,
+      "hits": [
+        "krzywych",
+        "podstawowych",
+        "przezywania",
+        "trzy",
+        "wykresow"
+      ]
+    },
+    {
+      "idx": 39,
+      "score": 0.859,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 20,
+      "hits": [
+        "aktywnie",
+        "areal",
+        "broniona",
+        "obszar",
+        "osobnika",
+        "populacja",
+        "potrzeby",
+        "preferowana",
+        "przestrzen",
+        "terytorium",
+        "zyciowe"
+      ]
+    },
+    {
+      "idx": 40,
+      "score": 0.584,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 41,
+      "hits": [
+        "gatunki",
+        "gatunkow",
+        "gausego",
+        "jednego",
+        "konkurencyjnego",
+        "niszy",
+        "wspolistniec",
+        "wypierania",
+        "zasada"
+      ]
+    },
+    {
+      "idx": 41,
+      "score": 0.36,
+      "pdf": "egz eko (1).pdf",
+      "page": 10,
+      "hits": [
+        "drapieznictwo",
+        "populacja",
+        "populacji",
+        "rownowadze"
+      ]
+    },
+    {
+      "idx": 42,
+      "score": 0.72,
+      "pdf": "egz eko (1).pdf",
+      "page": 3,
+      "hits": [
+        "braku",
+        "czynniki",
+        "konkurencyjnej",
+        "migracji",
+        "odpornosci",
+        "pokarmu",
+        "populacji",
+        "szanse",
+        "tempa",
+        "walce",
+        "wygranej",
+        "wzrostu",
+        "zaleza",
+        "zdolnosci"
+      ]
+    },
+    {
+      "idx": 43,
+      "score": 0.652,
+      "pdf": "egz eko (1).pdf",
+      "page": 14,
+      "hits": [
+        "obrebie",
+        "osobnikow",
+        "populacji",
+        "struktura",
+        "wewnetrzne",
+        "zroznicowanie"
+      ]
+    },
+    {
+      "idx": 44,
+      "score": 0.699,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 20,
+      "hits": [
+        "areal",
+        "arealow",
+        "osobnika",
+        "pojedynczego",
+        "populacja",
+        "populacji",
+        "przestrzen",
+        "przestrzenny",
+        "suma",
+        "zasieg"
+      ]
+    },
+    {
+      "idx": 45,
+      "score": 0.501,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 36,
+      "hits": [
+        "amensalizm",
+        "antagonistyczne",
+        "drapieznictwo",
+        "konkurencja",
+        "mutualizm",
+        "pasozytnictwo"
+      ]
+    },
+    {
+      "idx": 46,
+      "score": 0.402,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 57,
+      "hits": [
+        "drugi",
+        "jeden",
+        "mutualizm",
+        "nieantagonistyczne",
+        "protokooperacja",
+        "protokooperacje"
+      ]
+    },
+    {
+      "idx": 47,
+      "score": 0.535,
+      "pdf": "egz eko (1).pdf",
+      "page": 3,
+      "hits": [
+        "gatunkow",
+        "konkurencja",
+        "miejsce",
+        "pokarm",
+        "populacji",
+        "przestrzen",
+        "rywalizacja",
+        "wspolzawodnictwo"
+      ]
+    },
+    {
+      "idx": 48,
+      "score": 0.318,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 57,
+      "hits": [
+        "gatunki",
+        "mutualizm",
+        "siebie",
+        "wspolpraca"
+      ]
+    },
+    {
+      "idx": 49,
+      "score": 0.737,
+      "pdf": "egz eko (1).pdf",
+      "page": 1,
+      "hits": [
+        "bakterie",
+        "bakteryjna",
+        "flora",
+        "komensalizm",
+        "ludzi",
+        "motylkowate",
+        "mutualizm",
+        "mutualizmu",
+        "pokarmowego",
+        "porosty",
+        "przewodu",
+        "przyklady",
+        "tworzace",
+        "zaleznosci",
+        "zwierzat"
+      ]
+    },
+    {
+      "idx": 50,
+      "score": 0.387,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 51,
+      "hits": [
+        "gatunek",
+        "jeden",
+        "komensalizm",
+        "korzysci",
+        "korzysta",
+        "szkody"
+      ]
+    },
+    {
+      "idx": 51,
+      "score": 0.695,
+      "pdf": "egz eko (1).pdf",
+      "page": 5,
+      "hits": [
+        "hieny",
+        "komensalizmu",
+        "korzystaja",
+        "resztek",
+        "resztkami",
+        "sepy",
+        "szakale",
+        "zywiace"
+      ]
+    },
+    {
+      "idx": 52,
+      "score": 0.323,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 57,
+      "hits": [
+        "gatunki",
+        "protokooperacja",
+        "siebie",
+        "wspolpraca"
+      ]
+    },
+    {
+      "idx": 53,
+      "score": 0.61,
+      "pdf": "egz eko (1).pdf",
+      "page": 10,
+      "hits": [
+        "amensalizm",
+        "amensalizmie",
+        "hamuje",
+        "jeden",
+        "korzysci",
+        "odnosi",
+        "ograniczana",
+        "populacja",
+        "wplywa"
+      ]
+    },
+    {
+      "idx": 54,
+      "score": 0.627,
+      "pdf": "egz eko (1).pdf",
+      "page": 10,
+      "hits": [
+        "amensalizm",
+        "amensalizmu",
+        "korzysci",
+        "liczebnosc",
+        "ograniczana",
+        "populacje",
+        "populacji",
+        "wplywa"
+      ]
+    },
+    {
+      "idx": 55,
+      "score": 0.252,
+      "pdf": "egz eko (1).pdf",
+      "page": 10,
+      "hits": [
+        "neutralizmie",
+        "populacje",
+        "siebie"
+      ]
+    },
+    {
+      "idx": 56,
+      "score": 0.617,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 50,
+      "hits": [
+        "bakterie",
+        "grzyby",
+        "mikropasozyty",
+        "pasozyty",
+        "pierwotniaki",
+        "wirusy",
+        "zywiciela"
+      ]
+    },
+    {
+      "idx": 57,
+      "score": 0.43,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 50,
+      "hits": [
+        "makropasozyty",
+        "owady",
+        "pajeczaki",
+        "pasozyty",
+        "robaki"
+      ]
+    },
+    {
+      "idx": 58,
+      "score": 0.697,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 49,
+      "hits": [
+        "ektopasozytnictwo",
+        "kleszcze",
+        "komary",
+        "pasozytnictwo",
+        "pchly",
+        "pijawki",
+        "wszy",
+        "zaleznosci",
+        "zewnetrzne"
+      ]
+    },
+    {
+      "idx": 59,
+      "score": 0.345,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 49,
+      "hits": [
+        "endopasozytnictwo",
+        "glisty",
+        "owsiki",
+        "tasiemce",
+        "wlosnie",
+        "zaleznosci"
+      ]
+    },
+    {
+      "idx": 60,
+      "score": 0.438,
+      "pdf": "egz eko (1).pdf",
+      "page": 5,
+      "hits": [
+        "drapieznikow",
+        "generalisci",
+        "monofagi",
+        "oligofagi",
+        "polifagi",
+        "specjalisci",
+        "wyroznia"
+      ]
+    },
+    {
+      "idx": 61,
+      "score": 0.509,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 47,
+      "hits": [
+        "barwa",
+        "ksztaltem",
+        "mimetyzm",
+        "organizmu",
+        "patyczak",
+        "upodobnienie",
+        "wzorem"
+      ]
+    },
+    {
+      "idx": 62,
+      "score": 0.579,
+      "pdf": "egz eko (1).pdf",
+      "page": 1,
+      "hits": [
+        "mimikra",
+        "obronne",
+        "przystosowania",
+        "upodobnienie",
+        "zaleznosci"
+      ]
+    },
+    {
+      "idx": 63,
+      "score": 0.554,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 47,
+      "hits": [
+        "bierna",
+        "biernej",
+        "kamuflaz",
+        "mimetyzm",
+        "mimikra",
+        "obrona",
+        "obrony",
+        "piasku"
+      ]
+    },
+    {
+      "idx": 64,
+      "score": 0.61,
+      "pdf": "egz eko (1).pdf",
+      "page": 3,
+      "hits": [
+        "chemicznych",
+        "czynna",
+        "mechanicznych",
+        "obrona",
+        "obronnych",
+        "ochronnych",
+        "srodkow",
+        "stosowaniu",
+        "struktur",
+        "wydzielaniu",
+        "wyrzucaniu",
+        "zaslon"
+      ]
+    },
+    {
+      "idx": 65,
+      "score": 0.702,
+      "pdf": "egz eko (1).pdf",
+      "page": 13,
+      "hits": [
+        "bierna",
+        "czynnej",
+        "falszywych",
+        "obrona",
+        "obrony",
+        "ostrzeganiu",
+        "pozorow",
+        "sprawianiu",
+        "stwarzaniu",
+        "wiekszego",
+        "wrazenia",
+        "wzajemnym"
+      ]
+    },
+    {
+      "idx": 66,
+      "score": 0.787,
+      "pdf": "egz eko (1).pdf",
+      "page": 10,
+      "hits": [
+        "bakteryjna",
+        "flora",
+        "korzysci",
+        "ludzi",
+        "mutualizm",
+        "mutualizmu",
+        "pokarmowego",
+        "przewodu",
+        "przyklad",
+        "siebie",
+        "zwierzat"
+      ]
+    },
+    {
+      "idx": 67,
+      "score": 0.595,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 41,
+      "hits": [
+        "gatunku",
+        "konkurencja",
+        "konkurencje",
+        "miedzygatunkowa",
+        "wewnatrzgatunkowa",
+        "wyroznia"
+      ]
+    },
+    {
+      "idx": 68,
+      "score": 0.633,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 66,
+      "hits": [
+        "autotroficzne",
+        "inne",
+        "materie",
+        "nieorganicznych",
+        "organiczna",
+        "organizmy",
+        "producenci",
+        "producentami",
+        "rosliny",
+        "zielone",
+        "zwiazkow"
+      ]
+    },
+    {
+      "idx": 69,
+      "score": 0.767,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 69,
+      "hits": [
+        "konsumenci",
+        "konsumentami",
+        "pasozyty",
+        "producentow",
+        "roslinozercy",
+        "rzedu"
+      ]
+    },
+    {
+      "idx": 70,
+      "score": 0.686,
+      "pdf": "egz eko (1).pdf",
+      "page": 7,
+      "hits": [
+        "drapiezniki",
+        "ekosystem",
+        "konsumentami",
+        "pasozyty",
+        "rzedu",
+        "zwierzece"
+      ]
+    },
+    {
+      "idx": 71,
+      "score": 0.745,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 69,
+      "hits": [
+        "konsumenci",
+        "konsumentami",
+        "konsumentow",
+        "miesozernymi",
+        "odzywiajace",
+        "organizmy",
+        "rzedu"
+      ]
+    },
+    {
+      "idx": 72,
+      "score": 0.337,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 72,
+      "hits": [
+        "ekosystemie",
+        "martwa",
+        "materii",
+        "nieorganicznych",
+        "obiegu",
+        "organiczna",
+        "prostych",
+        "zwiazkow"
+      ]
+    },
+    {
+      "idx": 73,
+      "score": 0.494,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 70,
+      "hits": [
+        "martwej",
+        "materii",
+        "mineralizacja",
+        "nieorganiczne",
+        "proste",
+        "rola",
+        "rozklad",
+        "zwiazki"
+      ]
+    },
+    {
+      "idx": 74,
+      "score": 0.59,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 61,
+      "hits": [
+        "biocenozy",
+        "grup",
+        "konsumentow",
+        "materii",
+        "obieg",
+        "podstawa",
+        "producentow",
+        "reducentow",
+        "trzech",
+        "zamkniety"
+      ]
+    },
+    {
+      "idx": 75,
+      "score": 0.869,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 3,
+      "hits": [
+        "cyrkulacji",
+        "ekosystem",
+        "ekosystemie",
+        "energia",
+        "energii",
+        "krazy",
+        "materia",
+        "materii",
+        "natomiast",
+        "obieg",
+        "otwarty",
+        "podlega",
+        "przeplyw",
+        "przeplywa"
+      ]
+    },
+    {
+      "idx": 76,
+      "score": 0.589,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 3,
+      "hits": [
+        "ekosystem",
+        "ekosystemie",
+        "energia",
+        "energii",
+        "jednokierunkowym",
+        "obieg",
+        "obiegu",
+        "otwartym",
+        "strumieniem"
+      ]
+    },
+    {
+      "idx": 77,
+      "score": 0.459,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 62,
+      "hits": [
+        "biocenozy",
+        "gatunkowej",
+        "proces",
+        "struktury",
+        "sukcesja",
+        "uporzadkowany",
+        "zmian"
+      ]
+    },
+    {
+      "idx": 78,
+      "score": 0.703,
+      "pdf": "egz eko (1).pdf",
+      "page": 7,
+      "hits": [
+        "dotad",
+        "ekosystem",
+        "istnialo",
+        "ktorych",
+        "pierwotna",
+        "skaly",
+        "srodowiskach",
+        "sukcesja",
+        "zachodzi",
+        "zycia",
+        "zycie"
+      ]
+    },
+    {
+      "idx": 79,
+      "score": 0.606,
+      "pdf": "egz eko (1).pdf",
+      "page": 2,
+      "hits": [
+        "ekologicznej",
+        "hamowania",
+        "procesow",
+        "przebieg",
+        "sukcesji",
+        "tolerancji",
+        "udostepniania",
+        "zalezy"
+      ]
+    },
+    {
+      "idx": 80,
+      "score": 0.461,
+      "pdf": "egz eko (1).pdf",
+      "page": 11,
+      "hits": [
+        "gatunki",
+        "gatunkow",
+        "miejsce",
+        "nowych",
+        "proces",
+        "przeksztalcaja",
+        "stadium",
+        "sukcesji",
+        "udostepniania"
+      ]
+    },
+    {
+      "idx": 81,
+      "score": 0.383,
+      "pdf": "egz eko (1).pdf",
+      "page": 4,
+      "hits": [
+        "klimaks",
+        "konczacy",
+        "sukcesje",
+        "uklad",
+        "ustabilizowany"
+      ]
+    },
+    {
+      "idx": 82,
+      "score": 0.624,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 10,
+      "hits": [
+        "allochtonicznej",
+        "brak",
+        "dzieki",
+        "ekosystemy",
+        "glebiny",
+        "heterotroficzne",
+        "materii",
+        "morz",
+        "niepelne",
+        "oceanow",
+        "producentow",
+        "zewnatrz"
+      ]
+    },
+    {
+      "idx": 83,
+      "score": 0.625,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 60,
+      "hits": [
+        "autonomia",
+        "biocenozy",
+        "oddzialywaniem",
+        "odrebnoscia",
+        "organizacja",
+        "powiazaniami",
+        "skladnikow",
+        "terytorialna",
+        "wewnetrzna",
+        "wszystkich",
+        "wzajemnym"
+      ]
+    },
+    {
+      "idx": 84,
+      "score": 0.713,
+      "pdf": "egz eko (1).pdf",
+      "page": 12,
+      "hits": [
+        "adaptacji",
+        "biocenotyczna",
+        "biocenoza",
+        "charakteryzuje",
+        "dazy",
+        "gatunkowym",
+        "ktorego",
+        "organizmow",
+        "rownowaga",
+        "rownowagi",
+        "skladem",
+        "stalym",
+        "stan",
+        "stosunkow",
+        "wewnetrznych",
+        "wzgledna",
+        "wzglednie"
+      ]
+    },
+    {
+      "idx": 85,
+      "score": 0.606,
+      "pdf": "egz eko (1).pdf",
+      "page": 4,
+      "hits": [
+        "energii",
+        "granic",
+        "materii",
+        "obieg",
+        "okreslona",
+        "ostrych",
+        "ozywiona",
+        "przechodzi",
+        "przeplyw",
+        "stopniowo",
+        "struktura",
+        "strukture",
+        "troficzna",
+        "zachodza"
+      ]
+    },
+    {
+      "idx": 86,
+      "score": 0.82,
+      "pdf": "egz eko (1).pdf",
+      "page": 3,
+      "hits": [
+        "biocenoza",
+        "czasie",
+        "gatunkow",
+        "okreslonej",
+        "organizmow",
+        "populacji",
+        "powiazanych",
+        "przestrzeni",
+        "roznych",
+        "zaleznosciami",
+        "zespol",
+        "zyjacych"
+      ]
+    },
+    {
+      "idx": 87,
+      "score": 0.447,
+      "pdf": "egz eko (1).pdf",
+      "page": 6,
+      "hits": [
+        "ekosystem",
+        "materia",
+        "organiczna",
+        "reducenci",
+        "zwiazki"
+      ]
+    },
+    {
+      "idx": 88,
+      "score": 0.196,
+      "pdf": "egz eko (1).pdf",
+      "page": 14,
+      "hits": [
+        "czlowieka",
+        "dzieki",
+        "naturalnym"
+      ]
+    },
+    {
+      "idx": 89,
+      "score": 0.436,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 66,
+      "hits": [
+        "autotroficzne",
+        "materie",
+        "organiczna",
+        "organizmy",
+        "producenci",
+        "wytwarzajace"
+      ]
+    },
+    {
+      "idx": 90,
+      "score": 0.302,
+      "pdf": "egz eko (1).pdf",
+      "page": 7,
+      "hits": [
+        "78",
+        "glowny",
+        "glownym",
+        "swiecie"
+      ]
+    },
+    {
+      "idx": 91,
+      "score": 0.631,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 21,
+      "hits": [
+        "fazy",
+        "fosfor",
+        "fosforowe",
+        "fosforu",
+        "gazowej",
+        "glownym",
+        "morz",
+        "osady",
+        "skaly"
+      ]
+    },
+    {
+      "idx": 92,
+      "score": 0.62,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 22,
+      "hits": [
+        "glownym",
+        "siarczany",
+        "siarki",
+        "skorupa",
+        "zasobem",
+        "ziemska"
+      ]
+    },
+    {
+      "idx": 93,
+      "score": 0.419,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 16,
+      "hits": [
+        "atmosferze",
+        "formie",
+        "swiecie",
+        "tlen",
+        "tlenu",
+        "wystepuje",
+        "zwiazanej"
+      ]
+    },
+    {
+      "idx": 94,
+      "score": 0.491,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 71,
+      "hits": [
+        "amoniak",
+        "amonifikacja",
+        "azotu",
+        "mikroorganizmow",
+        "mineralizacji",
+        "organicznych",
+        "przejscie",
+        "wplywem"
+      ]
+    },
+    {
+      "idx": 95,
+      "score": 0.525,
+      "pdf": "egz eko (1).pdf",
+      "page": 20,
+      "hits": [
+        "drugi",
+        "etap",
+        "mineralizacji",
+        "nitrobacter",
+        "nitrosomonas",
+        "nitryfikacja"
+      ]
+    },
+    {
+      "idx": 96,
+      "score": 0.381,
+      "pdf": "egz eko (1).pdf",
+      "page": 7,
+      "hits": [
+        "autotrofami",
+        "bakterie",
+        "nitrobacter",
+        "nitrosomonas",
+        "udzial"
+      ]
+    },
+    {
+      "idx": 97,
+      "score": 0.715,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 22,
+      "hits": [
+        "aerozolu",
+        "aktywnosc",
+        "atmosfery",
+        "bakterii",
+        "beztlenowe",
+        "morskiej",
+        "odbywa",
+        "oddychanie",
+        "poprzez",
+        "redukujacych",
+        "rozpryskujacej",
+        "siarczany",
+        "siarki",
+        "tworzenie",
+        "uwalnianie",
+        "wody",
+        "wulkaniczna"
+      ]
+    },
+    {
+      "idx": 98,
+      "score": 0.587,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 68,
+      "hits": [
+        "asymilacja",
+        "ciemnosci",
+        "dwutlenku",
+        "fotosyntezy",
+        "iloscia",
+        "netto",
+        "przyswajanego",
+        "roznica",
+        "wegla",
+        "wydzielanego"
+      ]
+    },
+    {
+      "idx": 99,
+      "score": 0.369,
+      "pdf": "egz eko (1).pdf",
+      "page": 6,
+      "hits": [
+        "antropogeniczne",
+        "energetyczne",
+        "komunalne",
+        "komunikacyjne",
+        "przemyslowe",
+        "zanieczyszczen",
+        "zrodla"
+      ]
+    },
+    {
+      "idx": 100,
+      "score": 0.311,
+      "pdf": "egz eko (1).pdf",
+      "page": 16,
+      "hits": [
+        "ciepla",
+        "metan",
+        "najwyzszy",
+        "wspolczynnik"
+      ]
+    },
+    {
+      "idx": 101,
+      "score": 0.83,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 61,
+      "hits": [
+        "glownym",
+        "gospodarke",
+        "gospodarstwo",
+        "krajowa",
+        "odpowiedzialnym",
+        "panstwowe",
+        "podmiotem",
+        "polsce",
+        "polskie",
+        "wodami",
+        "wodna",
+        "wodne",
+        "wody"
+      ]
+    },
+    {
+      "idx": 102,
+      "score": 0.618,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 63,
+      "hits": [
+        "adaptacja",
+        "celow",
+        "jakosci",
+        "klimatu",
+        "podziemnych",
+        "powierzchniowych",
+        "przywrocenie",
+        "racjonalizacja",
+        "wykorzystania",
+        "wysokiej",
+        "zanieczyszczen",
+        "zmian"
+      ]
+    },
+    {
+      "idx": 103,
+      "score": 0.764,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 40,
+      "hits": [
+        "bagna",
+        "biomow",
+        "biomy",
+        "jeziora",
+        "mokradla",
+        "rzeki",
+        "slodkowodne",
+        "slodkowodnych",
+        "zalicza"
+      ]
+    },
+    {
+      "idx": 104,
+      "score": 0.631,
+      "pdf": "egz eko (1).pdf",
+      "page": 7,
+      "hits": [
+        "materialowy",
+        "odpadow",
+        "ponownym",
+        "produkt",
+        "przetwarzaniu",
+        "recykling",
+        "strukturze",
+        "tworzyw",
+        "uzytkowej",
+        "wartosci",
+        "wyrob"
+      ]
+    },
+    {
+      "idx": 105,
+      "score": 0.475,
+      "pdf": "egz eko (1).pdf",
+      "page": 18,
+      "hits": [
+        "5",
+        "biochemiczne",
+        "bzt5",
+        "dniowe",
+        "tlen",
+        "zapotrzebowanie"
+      ]
+    },
+    {
+      "idx": 106,
+      "score": 0.411,
+      "pdf": "egz eko (1).pdf",
+      "page": 20,
+      "hits": [
+        "5",
+        "biologicznego",
+        "bzt5",
+        "ciagu",
+        "dlaczego",
+        "najwieksza",
+        "poczatkowych",
+        "utleniania"
+      ]
+    },
+    {
+      "idx": 107,
+      "score": 0.707,
+      "pdf": "egz eko (1).pdf",
+      "page": 20,
+      "hits": [
+        "bzt5",
+        "jakosci",
+        "potencjalu",
+        "redukcyjnego",
+        "rozpuszczonego",
+        "stezenie",
+        "tlenowe",
+        "tlenowych",
+        "tlenu",
+        "wartosc",
+        "wody",
+        "wskaznikow"
+      ]
+    },
+    {
+      "idx": 108,
+      "score": 0.581,
+      "pdf": "egz eko (1).pdf",
+      "page": 20,
+      "hits": [
+        "1",
+        "bzt5",
+        "dobe",
+        "liczbe",
+        "mieszkancow",
+        "mieszkaniec",
+        "przemyslowych",
+        "sciekow",
+        "skrot",
+        "zalozeniu"
+      ]
+    },
+    {
+      "idx": 109,
+      "score": 0.719,
+      "pdf": "egz eko (1).pdf",
+      "page": 20,
+      "hits": [
+        "agno3",
+        "alkalicznym",
+        "chlorkow",
+        "k2cro4",
+        "metoda",
+        "mohra",
+        "obojetnym",
+        "oznaczania",
+        "sciekach",
+        "sluzy",
+        "wobec",
+        "wodach"
+      ]
+    },
+    {
+      "idx": 110,
+      "score": 0.584,
+      "pdf": "egz eko (1).pdf",
+      "page": 18,
+      "hits": [
+        "analitu",
+        "odczynnikami",
+        "pozwala",
+        "proba",
+        "roztwor",
+        "samymi",
+        "skladnika",
+        "tymi",
+        "zerowy"
+      ]
+    },
+    {
+      "idx": 111,
+      "score": 0.863,
+      "pdf": "egz eko (1).pdf",
+      "page": 20,
+      "hits": [
+        "100",
+        "aktywnosci",
+        "bliskie",
+        "czystosci",
+        "danej",
+        "drobnoustrojow",
+        "nasycenia",
+        "nasycenie",
+        "picia",
+        "powinno",
+        "rozpuszczonego",
+        "stanu",
+        "stezenie",
+        "swiadczy",
+        "temperaturze",
+        "tlenem",
+        "tlenu",
+        "wiec",
+        "wody",
+        "wodzie"
+      ]
+    },
+    {
+      "idx": 112,
+      "score": 0.593,
+      "pdf": "egz eko (1).pdf",
+      "page": 19,
+      "hits": [
+        "formie",
+        "hydrolizie",
+        "kwasow",
+        "obecnosc",
+        "organicznych",
+        "slabych",
+        "soli",
+        "ulegajacych",
+        "wegla",
+        "wody",
+        "wolnej",
+        "zawartosc"
+      ]
+    },
+    {
+      "idx": 113,
+      "score": 0.423,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 9,
+      "hits": [
+        "martwej",
+        "materii",
+        "obieg",
+        "obiegu",
+        "reducenci",
+        "uwalniaja",
+        "zamkniety"
+      ]
+    },
+    {
+      "idx": 114,
+      "score": 0.514,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 4,
+      "hits": [
+        "behawioralna",
+        "biocenoz",
+        "ewolucyjna",
+        "fizjologiczna",
+        "molekularna",
+        "obrebie",
+        "populacji"
+      ]
+    },
+    {
+      "idx": 115,
+      "score": 0.653,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 5,
+      "hits": [
+        "badania",
+        "biologii",
+        "ekologicznych",
+        "metody",
+        "molekularna",
+        "molekularnej",
+        "stosuje",
+        "wyjasniania",
+        "zjawisk"
+      ]
+    },
+    {
+      "idx": 116,
+      "score": 0.643,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 5,
+      "hits": [
+        "bada",
+        "ewolucyjne",
+        "fizjologiczna",
+        "fizjologiczne",
+        "organizmow",
+        "podloze",
+        "pojedynczych",
+        "procesow",
+        "procesy",
+        "wyjasnia",
+        "zajmuje"
+      ]
+    },
+    {
+      "idx": 117,
+      "score": 0.661,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 7,
+      "hits": [
+        "1",
+        "nauka",
+        "naukowego",
+        "potoczne",
+        "przyrodnicza",
+        "rozumienia",
+        "rozumienie",
+        "scisla",
+        "zasada"
+      ]
+    },
+    {
+      "idx": 118,
+      "score": 0.469,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 9,
+      "hits": [
+        "dobor",
+        "dobro",
+        "dzieje",
+        "gatunku",
+        "geny",
+        "liczebnosci",
+        "nawet",
+        "osobnika",
+        "populacji",
+        "wzgledu",
+        "zasada"
+      ]
+    },
+    {
+      "idx": 119,
+      "score": 0.41,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 14,
+      "hits": [
+        "ewolucja",
+        "nigdy",
+        "ograniczen",
+        "ograniczeniom",
+        "organizmow",
+        "organizmy",
+        "podlegaja"
+      ]
+    },
+    {
+      "idx": 120,
+      "score": 0.614,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 15,
+      "hits": [
+        "istotne",
+        "losowe",
+        "losowych",
+        "odgrywaja",
+        "przewidywan",
+        "rola",
+        "role",
+        "zjawisk",
+        "zjawiska",
+        "znaczaca"
+      ]
+    },
+    {
+      "idx": 121,
+      "score": 0.557,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 11,
+      "hits": [
+        "matematyczne",
+        "modele",
+        "modelowania",
+        "niescislosci",
+        "opisowych",
+        "wieloznacznosci",
+        "wymaga",
+        "zasada",
+        "zlozonosci",
+        "zrozumienie"
+      ]
+    },
+    {
+      "idx": 122,
+      "score": 0.551,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 12,
+      "hits": [
+        "bywa",
+        "faktow",
+        "niebezpieczne",
+        "opisowej",
+        "podstawie",
+        "teorie",
+        "teorii",
+        "uprawianie",
+        "zasada"
+      ]
+    },
+    {
+      "idx": 123,
+      "score": 0.706,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 23,
+      "hits": [
+        "braku",
+        "czynnika",
+        "limitujacego",
+        "nieograniczony",
+        "obecnosci",
+        "populacji",
+        "sigmoidalny",
+        "wykladniczy",
+        "wzrost"
+      ]
+    },
+    {
+      "idx": 124,
+      "score": 0.537,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 23,
+      "hits": [
+        "czynnika",
+        "liczebnosci",
+        "limitujacego",
+        "obecnosci",
+        "ograniczony",
+        "populacji",
+        "sigmoidalny",
+        "wzrost"
+      ]
+    },
+    {
+      "idx": 125,
+      "score": 0.438,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 29,
+      "hits": [
+        "czlowieka",
+        "dozywa",
+        "duzych",
+        "krzywa",
+        "osobnikow",
+        "przezywania",
+        "ssakow",
+        "typu"
+      ]
+    },
+    {
+      "idx": 126,
+      "score": 0.477,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 29,
+      "hits": [
+        "dozywa",
+        "krzywa",
+        "miliony",
+        "niewiele",
+        "osobnikow",
+        "przezywania",
+        "skladaja",
+        "typu"
+      ]
+    },
+    {
+      "idx": 127,
+      "score": 0.856,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 32,
+      "hits": [
+        "dojrzalych",
+        "mlodych",
+        "osobnikow",
+        "piramid",
+        "pomoca",
+        "populacji",
+        "przedstawia",
+        "rozrodczosc",
+        "smiertelnosc",
+        "starych",
+        "strukture",
+        "udzial",
+        "wiekowa",
+        "wiekowych"
+      ]
+    },
+    {
+      "idx": 128,
+      "score": 0.665,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 33,
+      "hits": [
+        "odmiana",
+        "osobnikow",
+        "podstawowe",
+        "populacji",
+        "rozmieszczenia",
+        "rozmieszczenie",
+        "skupiskowego",
+        "stadne",
+        "typy"
+      ]
+    },
+    {
+      "idx": 129,
+      "score": 0.346,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 34,
+      "hits": [
+        "ludzie",
+        "mrowki",
+        "mszyce",
+        "przyrodzie",
+        "slonie",
+        "wystepuje"
+      ]
+    },
+    {
+      "idx": 130,
+      "score": 0.602,
+      "pdf": "egz eko (1).pdf",
+      "page": 10,
+      "hits": [
+        "biocenotyczne",
+        "drapieznictwo",
+        "obecnosc",
+        "pasozytow",
+        "patogenow",
+        "populacja",
+        "populacji",
+        "przyczyny",
+        "smiertelnosci"
+      ]
+    },
+    {
+      "idx": 131,
+      "score": 1.0,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 39,
+      "hits": [
+        "allelopatia",
+        "amensalizm",
+        "botanicy",
+        "forma",
+        "konkurencja",
+        "nazywaja",
+        "przed",
+        "roslin",
+        "swiecie",
+        "ujemna",
+        "zaleznosci"
+      ]
+    },
+    {
+      "idx": 132,
+      "score": 0.475,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 40,
+      "hits": [
+        "antybiotykow",
+        "bakterie",
+        "gatunki",
+        "grzyby",
+        "mlekowe",
+        "penicillium",
+        "rodzaju",
+        "stosunki",
+        "tamy",
+        "wodne",
+        "wydzielanie",
+        "zakwaszanie"
+      ]
+    },
+    {
+      "idx": 133,
+      "score": 0.482,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 45,
+      "hits": [
+        "drapieznictwa",
+        "kanibalizm",
+        "odmiana"
+      ]
+    },
+    {
+      "idx": 134,
+      "score": 0.684,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 44,
+      "hits": [
+        "definicja",
+        "drapieznictwa",
+        "drapieznictwo",
+        "drapiezniki",
+        "ofiary",
+        "pasozyty",
+        "roslinozercow",
+        "wlasciwe",
+        "zabijajace"
+      ]
+    },
+    {
+      "idx": 135,
+      "score": 0.636,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 46,
+      "hits": [
+        "czynna",
+        "glikozydy",
+        "kapusty",
+        "lisciach",
+        "musztardowe",
+        "nikotyna",
+        "obrona",
+        "olejki",
+        "pokarm",
+        "przed",
+        "roslin",
+        "tanina",
+        "tytoniu",
+        "zawarta"
+      ]
+    },
+    {
+      "idx": 136,
+      "score": 0.544,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 46,
+      "hits": [
+        "bialkami",
+        "czynna",
+        "drzew",
+        "lisciach",
+        "niestrawny",
+        "obrona",
+        "pokarm",
+        "roslinozercow",
+        "staje",
+        "tanina",
+        "zawarta"
+      ]
+    },
+    {
+      "idx": 137,
+      "score": 0.645,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 52,
+      "hits": [
+        "bliskim",
+        "fizycznym",
+        "mutualizm",
+        "obaj",
+        "partnerzy",
+        "symbiotyczny",
+        "symbioza",
+        "zwiazku",
+        "zyja"
+      ]
+    },
+    {
+      "idx": 138,
+      "score": 0.799,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 53,
+      "hits": [
+        "borowik",
+        "grzybow",
+        "korzeniami",
+        "maslak",
+        "mikoryza",
+        "roslin",
+        "sosna",
+        "symbiotyczne",
+        "wspolzycie",
+        "wyzszych"
+      ]
+    },
+    {
+      "idx": 139,
+      "score": 0.545,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 56,
+      "hits": [
+        "150",
+        "azotu",
+        "bakterie",
+        "bradyrhizobium",
+        "hektar",
+        "motylkowe",
+        "okolo",
+        "rhizobium",
+        "rosliny"
+      ]
+    },
+    {
+      "idx": 140,
+      "score": 0.667,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 57,
+      "hits": [
+        "gatunki",
+        "mozna",
+        "mutualizm",
+        "okreslic",
+        "protokooperacja",
+        "protokooperacje",
+        "scisly",
+        "siebie"
+      ]
+    },
+    {
+      "idx": 141,
+      "score": 0.533,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 58,
+      "hits": [
+        "bakojady",
+        "bronia",
+        "mrowki",
+        "mszyce",
+        "nosorozce",
+        "pasozytow",
+        "skore",
+        "wydzielina",
+        "zywia"
+      ]
+    },
+    {
+      "idx": 142,
+      "score": 0.572,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 51,
+      "hits": [
+        "jeden",
+        "komensalizm",
+        "korzysta",
+        "mensa",
+        "stol",
+        "wspolbiesiadnictwo"
+      ]
+    },
+    {
+      "idx": 143,
+      "score": 0.529,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 52,
+      "hits": [
+        "czasem",
+        "czyli",
+        "jednego",
+        "korzysci",
+        "mutualizm",
+        "partnera",
+        "proporcje",
+        "tylko",
+        "wzajemnych"
+      ]
+    },
+    {
+      "idx": 144,
+      "score": 0.737,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 66,
+      "hits": [
+        "bakterie",
+        "chemosyntezy",
+        "droga",
+        "fotosyntezy",
+        "materie",
+        "nieorganicznych",
+        "organiczna",
+        "producenci",
+        "prostych",
+        "rosliny",
+        "zwiazkow"
+      ]
+    },
+    {
+      "idx": 145,
+      "score": 0.585,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 67,
+      "hits": [
+        "380",
+        "710",
+        "dlugosci",
+        "fali",
+        "fotosyntetycznemu",
+        "ulega",
+        "wiazaniu"
+      ]
+    },
+    {
+      "idx": 146,
+      "score": 0.713,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 69,
+      "hits": [
+        "dzieli",
+        "fitofagi",
+        "konsumenci",
+        "konsumentow",
+        "martwa",
+        "miesozerne",
+        "odzywiania",
+        "pasozyty",
+        "roslinozerne",
+        "saprofagi",
+        "sposob",
+        "wzgledu",
+        "zoofagi"
+      ]
+    },
+    {
+      "idx": 147,
+      "score": 0.469,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 69,
+      "hits": [
+        "konsumenci",
+        "martwa",
+        "materia",
+        "organiczna",
+        "saprofagi"
+      ]
+    },
+    {
+      "idx": 148,
+      "score": 0.431,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 62,
+      "hits": [
+        "fazy",
+        "materie",
+        "organiczna",
+        "pionierskiej",
+        "sukcesja",
+        "wtorna"
+      ]
+    },
+    {
+      "idx": 149,
+      "score": 0.673,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 62,
+      "hits": [
+        "bakterie",
+        "chemolitotroficzne",
+        "fotoautotroficzne",
+        "glony",
+        "materie",
+        "mikroorganizmy",
+        "organiczna",
+        "producenci",
+        "sinice",
+        "sukcesji"
+      ]
+    },
+    {
+      "idx": 150,
+      "score": 0.5,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 64,
+      "hits": [
+        "nazywane",
+        "seria",
+        "stadia",
+        "sukcesji",
+        "sukcesyjna",
+        "ustabilizowany"
+      ]
+    },
+    {
+      "idx": 151,
+      "score": 0.781,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 64,
+      "hits": [
+        "ekologicznej",
+        "ekosystemu",
+        "homeostaza",
+        "komponentow",
+        "postepem",
+        "rozwoj",
+        "sukcesji",
+        "wzrasta"
+      ]
+    },
+    {
+      "idx": 152,
+      "score": 0.696,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 72,
+      "hits": [
+        "2",
+        "5",
+        "biogennych",
+        "ciagu",
+        "gdyby",
+        "martwej",
+        "materii",
+        "obiegu",
+        "organicznej",
+        "pierwiastkow",
+        "reducentow",
+        "zasoby",
+        "ziemi",
+        "zycie"
+      ]
+    },
+    {
+      "idx": 153,
+      "score": 0.863,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 70,
+      "hits": [
+        "dwuparce",
+        "dzdzownice",
+        "dzieli",
+        "fauna",
+        "glebowa",
+        "larwy",
+        "mezofaune",
+        "mikrofaune",
+        "nicienie",
+        "owadow",
+        "reducenci",
+        "roztocza",
+        "skoczogonki",
+        "udzial"
+      ]
+    },
+    {
+      "idx": 154,
+      "score": 0.674,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 71,
+      "hits": [
+        "amonowy",
+        "azot",
+        "nastepnie",
+        "nitrobacter",
+        "nitrosomonas",
+        "nitryfikacja",
+        "przechodzi"
+      ]
+    },
+    {
+      "idx": 155,
+      "score": 0.85,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 2,
+      "hits": [
+        "ekosystem",
+        "ekosystemu",
+        "homeostaza",
+        "istnienia",
+        "materii",
+        "przemian",
+        "samoregulacji",
+        "trwalego",
+        "ukladu",
+        "warunkiem"
+      ]
+    },
+    {
+      "idx": 156,
+      "score": 0.716,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 10,
+      "hits": [
+        "autochtonicznej",
+        "autotroficzne",
+        "dzieki",
+        "ekosystemy",
+        "fotosyntezy",
+        "jezioro",
+        "laka",
+        "materii",
+        "powstajacej",
+        "procesie"
+      ]
+    },
+    {
+      "idx": 157,
+      "score": 0.662,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 10,
+      "hits": [
+        "autotroficzne",
+        "brak",
+        "ekosystemow",
+        "heterotroficzne",
+        "obecnosc",
+        "podstawa",
+        "podzialu",
+        "producentow"
+      ]
+    },
+    {
+      "idx": 158,
+      "score": 0.564,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 10,
+      "hits": [
+        "2",
+        "chemoautotrofow",
+        "ekosystemie",
+        "form",
+        "glownie",
+        "producentow",
+        "produktow",
+        "przyswajalnych",
+        "rola",
+        "toksycznych"
+      ]
+    },
+    {
+      "idx": 159,
+      "score": 0.27,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 8,
+      "hits": [
+        "chemicznych",
+        "cykle",
+        "obiegi",
+        "pierwiastkow"
+      ]
+    },
+    {
+      "idx": 160,
+      "score": 0.766,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 21,
+      "hits": [
+        "fazy",
+        "fosfor",
+        "fosforowe",
+        "fosforu",
+        "gazowej",
+        "morz",
+        "obieg",
+        "osadowego",
+        "osady",
+        "skaly",
+        "typu",
+        "zalicza"
+      ]
+    },
+    {
+      "idx": 161,
+      "score": 0.735,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 21,
+      "hits": [
+        "3",
+        "fosfor",
+        "jonow",
+        "mineralach",
+        "organizmach",
+        "postaci",
+        "producentow",
+        "przyswajane",
+        "rozpuszczalnej",
+        "wystepuje",
+        "zarowno",
+        "zawsze"
+      ]
+    },
+    {
+      "idx": 162,
+      "score": 0.575,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 19,
+      "hits": [
+        "azotanow",
+        "azotu",
+        "denitryfikacji",
+        "glownie",
+        "mikroorganizmy",
+        "obieg",
+        "posrednictwem",
+        "zamykany"
+      ]
+    },
+    {
+      "idx": 163,
+      "score": 0.35,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 19,
+      "hits": [
+        "08",
+        "78",
+        "azot",
+        "objetosciowych"
+      ]
+    },
+    {
+      "idx": 164,
+      "score": 0.52,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 18,
+      "hits": [
+        "20",
+        "95",
+        "atmosferyczny",
+        "objetosciowych",
+        "okolo",
+        "powietrza",
+        "tlen"
+      ]
+    },
+    {
+      "idx": 165,
+      "score": 0.455,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 12,
+      "hits": [
+        "0",
+        "0354",
+        "0425",
+        "dwutlenku",
+        "roslin",
+        "wegla",
+        "wzrostu"
+      ]
+    },
+    {
+      "idx": 166,
+      "score": 0.599,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 12,
+      "hits": [
+        "brak",
+        "dobowym",
+        "dzien",
+        "fotosynteza",
+        "fotosyntezy",
+        "nizsze",
+        "nocy",
+        "oddychaniem",
+        "stezenie",
+        "wyzsze"
+      ]
+    },
+    {
+      "idx": 167,
+      "score": 0.583,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 11,
+      "hits": [
+        "2",
+        "96",
+        "lodu",
+        "oceanach",
+        "okolo",
+        "postaci",
+        "tylko",
+        "woda",
+        "wody",
+        "ziemi"
+      ]
+    },
+    {
+      "idx": 168,
+      "score": 0.411,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 12,
+      "hits": [
+        "fotosynteza",
+        "obiegu",
+        "oddychanie",
+        "podstawa",
+        "procesy",
+        "przeciwstawne",
+        "wegla"
+      ]
+    },
+    {
+      "idx": 169,
+      "score": 0.879,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 26,
+      "hits": [
+        "1916",
+        "amerykanski",
+        "biom",
+        "calosc",
+        "clements",
+        "ekolog",
+        "frederic",
+        "krajobrazow",
+        "okreslil",
+        "pojecia",
+        "tworca",
+        "tworzacych",
+        "zespol"
+      ]
+    },
+    {
+      "idx": 170,
+      "score": 0.609,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 27,
+      "hits": [
+        "biomy",
+        "borealne",
+        "formacje",
+        "ladowe",
+        "lasy",
+        "pustynie",
+        "sawanna",
+        "step",
+        "trawiaste",
+        "tropikalne",
+        "tundra"
+      ]
+    },
+    {
+      "idx": 171,
+      "score": 0.607,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 29,
+      "hits": [
+        "30",
+        "50",
+        "gorace",
+        "pustynie",
+        "rownoleznikow",
+        "spotyka",
+        "wzdluz"
+      ]
+    },
+    {
+      "idx": 172,
+      "score": 0.604,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 29,
+      "hits": [
+        "50",
+        "opadow",
+        "przekracza",
+        "pustyni",
+        "roczna",
+        "roslinnosc",
+        "suma",
+        "uboga"
+      ]
+    },
+    {
+      "idx": 173,
+      "score": 0.609,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 30,
+      "hits": [
+        "200",
+        "500",
+        "formacje",
+        "lasem",
+        "opadow",
+        "pustynia",
+        "trawiaste",
+        "wystepuja"
+      ]
+    },
+    {
+      "idx": 174,
+      "score": 0.663,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 31,
+      "hits": [
+        "drzewiasta",
+        "krzewiasta",
+        "sawanna",
+        "sawanne",
+        "trawiasta",
+        "wyroznia"
+      ]
+    },
+    {
+      "idx": 175,
+      "score": 0.76,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 33,
+      "hits": [
+        "ameryce",
+        "azji",
+        "europie",
+        "formacje",
+        "nazywa",
+        "pampa",
+        "preria",
+        "step",
+        "strefy",
+        "umiarkowanej"
+      ]
+    },
+    {
+      "idx": 176,
+      "score": 0.475,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 33,
+      "hits": [
+        "ameryce",
+        "pampa",
+        "preria",
+        "stepu",
+        "strefy",
+        "umiarkowanej"
+      ]
+    },
+    {
+      "idx": 177,
+      "score": 0.551,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 35,
+      "hits": [
+        "deszczowe",
+        "drzew",
+        "duza",
+        "gatunkow",
+        "korony",
+        "lasy",
+        "materii",
+        "niedoboru",
+        "organicznej",
+        "pierwiastkow",
+        "tropikalne",
+        "zacieniaja"
+      ]
+    },
+    {
+      "idx": 178,
+      "score": 0.768,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 38,
+      "hits": [
+        "arktycznym",
+        "czapami",
+        "glownie",
+        "iglastymi",
+        "lasami",
+        "lodowymi",
+        "niskie",
+        "oceanem",
+        "okolobiegunowy",
+        "opady",
+        "postaci",
+        "sniegu",
+        "temperatury",
+        "tundra"
+      ]
+    },
+    {
+      "idx": 179,
+      "score": 0.663,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 39,
+      "hits": [
+        "bentosem",
+        "biomy",
+        "fauna",
+        "organizmy",
+        "przydenna",
+        "warstwe",
+        "zasiedla",
+        "zooplankton",
+        "zwana"
+      ]
+    },
+    {
+      "idx": 180,
+      "score": 0.62,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 39,
+      "hits": [
+        "biomy",
+        "lecz",
+        "malo",
+        "ocean",
+        "otwarty",
+        "powierzchnie"
+      ]
+    },
+    {
+      "idx": 181,
+      "score": 0.771,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 39,
+      "hits": [
+        "200",
+        "biomy",
+        "glebokosci",
+        "kontynentalne",
+        "szelfy",
+        "wokol",
+        "wybrzeza",
+        "wybrzezy"
+      ]
+    },
+    {
+      "idx": 182,
+      "score": 0.798,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 39,
+      "hits": [
+        "bagna",
+        "biomow",
+        "biomy",
+        "kontynentalne",
+        "miedzyplywowe",
+        "morza",
+        "namorzynowe",
+        "oceany",
+        "otwarte",
+        "slone",
+        "slonowodne",
+        "slonowodnych",
+        "strefy",
+        "szelfy",
+        "zarosla"
+      ]
+    },
+    {
+      "idx": 183,
+      "score": 0.823,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 41,
+      "hits": [
+        "atmosfery",
+        "biosfera",
+        "calosc",
+        "czesc",
+        "dolna",
+        "ekosfera",
+        "niemal",
+        "organizmy",
+        "strefa",
+        "wierzchnia",
+        "zamieszkana",
+        "ziemi",
+        "zycia",
+        "zywe"
+      ]
+    },
+    {
+      "idx": 184,
+      "score": 0.882,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 42,
+      "hits": [
+        "3",
+        "5",
+        "biogenezy",
+        "biosfera",
+        "miliarda",
+        "proces",
+        "szacuje",
+        "temu",
+        "tworzyc",
+        "zaczela",
+        "ziemska"
+      ]
+    },
+    {
+      "idx": 185,
+      "score": 0.619,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 45,
+      "hits": [
+        "atmosferyczny",
+        "ozon",
+        "ozonosfera",
+        "pochlania",
+        "promieniowanie",
+        "zabojcze"
+      ]
+    },
+    {
+      "idx": 186,
+      "score": 0.645,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 45,
+      "hits": [
+        "32",
+        "najwyzsze",
+        "okolo",
+        "ozonu",
+        "stezenie",
+        "warstwa",
+        "wysokosci",
+        "wystepuje"
+      ]
+    },
+    {
+      "idx": 187,
+      "score": 0.71,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 52,
+      "hits": [
+        "85",
+        "atmosfery",
+        "chemiczny",
+        "powyzej",
+        "przyblizeniu",
+        "sklad",
+        "staly",
+        "warstwa"
+      ]
+    },
+    {
+      "idx": 188,
+      "score": 0.55,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 53,
+      "hits": [
+        "atmosfery",
+        "atmosferze",
+        "mezosfere",
+        "stratosfere",
+        "temperatury",
+        "termosfere",
+        "troposfere",
+        "wyroznia",
+        "ziemi",
+        "zmiany"
+      ]
+    },
+    {
+      "idx": 189,
+      "score": 0.774,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 16,
+      "hits": [
+        "atmosfera",
+        "dowodem",
+        "fes2",
+        "osadowych",
+        "pierwotna",
+        "skalach",
+        "tlenu",
+        "zawierala",
+        "ziemi"
+      ]
+    },
+    {
+      "idx": 190,
+      "score": 0.558,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 60,
+      "hits": [
+        "biomasa",
+        "biomasy",
+        "odnawialna",
+        "pobrala",
+        "roslina",
+        "spalaniu",
+        "tyle",
+        "wydziela"
+      ]
+    },
+    {
+      "idx": 191,
+      "score": 0.753,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 57,
+      "hits": [
+        "112",
+        "49",
+        "energii",
+        "jednostke",
+        "kopalne",
+        "metanu",
+        "paliwo",
+        "spalanie",
+        "tylko",
+        "wegla",
+        "ziemny"
+      ]
+    },
+    {
+      "idx": 192,
+      "score": 0.818,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 66,
+      "hits": [
+        "16",
+        "elektrownie",
+        "emisji",
+        "energii",
+        "jadrowa",
+        "jadrowe",
+        "skali",
+        "swiata",
+        "zanieczyszczania",
+        "zerowej"
+      ]
+    },
+    {
+      "idx": 193,
+      "score": 0.616,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 68,
+      "hits": [
+        "elektrownie",
+        "energetyke",
+        "energii",
+        "mala",
+        "wodna",
+        "wodne",
+        "zaliczana",
+        "zrodlo"
+      ]
+    },
+    {
+      "idx": 194,
+      "score": 0.803,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 70,
+      "hits": [
+        "cieni",
+        "efekt",
+        "elektrowni",
+        "halas",
+        "migotania",
+        "strony",
+        "uwaza",
+        "wiatrowe",
+        "wiatrowych",
+        "zagrozenia"
+      ]
+    },
+    {
+      "idx": 195,
+      "score": 0.718,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 84,
+      "hits": [
+        "dzialan",
+        "glebie",
+        "rekultywacja",
+        "skladowiska",
+        "tereny",
+        "wyrobiska",
+        "zdegradowanej"
+      ]
+    },
+    {
+      "idx": 196,
+      "score": 0.506,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 86,
+      "hits": [
+        "duzych",
+        "gruntu",
+        "miejscu",
+        "remediacja",
+        "situ",
+        "zanieczyszczenia"
+      ]
+    },
+    {
+      "idx": 197,
+      "score": 0.46,
+      "pdf": "EZS-NS-W1-W2.pdf",
+      "page": 70,
+      "hits": [
+        "bakterie",
+        "drobnoustroje",
+        "grzyby",
+        "organiczne",
+        "organicznych",
+        "zwiazki"
+      ]
+    },
+    {
+      "idx": 198,
+      "score": 0.803,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 89,
+      "hits": [
+        "dodatkowych",
+        "drobnoustroje",
+        "drobnoustrojow",
+        "gleby",
+        "sobie",
+        "specjalnych",
+        "szczepow",
+        "wprowadzenie",
+        "zanieczyszczenia"
+      ]
+    },
+    {
+      "idx": 199,
+      "score": 0.797,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 79,
+      "hits": [
+        "biologiczna",
+        "chemiczne",
+        "degradacja",
+        "erozja",
+        "gleby",
+        "mechaniczne",
+        "niszczenie",
+        "prochniczej",
+        "przesuszanie",
+        "pustynnienie",
+        "stepowienie",
+        "warstwy",
+        "zanieczyszczenia",
+        "zawadnianie"
+      ]
+    },
+    {
+      "idx": 200,
+      "score": 0.579,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 34,
+      "hits": [
+        "1",
+        "3600",
+        "6000",
+        "lasu",
+        "okolo",
+        "tlenu",
+        "wegla"
+      ]
+    },
+    {
+      "idx": 201,
+      "score": 0.66,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 37,
+      "hits": [
+        "awarie",
+        "bioroznorodnosci",
+        "czlowieka",
+        "degradacje",
+        "dzialalnosci",
+        "klimatyczne",
+        "nadmierne",
+        "najbardziej",
+        "niszczycielskich",
+        "odpadow",
+        "produkcje",
+        "przemyslowe",
+        "wykorzystanie",
+        "zagrozen",
+        "zagrozenia",
+        "zalicza",
+        "zasobow",
+        "zmiany"
+      ]
+    },
+    {
+      "idx": 202,
+      "score": 0.795,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 25,
+      "hits": [
+        "amplitudy",
+        "drgan",
+        "gruntu",
+        "intensywnosc",
+        "logarytm",
+        "mercallego",
+        "najwiekszej",
+        "richtera",
+        "skala",
+        "trzesienie",
+        "ziemi"
+      ]
+    },
+    {
+      "idx": 203,
+      "score": 0.566,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 25,
+      "hits": [
+        "intensywnosc",
+        "mercallego",
+        "okresla",
+        "richtera",
+        "skala",
+        "trzesienia",
+        "ziemi"
+      ]
+    },
+    {
+      "idx": 204,
+      "score": 0.811,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 23,
+      "hits": [
+        "gdzie",
+        "litosfera",
+        "litosfery",
+        "miejscach",
+        "najslabsza",
+        "plyt",
+        "polaczenia",
+        "powstaja",
+        "reguly",
+        "wulkany"
+      ]
+    },
+    {
+      "idx": 205,
+      "score": 0.469,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 24,
+      "hits": [
+        "chlor",
+        "erupcji",
+        "gazy",
+        "lawa",
+        "lawe",
+        "pyly",
+        "siarka",
+        "wulkanu"
+      ]
+    },
+    {
+      "idx": 206,
+      "score": 0.845,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 24,
+      "hits": [
+        "1300",
+        "700",
+        "granicach",
+        "kilkudziesieciu",
+        "lawa",
+        "miesci",
+        "ograniczony",
+        "temperatura",
+        "zasieg",
+        "zniszczen",
+        "zwykle"
+      ]
+    },
+    {
+      "idx": 207,
+      "score": 0.61,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 26,
+      "hits": [
+        "ewakuacja",
+        "jedynym",
+        "ludzi",
+        "ostrzegania",
+        "sposobem",
+        "terenow",
+        "tsunami",
+        "wczesnego",
+        "zagrozonych",
+        "zniszczen"
+      ]
+    },
+    {
+      "idx": 208,
+      "score": 0.597,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 34,
+      "hits": [
+        "kierunku",
+        "nino",
+        "odwroceniu",
+        "passatow",
+        "rownikowej",
+        "strefie",
+        "zjawisko"
+      ]
+    },
+    {
+      "idx": 209,
+      "score": 0.563,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 34,
+      "hits": [
+        "2",
+        "7",
+        "dwoch",
+        "nino",
+        "roku",
+        "wystepuje",
+        "zjawisko"
+      ]
+    },
+    {
+      "idx": 210,
+      "score": 0.697,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 32,
+      "hits": [
+        "26",
+        "cyklon",
+        "cyklony",
+        "gornej",
+        "huragany",
+        "oceanem",
+        "oceanu",
+        "parowanie",
+        "ponad",
+        "powstaja",
+        "silne",
+        "warstwy",
+        "wody"
+      ]
+    },
+    {
+      "idx": 211,
+      "score": 0.705,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 33,
+      "hits": [
+        "500",
+        "deszczu",
+        "kilkuset",
+        "krotkotrwale",
+        "ladzie",
+        "niewielkie",
+        "opadami",
+        "powstaje",
+        "tornado",
+        "zwiazane"
+      ]
+    },
+    {
+      "idx": 212,
+      "score": 0.809,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 28,
+      "hits": [
+        "absorbuja",
+        "czynnikiem",
+        "grunt",
+        "korzenie",
+        "lasow",
+        "lasy",
+        "osuwiska",
+        "osuwiskom",
+        "przeciwdzialajacym",
+        "roslinnosc",
+        "stabilizuja",
+        "stokow",
+        "wode",
+        "wykarczowaniu"
+      ]
+    },
+    {
+      "idx": 213,
+      "score": 0.699,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 30,
+      "hits": [
+        "blotne",
+        "kamienne",
+        "lawin",
+        "lawiny",
+        "lodowe",
+        "mieszane",
+        "sniezne",
+        "wulkaniczne"
+      ]
+    },
+    {
+      "idx": 214,
+      "score": 0.758,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 46,
+      "hits": [
+        "1984",
+        "1986",
+        "1989",
+        "atomowej",
+        "awaria",
+        "chemicznych",
+        "czarnobylu",
+        "deepwater",
+        "elektrowni",
+        "exxon",
+        "horizon",
+        "katastrofa",
+        "katastrofy",
+        "przemyslowe",
+        "ropy",
+        "tankowca",
+        "valdez",
+        "wyciek",
+        "zakladow"
+      ]
+    },
+    {
+      "idx": 215,
+      "score": 0.772,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 40,
+      "hits": [
+        "bioroznorodnosci",
+        "degradacja",
+        "drugi",
+        "problem",
+        "srodowiskowy",
+        "swiata",
+        "uznawana",
+        "waznosci",
+        "wspolczesnego"
+      ]
+    },
+    {
+      "idx": 216,
+      "score": 0.258,
+      "pdf": "EZS-NS-W3-W4.pdf",
+      "page": 2,
+      "hits": [
+        "ekologiczny",
+        "ekologicznym"
+      ]
+    },
+    {
+      "idx": 217,
+      "score": 0.824,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 41,
+      "hits": [
+        "bagien",
+        "czlowieka",
+        "dzialalnosci",
+        "osuszanie",
+        "przyrodzie",
+        "synantropizacja",
+        "wplywem",
+        "zachodzace",
+        "zagrozenia",
+        "zaorywanie",
+        "zmiany"
+      ]
+    },
+    {
+      "idx": 218,
+      "score": 0.621,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 41,
+      "hits": [
+        "bioroznorodnosci",
+        "czesci",
+        "dzielenie",
+        "fragmentacja",
+        "obszarow",
+        "oddzielne",
+        "przyrodniczych",
+        "zagrozenia"
+      ]
+    },
+    {
+      "idx": 219,
+      "score": 0.686,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 44,
+      "hits": [
+        "23",
+        "70",
+        "8",
+        "domowe",
+        "globalnego",
+        "gospodarstwa",
+        "przemysl",
+        "rolnictwo",
+        "slodkiej",
+        "wody",
+        "zuzycia"
+      ]
+    },
+    {
+      "idx": 220,
+      "score": 0.705,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 42,
+      "hits": [
+        "nieodnawialne",
+        "niewyczerpywane",
+        "odnawialne",
+        "podzial",
+        "wyczerpywane",
+        "zasobow"
+      ]
+    },
+    {
+      "idx": 221,
+      "score": 0.881,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 12,
+      "hits": [
+        "bardzo",
+        "dobry",
+        "ekologiczny",
+        "klas",
+        "klasyfikuje",
+        "pieciu",
+        "potencjal",
+        "powierzchniowych",
+        "slaby",
+        "stan",
+        "umiarkowany"
+      ]
+    },
+    {
+      "idx": 222,
+      "score": 0.706,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 13,
+      "hits": [
+        "chemiczny",
+        "czesci",
+        "dobrego",
+        "jednolitej",
+        "oceny",
+        "okresla",
+        "ponizej",
+        "stan"
+      ]
+    },
+    {
+      "idx": 223,
+      "score": 0.51,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 14,
+      "hits": [
+        "chemiczny",
+        "czesci",
+        "dobry",
+        "ekologiczny",
+        "jednoczesnie",
+        "jednolitej",
+        "ocenia",
+        "stan"
+      ]
+    },
+    {
+      "idx": 224,
+      "score": 0.784,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 9,
+      "hits": [
+        "2000",
+        "60",
+        "dyrektywa",
+        "gospodarowania",
+        "polityki",
+        "ramowa",
+        "ramy",
+        "wodami",
+        "wodna",
+        "wodnej"
+      ]
+    },
+    {
+      "idx": 225,
+      "score": 0.401,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 9,
+      "hits": [
+        "bytowo",
+        "eutrofizacja",
+        "komunalnych",
+        "rolniczych"
+      ]
+    },
+    {
+      "idx": 226,
+      "score": 0.472,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 5,
+      "hits": [
+        "biocenoze",
+        "deficyt",
+        "materii",
+        "rozklad",
+        "termiczne",
+        "tlenowy",
+        "zmienia"
+      ]
+    },
+    {
+      "idx": 227,
+      "score": 0.899,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 67,
+      "hits": [
+        "chemiczny",
+        "odzyskiwaniu",
+        "plastikow",
+        "produkcji",
+        "recykling",
+        "surowce",
+        "surowcow",
+        "surowcowy",
+        "uzytych",
+        "wyrobu",
+        "wytwarza"
+      ]
+    },
+    {
+      "idx": 228,
+      "score": 0.731,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 67,
+      "hits": [
+        "instalacji",
+        "mozliwosc",
+        "przerobki",
+        "recykling",
+        "recyklingu",
+        "segregacji",
+        "surowcowy",
+        "tworzyw",
+        "uprzedniej",
+        "zaleta"
+      ]
+    },
+    {
+      "idx": 229,
+      "score": 0.714,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 71,
+      "hits": [
+        "120",
+        "130",
+        "bolu",
+        "granica",
+        "odczuwania",
+        "sluchu"
+      ]
+    },
+    {
+      "idx": 230,
+      "score": 0.716,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 71,
+      "hits": [
+        "70",
+        "75",
+        "90",
+        "choroby",
+        "halasu",
+        "oslabienie",
+        "sluchu",
+        "ubytek",
+        "wegetatywne",
+        "zmiany"
+      ]
+    },
+    {
+      "idx": 231,
+      "score": 0.719,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 74,
+      "hits": [
+        "20",
+        "20000",
+        "czestotliwosci",
+        "drgan",
+        "halas",
+        "infradzwiekowy",
+        "nieslyszalny",
+        "nizszej",
+        "odczuwalny"
+      ]
+    },
+    {
+      "idx": 232,
+      "score": 0.315,
+      "pdf": "egz eko (1).pdf",
+      "page": 17,
+      "hits": [
+        "czlowieka",
+        "poza",
+        "zakresie"
+      ]
+    },
+    {
+      "idx": 233,
+      "score": 0.94,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 70,
+      "hits": [
+        "amplitudzie",
+        "bezposrednio",
+        "ciala",
+        "czestotliwosci",
+        "drgania",
+        "kilkudziesieciu",
+        "kilkunastu",
+        "malej",
+        "niskiej",
+        "pominieciem",
+        "tkanki",
+        "wibracje"
+      ]
+    },
+    {
+      "idx": 234,
+      "score": 0.698,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 80,
+      "hits": [
+        "1991",
+        "informuje",
+        "monitoring",
+        "ocen",
+        "panstwowy",
+        "pomiarow",
+        "prognoz",
+        "stanu"
+      ]
+    },
+    {
+      "idx": 235,
+      "score": 0.466,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 82,
+      "hits": [
+        "2020",
+        "2025",
+        "akustycznego",
+        "elektromagnetycznych",
+        "gleby",
+        "jakosci",
+        "jonizujacego",
+        "klimatu",
+        "powietrza",
+        "promieniowania",
+        "ziemi"
+      ]
+    },
+    {
+      "idx": 236,
+      "score": 0.607,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 50,
+      "hits": [
+        "mniejszej",
+        "narodowy",
+        "obszar",
+        "park",
+        "powierzchni",
+        "przyrodniczych",
+        "tworzy"
+      ]
+    },
+    {
+      "idx": 237,
+      "score": 0.754,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 48,
+      "hits": [
+        "2000",
+        "chronionego",
+        "gatunkowa",
+        "grzybow",
+        "krajobrazowe",
+        "krajobrazu",
+        "narodowe",
+        "natura",
+        "obszary",
+        "parki",
+        "pomniki",
+        "przyrody",
+        "rezerwaty",
+        "roslin",
+        "uzytki",
+        "zwierzat"
+      ]
+    },
+    {
+      "idx": 238,
+      "score": 0.904,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 55,
+      "hits": [
+        "drzewa",
+        "glazy",
+        "jaskinie",
+        "narzutowe",
+        "pojedyncze",
+        "pomniki",
+        "przyrody",
+        "szczegolnej",
+        "twory",
+        "wartosci",
+        "wodospady",
+        "zrodla"
+      ]
+    },
+    {
+      "idx": 239,
+      "score": 0.977,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 54,
+      "hits": [
+        "2000",
+        "natura",
+        "obszary",
+        "ptakow",
+        "siec",
+        "siedlisk",
+        "specjalne",
+        "specjalnej"
+      ]
+    },
+    {
+      "idx": 240,
+      "score": 0.872,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 60,
+      "hits": [
+        "centralny",
+        "dyrektora",
+        "form",
+        "generalnego",
+        "kompetencjach",
+        "pozostaje",
+        "przyrody",
+        "rejestr"
+      ]
+    },
+    {
+      "idx": 241,
+      "score": 0.705,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 90,
+      "hits": [
+        "budynki",
+        "deszcze",
+        "glownie",
+        "kwasne",
+        "niszczace",
+        "powietrzu",
+        "roslinnosc",
+        "rozpuszcza",
+        "siarki",
+        "spalania",
+        "wegla",
+        "wodzie"
+      ]
+    },
+    {
+      "idx": 242,
+      "score": 0.586,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 93,
+      "hits": [
+        "hemoglobina",
+        "nawet",
+        "niedotlenienie",
+        "tlen",
+        "tlenku",
+        "toksycznosc",
+        "wegla",
+        "wynika",
+        "wypiera"
+      ]
+    },
+    {
+      "idx": 243,
+      "score": 0.727,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 100,
+      "hits": [
+        "2",
+        "5",
+        "krwi",
+        "pecherzykow",
+        "plucnych",
+        "pm10",
+        "zawieszony",
+        "zdrowia"
+      ]
+    },
+    {
+      "idx": 244,
+      "score": 0.718,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 97,
+      "hits": [
+        "10",
+        "50",
+        "90",
+        "drog",
+        "mikrometrow",
+        "oddechowych",
+        "pm10",
+        "porownania",
+        "srednice",
+        "zawieszony"
+      ]
+    },
+    {
+      "idx": 245,
+      "score": 0.576,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 91,
+      "hits": [
+        "azotu",
+        "glownych",
+        "jeden",
+        "powietrzu",
+        "skladnikow",
+        "smogu",
+        "tlenki",
+        "tlenkow",
+        "transportu"
+      ]
+    },
+    {
+      "idx": 246,
+      "score": 0.606,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 101,
+      "hits": [
+        "benzo",
+        "organizmie",
+        "piece",
+        "piren",
+        "rakotworcze",
+        "smieci",
+        "wlasciwosci"
+      ]
+    },
+    {
+      "idx": 247,
+      "score": 0.51,
+      "pdf": "EZS-NS-W5-W6.pdf",
+      "page": 105,
+      "hits": [
+        "fotochemicznych",
+        "najwyzsze",
+        "ozon",
+        "produktem",
+        "reakcji",
+        "stezenia"
+      ]
+    },
+    {
+      "idx": 248,
+      "score": 0.83,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 2,
+      "hits": [
+        "administracyjno",
+        "bezposredniej",
+        "dzieli",
+        "ekologicznej",
+        "ekonomiczne",
+        "instrumenty",
+        "polityki",
+        "posredniej",
+        "regulacji"
+      ]
+    },
+    {
+      "idx": 249,
+      "score": 0.63,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 2,
+      "hits": [
+        "cechuje",
+        "decyzje",
+        "ekonomiczne",
+        "instrumenty",
+        "posredniego",
+        "przymusu",
+        "wykorzystanie"
+      ]
+    },
+    {
+      "idx": 250,
+      "score": 0.706,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 2,
+      "hits": [
+        "administracyjno",
+        "ekologicznej",
+        "ekonomiczne",
+        "instrumentow",
+        "instrumenty",
+        "polityce",
+        "praktyce",
+        "prawnych",
+        "uzupelnienie"
+      ]
+    },
+    {
+      "idx": 251,
+      "score": 0.601,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 4,
+      "hits": [
+        "bodzcowa",
+        "dochodotworcza",
+        "ekonomicznych",
+        "funkcje",
+        "instrumentow",
+        "regulacyjna",
+        "stymulacyjna",
+        "transferowa"
+      ]
+    },
+    {
+      "idx": 252,
+      "score": 0.699,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 4,
+      "hits": [
+        "bodzcowa",
+        "ekonomicznych",
+        "funkcja",
+        "instrumentow",
+        "korzystania",
+        "podmiotow",
+        "racjonalnego",
+        "stymulacyjna",
+        "zachecaniu",
+        "zasobow"
+      ]
+    },
+    {
+      "idx": 253,
+      "score": 0.7,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 4,
+      "hits": [
+        "bledow",
+        "ekonomicznych",
+        "eliminowaniu",
+        "funkcja",
+        "instrumentow",
+        "internalizacji",
+        "kosztow",
+        "regulacyjna",
+        "rynku",
+        "zewnetrznych"
+      ]
+    },
+    {
+      "idx": 254,
+      "score": 0.692,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 3,
+      "hits": [
+        "efektywnosc",
+        "ekologicznej",
+        "ekonomiczna",
+        "ekonomicznych",
+        "instrumentow",
+        "mozliwosci",
+        "projektowania",
+        "skutecznosc",
+        "wdrozenia",
+        "wyboru"
+      ]
+    },
+    {
+      "idx": 255,
+      "score": 0.757,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 5,
+      "hits": [
+        "depozytowa",
+        "ekonomicznych",
+        "emisji",
+        "handlu",
+        "instrumentow",
+        "klasyfikacja",
+        "oplata",
+        "oplaty",
+        "produktowa",
+        "uprawnieniami"
+      ]
+    },
+    {
+      "idx": 256,
+      "score": 0.88,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 6,
+      "hits": [
+        "degradacje",
+        "drzew",
+        "gruntow",
+        "ilosciowa",
+        "krzewow",
+        "oplata",
+        "oplaty",
+        "produkcji",
+        "usuwanie"
+      ]
+    },
+    {
+      "idx": 257,
+      "score": 0.745,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 6,
+      "hits": [
+        "degradacje",
+        "gazow",
+        "jakosciowa",
+        "odpadow",
+        "oplata",
+        "oplaty",
+        "sciekow",
+        "skladowanie",
+        "wprowadzanie",
+        "ziemi"
+      ]
+    },
+    {
+      "idx": 258,
+      "score": 0.656,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 16,
+      "hits": [
+        "130",
+        "drzewa",
+        "gatunku",
+        "krzewow",
+        "obwodu",
+        "oplaty",
+        "pnia",
+        "powierzchni",
+        "wysokosc",
+        "wysokosci",
+        "zalezy"
+      ]
+    },
+    {
+      "idx": 259,
+      "score": 0.806,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 17,
+      "hits": [
+        "500",
+        "budowie",
+        "domu",
+        "gruntu",
+        "jednorodzinnego",
+        "mozna",
+        "oplat",
+        "produkcji",
+        "wylaczyc"
+      ]
+    },
+    {
+      "idx": 260,
+      "score": 0.443,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 23,
+      "hits": [
+        "decyzja",
+        "drzew",
+        "korzystanie",
+        "nakladane",
+        "usuwanie"
+      ]
+    },
+    {
+      "idx": 261,
+      "score": 0.81,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 23,
+      "hits": [
+        "konto",
+        "korzystania",
+        "korzystanie",
+        "marszalkowskiego",
+        "miejsce",
+        "urzedu",
+        "wlasciwego",
+        "wzgledu"
+      ]
+    },
+    {
+      "idx": 262,
+      "score": 0.702,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 23,
+      "hits": [
+        "400",
+        "jezeli",
+        "korzystanie",
+        "polroczna",
+        "przekracza",
+        "wysokosc",
+        "zwolnienie"
+      ]
+    },
+    {
+      "idx": 263,
+      "score": 0.448,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 24,
+      "hits": [
+        "500",
+        "gazow",
+        "oplata",
+        "pobor",
+        "pozwolenia",
+        "sciekow"
+      ]
+    },
+    {
+      "idx": 264,
+      "score": 0.501,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 24,
+      "hits": [
+        "100",
+        "morza",
+        "odpadow",
+        "oplata",
+        "oplaty",
+        "wrzucenie"
+      ]
+    },
+    {
+      "idx": 265,
+      "score": 0.784,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 25,
+      "hits": [
+        "cieplarnianych",
+        "emisji",
+        "gazow",
+        "handlu",
+        "najwiekszy",
+        "oplacalny",
+        "pierwszy",
+        "rynek",
+        "sposob",
+        "unijny",
+        "uprawnien",
+        "uprawnieniami",
+        "zmniejszania"
+      ]
+    },
+    {
+      "idx": 266,
+      "score": 0.773,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 26,
+      "hits": [
+        "czasem",
+        "emisji",
+        "firmy",
+        "handlu",
+        "ktorymi",
+        "lacznych",
+        "limit",
+        "obnizany",
+        "pulapow",
+        "ramach"
+      ]
+    },
+    {
+      "idx": 267,
+      "score": 0.864,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 26,
+      "hits": [
+        "emisje",
+        "jezeli",
+        "ktoremu",
+        "objete",
+        "przedsiebiorstwo",
+        "przedsiebiorstwu",
+        "sprzedac",
+        "swoje",
+        "uprawnien",
+        "zabraklo",
+        "zatrzymac",
+        "zmniejszy"
+      ]
+    },
+    {
+      "idx": 268,
+      "score": 0.415,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 29,
+      "hits": [
+        "bazy",
+        "danych",
+        "emisjach",
+        "emisjami",
+        "emisji",
+        "kobize",
+        "krajowej",
+        "polsce",
+        "zarzadzania"
+      ]
+    },
+    {
+      "idx": 269,
+      "score": 0.845,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 28,
+      "hits": [
+        "klimatu",
+        "kobize",
+        "krajowym",
+        "nadzor",
+        "osrodkiem",
+        "ustawa",
+        "zgodnie"
+      ]
+    },
+    {
+      "idx": 270,
+      "score": 0.606,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 30,
+      "hits": [
+        "czesc",
+        "planowanie",
+        "potrzeby",
+        "przedsiebiorstwem",
+        "srodki",
+        "srodowiskowego",
+        "zarzadzania"
+      ]
+    },
+    {
+      "idx": 271,
+      "score": 0.694,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 32,
+      "hits": [
+        "14001",
+        "50001",
+        "audytu",
+        "ekozarzadzania",
+        "emas",
+        "gospodarki",
+        "lesnej",
+        "najpopularniejsze",
+        "pochodzenia",
+        "produktu",
+        "zarzadzania"
+      ]
+    },
+    {
+      "idx": 272,
+      "score": 0.585,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 32,
+      "hits": [
+        "50001",
+        "energia",
+        "zarzadzania"
+      ]
+    },
+    {
+      "idx": 273,
+      "score": 0.71,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 33,
+      "hits": [
+        "14000",
+        "1992",
+        "decyzje",
+        "janeiro",
+        "konferencji",
+        "normy",
+        "odbyla",
+        "rozwoj",
+        "rozwoju",
+        "serii",
+        "wsparcia",
+        "zobowiazaly",
+        "zrownowazonego"
+      ]
+    },
+    {
+      "idx": 274,
+      "score": 0.798,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 35,
+      "hits": [
+        "14001",
+        "14004",
+        "auditowane",
+        "celow",
+        "certyfikacji",
+        "norma",
+        "srodowiskowego",
+        "wymagania",
+        "zarzadzania"
+      ]
+    },
+    {
+      "idx": 275,
+      "score": 0.907,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 42,
+      "hits": [
+        "1221",
+        "2009",
+        "audit",
+        "audytu",
+        "ekozarzadzania",
+        "emas",
+        "management",
+        "rozporzadzenie",
+        "scheme",
+        "unijny"
+      ]
+    },
+    {
+      "idx": 276,
+      "score": 0.853,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 45,
+      "hits": [
+        "emas",
+        "logo",
+        "numerem",
+        "organizacja",
+        "organizacje",
+        "rejestracja",
+        "rejestracyjnym",
+        "stosowac",
+        "tylko",
+        "wazna",
+        "wylacznie"
+      ]
+    },
+    {
+      "idx": 277,
+      "score": 0.564,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 43,
+      "hits": [
+        "deklaracji",
+        "emas",
+        "opublikowanie",
+        "programie",
+        "srodowiskowej",
+        "wdrozenie"
+      ]
+    },
+    {
+      "idx": 278,
+      "score": 0.525,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 37,
+      "hits": [
+        "14000",
+        "energii",
+        "firmy",
+        "ilosci",
+        "norm",
+        "odpadow",
+        "poprawa",
+        "surowcow",
+        "wizerunku",
+        "wytwarzanych",
+        "zuzycia"
+      ]
+    },
+    {
+      "idx": 279,
+      "score": 0.553,
+      "pdf": "EZS-NS-W7.pdf",
+      "page": 40,
+      "hits": [
+        "14001",
+        "kierownictwa",
+        "przeglad",
+        "testowanie",
+        "wdrazania"
+      ]
+    }
+  ]
+}
