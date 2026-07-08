@@ -70,10 +70,11 @@
 <div id="gate">
   <div class="box">
     <div style="font:700 20px 'Space Grotesk'">🔒 Panel administratora</div>
-    <div class="muted" style="font-size:13px;margin-top:6px">Podaj hasło dostępu</div>
-    <input id="gpass" type="password" placeholder="hasło" autocomplete="off">
+    <div class="muted" style="font-size:13px;margin-top:6px">Zaloguj sie kontem admina</div>
+    <input id="gemail" type="email" placeholder="email" autocomplete="username">
+    <input id="gpass" type="password" placeholder="haslo" autocomplete="current-password">
     <div class="err" id="gerr"></div>
-    <button class="btn primary" style="width:100%" id="gbtn">Wejdź</button>
+    <button class="btn primary" style="width:100%" id="gbtn">Zaloguj</button>
   </div>
 </div>
 
@@ -85,13 +86,14 @@
     </div>
     <div style="display:flex;gap:10px">
       <a class="btn" href="./index.html">← Do quizu</a>
+      <button class="btn" id="logout">Wyloguj</button>
       <button class="btn primary" id="refresh">↻ Odśwież</button>
     </div>
   </header>
 
   <div id="content"><div class="spin">Ładowanie danych…</div></div>
 
-  <div class="foot">Dane z Supabase (RLS). Panel tylko do odczytu · <span id="clientnote"></span></div>
+  <div class="foot">Dane z Supabase Auth/RLS · <span id="clientnote"></span></div>
 </div>
 
 <script>
@@ -100,9 +102,6 @@
 // Te same publiczne (publishable) klucze co aplikacja — chronione przez RLS.
 const SUPABASE_URL = "https://xjlupiohhihtzhqjgtma.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_35E-8urxsuFV4WqxeUfz0Q_VIrJBJNR";
-// Lekka bramka (obfuskacja, nie zabezpieczenie — dane rankingu są i tak publiczne).
-// Zmień na własne hasło:
-const ADMIN_PASS = "eko-admin";
 
 const MODULE_LABEL = { ekologia:'Ekologia', marketing:'Marketing', zywnosc:'Żywność roślinna' };
 const EVENT_LABEL  = { page_view:'Wejścia', quiz_start:'Rozpoczęte', quiz_complete:'Ukończone' };
@@ -159,7 +158,7 @@ function svgDays(map, days){
 // ── Ładowanie danych ───────────────────────────────────────────────────────
 let sb=null;
 function client(){ if(sb)return sb; const g=window.supabase; if(!g||!g.createClient)return null;
-  sb=g.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{persistSession:false,autoRefreshToken:false}}); return sb; }
+  sb=g.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}}); return sb; }
 
 async function fetchAll(){
   const c=client(); if(!c) throw new Error('Supabase CDN niezaładowane');
@@ -351,7 +350,7 @@ function render({scores, events}){
     +`<button class="btn danger" data-reset="${esc(m)}">Resetuj</button></div>`).join('');
   html += `<div class="card"><h2><span class="dot" style="background:var(--bad)"></span>Reset rankingów</h2>
     ${resetItems||'<div class="muted">Brak danych</div>'}
-    <div class="muted" style="margin-top:10px;font-size:12px">Usuwa wszystkie wyniki wybranego modułu. Nieodwracalne. Wymaga funkcji SQL <code style="display:inline;padding:1px 5px">admin_reset_module</code>.</div></div>`;
+    <div class="muted" style="margin-top:10px;font-size:12px">Usuwa wszystkie wyniki wybranego modułu. Nieodwracalne. Wymaga <code style="display:inline;padding:1px 5px">supabase_admin_auth.sql</code>.</div></div>`;
 
   // Panel: TOP 10 wyników
   html += `<div class="card" style="grid-column:1/-1"><h2><span class="dot"></span>Top 10 wyników</h2>
@@ -376,7 +375,7 @@ function render({scores, events}){
       <td class="muted">${fmtDate(r.created_at)}</td>
       <td class="num">${r.id?`<button class="btn danger" data-del="${esc(r.id)}" title="Usuń ten wynik" style="padding:5px 9px">🗑</button>`:'—'}</td></tr>`).join('')||'<tr><td colspan="7" class="muted">Brak wyników</td></tr>'}
     </tbody></table></div>
-    <div class="muted" style="margin-top:10px;font-size:12px">🗑 usuwa pojedynczy wynik (nieodwracalne). Wymaga funkcji SQL <code style="display:inline;padding:1px 5px">admin_delete_score</code>.</div></div>`;
+    <div class="muted" style="margin-top:10px;font-size:12px">🗑 usuwa pojedynczy wynik (nieodwracalne). Wymaga <code style="display:inline;padding:1px 5px">supabase_admin_auth.sql</code>.</div></div>`;
 
   html += `</div>`;
 
@@ -398,33 +397,86 @@ async function load(){
 }
 
 // ── Bramka ─────────────────────────────────────────────────────────────────
-function unlock(){ $('#gate').style.display='none'; $('#app').style.display='block';
-  // Oznacz tę przeglądarkę jako deweloperską (ten sam origin co quiz) —
-  // jej przyszłe wejścia będą tagowane 'dev' i pomijane w licznikach „bez nas".
+function setGateError(message){ $('#gerr').textContent = message || ''; }
+function showGate(){
+  $('#gate').style.display='flex';
+  $('#app').style.display='none';
+  setGateError('');
+  setTimeout(()=>$('#gemail').focus(),80);
+}
+async function requireAdminSession(){
+  const c=client(); if(!c) throw new Error('Supabase CDN niezaladowane');
+  const { data, error } = await c.rpc('is_quiz_admin');
+  if(error) throw error;
+  if(data !== true) throw new Error('To konto nie ma uprawnien admina');
+}
+function unlock(user){
+  $('#gate').style.display='none';
+  $('#app').style.display='block';
   try{ localStorage.setItem('quizy_dev','1'); }catch(e){}
-  $('#clientnote').textContent = SUPABASE_URL.replace('https://','').split('.')[0];
-  load(); }
-function tryPass(){ const v=$('#gpass').value; if(v===ADMIN_PASS){ try{sessionStorage.setItem('quizy_admin_ok','1');}catch(e){} unlock(); }
-  else { $('#gerr').textContent='Nieprawidłowe hasło'; } }
-$('#gbtn').addEventListener('click', tryPass);
-$('#gpass').addEventListener('keydown', e=>{ if(e.key==='Enter') tryPass(); });
+  const project = SUPABASE_URL.replace('https://','').split('.')[0];
+  $('#clientnote').textContent = user && user.email ? project+' / '+user.email : project;
+  load();
+}
+async function tryLogin(){
+  const email=$('#gemail').value.trim();
+  const password=$('#gpass').value;
+  if(!email || !password){ setGateError('Podaj email i haslo'); return; }
+  const c=client(); if(!c){ setGateError('Supabase CDN niezaladowane'); return; }
+  $('#gbtn').disabled=true; setGateError('');
+  try{
+    const { data, error } = await c.auth.signInWithPassword({ email, password });
+    if(error) throw error;
+    await requireAdminSession();
+    unlock(data.user);
+  }catch(e){
+    try{ await c.auth.signOut(); }catch(_){}
+    setGateError(e.message || 'Logowanie nie powiodlo sie');
+  }finally{
+    $('#gbtn').disabled=false;
+  }
+}
+async function restoreSession(){
+  const c=client(); if(!c){ showGate(); return; }
+  try{
+    const { data } = await c.auth.getSession();
+    if(data && data.session && data.session.user){
+      await requireAdminSession();
+      unlock(data.session.user);
+    }else{
+      showGate();
+    }
+  }catch(e){
+    try{ await c.auth.signOut(); }catch(_){}
+    showGate();
+    setGateError(e.message || 'Sesja admina wygasla');
+  }
+}
+async function logout(){
+  const c=client(); if(c){ try{ await c.auth.signOut(); }catch(e){} }
+  showGate();
+}
+$('#gbtn').addEventListener('click', tryLogin);
+$('#gemail').addEventListener('keydown', e=>{ if(e.key==='Enter') tryLogin(); });
+$('#gpass').addEventListener('keydown', e=>{ if(e.key==='Enter') tryLogin(); });
 $('#refresh').addEventListener('click', load);
+$('#logout').addEventListener('click', logout);
 
-// ── Usuwanie / reset (przez funkcje RPC chronione hasłem) ────────────────────
+// ── Usuwanie / reset (przez funkcje RPC chronione Supabase Auth) ─────────────
 async function deleteScore(id){
   if(!id) return;
   if(!confirm('Usunąć ten wynik? Operacja nieodwracalna.')) return;
   const c=client(); if(!c){ alert('Brak połączenia z Supabase'); return; }
-  const { error } = await c.rpc('admin_delete_score', { p_id:id, p_pass:ADMIN_PASS });
-  if(error){ alert('Nie udało się usunąć: '+(error.message||error.code||'')+'\n\nCzy uruchomiłeś w Supabase SQL funkcje admin_delete_score / admin_reset_module?'); return; }
+  const { error } = await c.rpc('admin_delete_score', { p_id:id });
+  if(error){ alert('Nie udało się usunąć: '+(error.message||error.code||'')+'\n\nCzy uruchomiłeś w Supabase SQL supabase_admin_auth.sql i oznaczyłeś konto jako admin?'); return; }
   load();
 }
 async function resetModule(mod){
   if(!mod) return;
   if(!confirm('Wyczyścić CAŁY ranking modułu „'+(MODULE_LABEL[mod]||mod)+'"?\nUsunie wszystkie jego wyniki. Nieodwracalne.')) return;
   const c=client(); if(!c){ alert('Brak połączenia z Supabase'); return; }
-  const { data, error } = await c.rpc('admin_reset_module', { p_module:mod, p_pass:ADMIN_PASS });
-  if(error){ alert('Nie udało się zresetować: '+(error.message||error.code||'')+'\n\nCzy uruchomiłeś w Supabase SQL funkcje admin_*?'); return; }
+  const { data, error } = await c.rpc('admin_reset_module', { p_module:mod });
+  if(error){ alert('Nie udało się zresetować: '+(error.message||error.code||'')+'\n\nCzy uruchomiłeś w Supabase SQL supabase_admin_auth.sql i oznaczyłeś konto jako admin?'); return; }
   alert('Usunięto '+(data==null?'':data+' ')+'wyników.');
   load();
 }
@@ -443,8 +495,7 @@ $('#content').addEventListener('click', e=>{
   const rst=e.target.closest('[data-reset]'); if(rst){ resetModule(rst.getAttribute('data-reset')); return; }
 });
 
-// pamiętaj odblokowanie w obrębie sesji karty
-try{ if(sessionStorage.getItem('quizy_admin_ok')==='1'){ unlock(); } else { setTimeout(()=>$('#gpass').focus(),80); } }catch(e){ setTimeout(()=>$('#gpass').focus(),80); }
+restoreSession();
 </script>
 </body>
 </html>
