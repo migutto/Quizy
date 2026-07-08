@@ -798,7 +798,7 @@ class Component extends DCLogic {
       const gotStyle=Object.assign(this.scopeCard(true,gotTh),{background:gotGloss+', '+gotBase,backgroundSize:'230% 100%, 100% 100%',backgroundRepeat:'no-repeat',animation:'sheen 5s ease-in-out infinite',border:'1.5px solid '+this.hexA(gotTh.color,gotAct?1:.7),boxShadow:gotAct?('0 0 0 3px '+this.hexA(gotTh.color,.34)+', 0 16px 40px -14px '+this.hexA(gotTh.color,.65)):('0 12px 30px -16px '+this.hexA(gotTh.color,.5))});
       const gotIcon=Object.assign(this.scopeIcon(gotTh),{background:this.hexA(gotTh.color,gotAct?.32:.15)});
       const gotChip={label:'Pytania z gotowca',count:gotN+' '+this.plural(gotN),icon:gotTh.icon,iconStyle:gotIcon,style:gotStyle,countStyle:this.scopeCount(true),hover:this.scopeHover(true,gotTh.color),press:this.chipPress(),onClick:()=>this.setState({scope:'gotowiec',catOpen:false})};
-      const topChips=[allChip,catChip,gotChip];
+      const topChips=[gotChip,allChip,catChip];
       const lens=[['10','10'],['20','20'],['40','40'],['all','Wszystkie']];
       const lengthChips=lens.map(x=>({label:x[1],style:this.segStyle(s.length===x[0]),hover:this.segHover(s.length===x[0]),press:this.chipPress(),onClick:()=>this.setState({length:x[0]})}));
       const pool=this.filtered(s.scope).length;
