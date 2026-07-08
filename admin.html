@@ -265,6 +265,38 @@ function render({scores, events}){
       <span style="margin-left:auto;color:var(--mut);font-weight:600;font-size:13px">razem: <b style="color:var(--txt)">${num(windowTotal(dayMap,30))}</b></span></h2>
     ${svgDays(dayMap,30)}</div>`;
 
+  // Panel: wykaz wykonanych testów (chronologicznie) — anonimowe + z nickami
+  // Źródło: zdarzenia quiz_complete (każde ukończenie). Nick dopasowany best-effort
+  // do zapisanego wyniku; sesje testowe (localhost/dev/podgląd) pomijane.
+  if(!eventsBlocked){
+    const isTestScope = s => s==='dev' || /localhost|127\.0\.0\.1|0\.0\.0\.0|::1|^file$|preview/i.test(s||'');
+    const testSession = {};
+    E.forEach(e=>{ if(e.event_type==='page_view' && isTestScope(e.scope)) testSession[e.session_id]=true; });
+    const scopeModule = sc => { if(!sc)return null; if(sc==='gotowiec'||/^E-/.test(sc))return 'ekologia';
+      if(['Przemial','Pieczywo','Cukier','Olej','Soki'].indexOf(sc)>=0)return 'zywnosc';
+      if(['W1-2','W3','W4','W5-6','Promocja','links'].indexOf(sc)>=0)return 'marketing'; return null; };
+    const matchNick = ev => { let best=null,bestDt=3e5; for(const s of S){ if(+s.score!==+ev.score||+s.total!==+ev.total)continue; if((s.scope||'')!==(ev.scope||''))continue; const dt=Math.abs(new Date(s.created_at)-new Date(ev.created_at)); if(dt<bestDt){best=s;bestDt=dt;} } return best; };
+    const completes = E.filter(e=>e.event_type==='quiz_complete' && !testSession[e.session_id])
+      .slice().sort((a,b)=> new Date(b.created_at)-new Date(a.created_at));
+    const testRows = completes.map(e=>{ const m=matchNick(e); const p=e.total?Math.round(e.score/e.total*100):null;
+      return { nick:m?m.player_name:null, mod:m?m.module:scopeModule(e.scope), scope:e.scope, score:e.score, total:e.total, pct:p, len:e.session_length, at:e.created_at }; });
+    const shownTests = testRows.slice(0,500);
+    html += `<div class="card" style="grid-column:1/-1"><h2><span class="dot"></span>Wykonane testy — chronologicznie <span class="pill">${testRows.length}</span></h2>
+      <input id="testFilter" placeholder="Filtruj po nicku / zakresie…" oninput="filterTestRows(this.value)" autocomplete="off"
+        style="width:100%;max-width:320px;margin-bottom:10px;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:#0d1120;color:var(--txt);font:600 13px 'Space Grotesk'">
+      <div style="max-height:460px;overflow:auto"><table><thead><tr><th>Kiedy</th><th>Gracz</th><th>Moduł</th><th>Zakres</th><th class="num">Wynik</th><th class="num">%</th><th class="num">Pytań</th></tr></thead><tbody>
+      ${shownTests.map(r=>{ const nickCell=r.nick?esc(r.nick):'<span class="muted" style="font-style:italic">anonim</span>';
+        const fk=((r.nick||'anonim')+' '+(r.scope||'')).toLowerCase();
+        return `<tr data-testname="${esc(fk)}"><td class="muted">${fmtDate(r.at)}</td><td>${nickCell}</td>`
+          +`<td>${r.mod?`<span class="pill">${esc(MODULE_LABEL[r.mod]||r.mod)}</span>`:'<span class="muted">—</span>'}</td>`
+          +`<td class="muted">${esc(r.scope||'—')}</td><td class="num">${r.score}/${r.total}</td>`
+          +`<td class="num">${r.pct==null?'—':r.pct+'%'}</td><td class="num muted">${esc(r.len||'—')}</td></tr>`;
+      }).join('')||'<tr><td colspan="7" class="muted">Brak ukończonych testów</td></tr>'}
+      </tbody></table></div>
+      ${testRows.length>500?`<div class="muted" style="margin-top:8px;font-size:12px">Pokazano ostatnie 500 z ${testRows.length}.</div>`:''}
+      <div class="muted" style="margin-top:8px;font-size:12px">Każde ukończenie testu (też bez nicku → „anonim"); nick dopasowany do zapisanego wyniku. Pomija oznaczone sesje testowe (localhost/dev/podgląd) — starsze wpisy sprzed wdrożenia oznaczania mogą zawierać nasze testy.</div></div>`;
+  }
+
   // Panel: lejek (events)
   if(!eventsBlocked){
     const fmax=Math.max(1,views,starts,completes);
@@ -380,6 +412,7 @@ async function resetModule(mod){
   load();
 }
 function filterScoreRows(v){ v=(v||'').toLowerCase().trim(); document.querySelectorAll('tr[data-name]').forEach(tr=>{ tr.style.display=(!v||tr.getAttribute('data-name').indexOf(v)>=0)?'':'none'; }); }
+function filterTestRows(v){ v=(v||'').toLowerCase().trim(); document.querySelectorAll('tr[data-testname]').forEach(tr=>{ tr.style.display=(!v||tr.getAttribute('data-testname').indexOf(v)>=0)?'':'none'; }); }
 $('#content').addEventListener('click', e=>{
   const del=e.target.closest('[data-del]'); if(del){ deleteScore(del.getAttribute('data-del')); return; }
   const rst=e.target.closest('[data-reset]'); if(rst){ resetModule(rst.getAttribute('data-reset')); return; }
