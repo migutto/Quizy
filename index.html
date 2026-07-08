@@ -6,6 +6,7 @@
 <title>Quizy — Marketing · Żywność roślinna · Ekologia</title>
 <meta name="description" content="Interaktywne quizy z pytaniami zamkniętymi, wyjaśnieniami i rankingiem na żywo. Sprawdź wiedzę z marketingu, technologii żywności roślinnej i ekologii.">
 <meta name="theme-color" content="#0B0D12">
+<link rel="canonical" href="https://migutto.github.io/Quizy/">
 <link rel="icon" href="./favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="./favicon.svg">
 <!-- Open Graph / Facebook / Messenger -->
@@ -26,6 +27,15 @@
 <meta name="twitter:title" content="Quizy — Marketing · Żywność roślinna · Ekologia">
 <meta name="twitter:description" content="Interaktywne quizy z wyjaśnieniami i rankingiem na żywo.">
 <meta name="twitter:image" content="https://migutto.github.io/Quizy/og-image.png">
+<script>
+(function(){
+  var protocol = window.location.protocol;
+  if ((protocol === 'http:' || protocol === 'https:') && /\/index\.html$/.test(window.location.pathname)) {
+    var cleanPath = window.location.pathname.replace(/index\.html$/, '');
+    window.history.replaceState(null, document.title, cleanPath + window.location.search + window.location.hash);
+  }
+})();
+</script>
 <script src="./support.js"></script>
 <!-- Supabase JS v2 (leaderboard). Pinned exact version; exposes window.supabase.createClient -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.0/dist/umd/supabase.min.js"></script>
