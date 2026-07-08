@@ -415,6 +415,8 @@ class Component extends DCLogic {
         row.scope = dev ? 'dev' : host;
       }
       if(data.session_length!=null) row.session_length=String(data.session_length);
+      if(data.module!=null) row.module=String(data.module);
+      if(data.player_name!=null){ const pn=this.normalizePlayerName(data.player_name); if(pn) row.player_name=pn; }
       if(data.score!=null) row.score=data.score;
       if(data.total!=null) row.total=data.total;
       await sb.from('quiz_events').insert(row);
@@ -683,7 +685,7 @@ class Component extends DCLogic {
       localStorage.removeItem('quizmkt_session'); }catch(e){}
     try{ const h=this.loadHistory(); h.unshift({id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),createdAt:new Date().toISOString(),mode:'study',module:this.state.module,scope:this.state.scope,length:this.state.length,score:this.state.score,total,pct,bestStreak:this.state.bestStreak}); localStorage.setItem('quizmkt_history',JSON.stringify(h.slice(0,20))); }catch(e){}
     const sid=Date.now().toString(36)+Math.random().toString(36).slice(2,7);
-    this.trackQuizEvent('quiz_complete', { score:this.state.score, total:total, scope:this.state.scope, session_length:String(this.state.length) });
+    this.trackQuizEvent('quiz_complete', { score:this.state.score, total:total, scope:this.state.scope, session_length:String(this.state.length), module:this.state.module||'marketing', player_name:this.state.nick });
     this.setState({screen:'end',resumable:null,lastSessionId:sid,endCount:0}, ()=>{
       this.animateEndRing(pct);
       Promise.resolve(this.submitScore(sid)).then(()=>this.loadLeaderboard());

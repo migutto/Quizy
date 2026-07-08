@@ -12,6 +12,8 @@ create table if not exists public.quiz_events (
   ),
 
   session_id text,
+  module text,
+  player_name text,
   scope text,
   session_length text,
 
@@ -38,6 +40,8 @@ for insert
 to anon
 with check (
   event_type in ('page_view', 'quiz_start', 'quiz_complete')
+  and (module is null or char_length(module) between 1 and 40)
+  and (player_name is null or char_length(player_name) between 1 and 40)
   and (score is null or score >= 0)
   and (total is null or total > 0)
   and (score is null or total is null or score <= total)
