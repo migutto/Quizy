@@ -60,6 +60,13 @@ body{margin:0;-webkit-font-smoothing:antialiased;}
 @keyframes questionIn{from{opacity:0;transform:translateY(12px) scale(.992);}to{opacity:1;transform:none;}}
 @keyframes resultRingIn{from{opacity:0;transform:translateY(12px) scale(.965);}to{opacity:1;transform:none;}}
 @keyframes resultSectionIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+@keyframes surfaceIn{from{opacity:0;transform:translateY(14px) scale(.992);}to{opacity:1;transform:none;}}
+@keyframes choiceStaggerIn{from{opacity:0;transform:translateY(8px) scale(.985);}to{opacity:1;transform:none;}}
+@keyframes progressSettle{from{opacity:.78;transform:scaleX(.985);filter:saturate(.9);}to{opacity:1;transform:scaleX(1);filter:saturate(1);}}
+@keyframes flashCardIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+@keyframes flashBodyIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:none;}}
+@keyframes saveSuccessPulse{0%{box-shadow:0 0 0 0 rgba(60,203,127,0),0 12px 34px -24px rgba(60,203,127,.65);}45%{box-shadow:0 0 0 5px rgba(60,203,127,.16),0 16px 40px -22px rgba(60,203,127,.8);}100%{box-shadow:0 0 0 0 rgba(60,203,127,0),0 12px 34px -24px rgba(60,203,127,.65);}}
+@keyframes barIn{from{opacity:.65;transform:scaleX(0);}to{opacity:1;transform:scaleX(1);}}
 @keyframes livePulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.45;transform:scale(.78);}}
 @keyframes nudgeY{0%,100%{transform:translateY(0);}50%{transform:translateY(3px);}}
 @keyframes riseIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
@@ -95,17 +102,17 @@ input:focus-visible{outline:none;}
  <div style="width:100%;max-width:720px;position:relative;z-index:1;">
 
   <sc-if value="{{ isStart }}" hint-placeholder-val="{{ true }}">
-   <div style="animation:qfade .4s ease;">
+   <div style="{{ startScreenStyle }}">
     <a href="./admin.html" title="Panel Admina" aria-label="Panel Admina" style="position:absolute;top:0;right:0;z-index:6;width:38px;height:38px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;background:linear-gradient(135deg,#9A8DFF,#6C5AF5 60%,#5B7CFF);border:1px solid rgba(255,255,255,.16);box-shadow:0 8px 22px -8px rgba(124,108,255,.9), inset 0 1px 0 rgba(255,255,255,.28);transition:transform .16s ease, box-shadow .16s ease;" style-hover="transform:translateY(-1px) scale(1.07);box-shadow:0 13px 28px -8px rgba(124,108,255,1)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></a>
-    <div style="text-align:center;margin:14px 0 36px;">
+    <div style="{{ startHeroStyle }}">
      <h1 style="font:700 clamp(30px,8.5vw,44px)/1.15 'Unbounded',sans-serif;margin:0;letter-spacing:-.015em;color:#EDF0F7;">Quiz<br><span style="background:linear-gradient(90deg,#9A8DFF,#C9CBFF 34%,#7CE0FF 58%,#9A8DFF 82%,#C9CBFF);background-size:220% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:titleShimmer 7s linear infinite;">{{ moduleTitle }}</span></h1>
     </div>
-    <div style="display:flex;flex-wrap:wrap;gap:5px;background:#10141F;border:1px solid #232938;border-radius:16px;padding:5px;margin-bottom:22px;">
+    <div style="{{ moduleSwitchStyle }}">
      <sc-for list="{{ moduleChips }}" as="m" hint-placeholder-count="2">
       <button onClick="{{ m.onClick }}" style="{{ m.style }}" style-hover="{{ m.hover }}" style-active="{{ m.press }}">{{ m.label }}</button>
      </sc-for>
     </div>
-    <div style="background:linear-gradient(160deg,rgba(124,108,255,.16),rgba(124,108,255,.04));border:1px solid rgba(124,108,255,.5);border-radius:20px;padding:clamp(16px,4.5vw,20px) clamp(16px,4.5vw,22px);margin-bottom:16px;box-shadow:0 20px 55px -30px rgba(124,108,255,.65), inset 0 1px 0 rgba(255,255,255,.06);">
+    <div style="{{ nickPanelStyle }}">
      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
       <span style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#9A8DFF,#6C5AF5);color:#fff;display:inline-flex;align-items:center;justify-content:center;font:700 14px 'Space Grotesk';box-shadow:0 6px 16px -6px rgba(124,108,255,.8);">✎</span>
       <span style="font:700 12.5px 'Space Grotesk';color:#C9CBFF;text-transform:uppercase;letter-spacing:.14em;">Twój nick</span>
@@ -114,7 +121,7 @@ input:focus-visible{outline:none;}
      <div style="margin-top:11px;font:500 13px 'Space Grotesk';color:#A6ABCB;display:flex;align-items:center;gap:7px;">Wpisz nick, jeśli chcesz aby Twój wynik trafił do rankingu <span style="color:#9A8DFF;font-weight:700;display:inline-block;animation:nudgeY 1.8s ease-in-out infinite;">↓</span></div>
     </div>
     <sc-if value="{{ hasLeaderboard }}" hint-placeholder-val="{{ false }}">
-     <div style="margin-bottom:16px;background:#151926;border:1px solid #262D40;border-radius:18px;padding:19px 21px;">
+     <div style="{{ startLeaderboardStyle }}">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;">
        <div style="font:600 12px 'Space Grotesk';letter-spacing:.1em;text-transform:uppercase;color:#929BB3;">Ranking — top 10</div>
        <span style="font:600 10.5px 'Space Grotesk';letter-spacing:.08em;text-transform:uppercase;color:#3CCB7F;display:flex;align-items:center;gap:6px;"><span style="width:7px;height:7px;border-radius:50%;background:#3CCB7F;display:inline-block;box-shadow:0 0 8px #3CCB7F;animation:livePulse 1.6s ease-in-out infinite;"></span>Live</span>
@@ -132,7 +139,7 @@ input:focus-visible{outline:none;}
       <sc-if value="{{ hasMyHint }}" hint-placeholder-val="{{ false }}"><div style="margin-top:11px;padding-top:11px;border-top:1px solid #262D40;font:500 12px 'Space Grotesk';color:#929BB3;">{{ myHint }}</div></sc-if>
      </div>
     </sc-if>
-    <div style="background:rgba(21,25,38,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(124,108,255,.22);border-radius:26px;padding:clamp(18px,5vw,28px);box-shadow:0 30px 80px -40px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.05);">
+    <div style="{{ startShellStyle }}">
      <sc-if value="{{ showTopScopes }}" hint-placeholder-val="{{ true }}">
       <div style="font:600 11.5px 'Space Grotesk';color:#929BB3;text-transform:uppercase;letter-spacing:.16em;margin-bottom:13px;">Zakres materiału</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));gap:10px;margin-bottom:26px;">
@@ -162,15 +169,15 @@ input:focus-visible{outline:none;}
       </sc-for>
      </div>
      <div style="display:flex;flex-wrap:wrap;gap:10px;">
-      <button onClick="{{ onStart }}" style="flex:1 1 165px;display:flex;align-items:center;justify-content:center;gap:9px;padding:15px 16px;border:none;border-radius:99px;background:linear-gradient(115deg,transparent 22%,rgba(255,255,255,.24) 40%,transparent 56%),linear-gradient(135deg,#9A8DFF,#6C5AF5 55%,#5B7CFF);background-size:230% 100%,100% 100%;background-repeat:no-repeat;color:#fff;font:700 15px 'Space Grotesk';letter-spacing:.02em;cursor:pointer;box-shadow:0 14px 34px -16px rgba(124,108,255,.7), inset 0 1px 0 rgba(255,255,255,.25);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;animation:sheen 5.5s ease-in-out infinite;" style-hover="transform:translateY(-2px);box-shadow:0 20px 46px -18px rgba(124,108,255,.95), inset 0 1px 0 rgba(255,255,255,.3);filter:brightness(1.06);" style-active="transform:translateY(0) scale(.985);filter:brightness(.96);"><span>{{ startLabel }}</span><span style="font-size:18px;line-height:1;">→</span></button>
+      <button onClick="{{ onStart }}" style="{{ startButtonStyle }}" style-hover="transform:translateY(-2px);box-shadow:0 20px 46px -18px rgba(124,108,255,.95), inset 0 1px 0 rgba(255,255,255,.3);filter:brightness(1.06);" style-active="transform:translateY(0) scale(.985);filter:brightness(.96);"><span>{{ startLabel }}</span><span style="font-size:18px;line-height:1;">→</span></button>
       <sc-if value="{{ hasResume }}" hint-placeholder-val="{{ false }}">
-       <button onClick="{{ onResume }}" style="flex:1 1 150px;padding:15px 14px;border:1px solid rgba(124,108,255,.45);border-radius:99px;background:rgba(124,108,255,.08);color:#C3C6FF;font:600 14px 'Space Grotesk';cursor:pointer;white-space:nowrap;transition:transform .18s ease, background .18s ease, border-color .18s ease;" style-hover="background:rgba(124,108,255,.18);border-color:#8F82FF;transform:translateY(-2px);" style-active="transform:translateY(0) scale(.985);">{{ resumeLabel }}</button>
+       <button onClick="{{ onResume }}" style="{{ resumeButtonStyle }}" style-hover="background:rgba(124,108,255,.18);border-color:#8F82FF;transform:translateY(-2px);" style-active="transform:translateY(0) scale(.985);">{{ resumeLabel }}</button>
       </sc-if>
-      <button onClick="{{ onFlash }}" style="flex:1 1 150px;padding:15px 14px;border:1px solid rgba(124,108,255,.4);border-radius:99px;background:rgba(124,108,255,.06);color:#C3C6FF;font:600 14px 'Space Grotesk';cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;transition:transform .18s ease, background .18s ease, border-color .18s ease;" style-hover="background:rgba(124,108,255,.15);border-color:#8F82FF;transform:translateY(-2px);" style-active="transform:translateY(0) scale(.985);"><span style="font-size:16px;">🗂️</span>Przeglądaj pytania</button>
+      <button onClick="{{ onFlash }}" style="{{ flashButtonStyle }}" style-hover="background:rgba(124,108,255,.15);border-color:#8F82FF;transform:translateY(-2px);" style-active="transform:translateY(0) scale(.985);"><span style="font-size:16px;">🗂️</span>Przeglądaj pytania</button>
      </div>
     </div>
     <sc-if value="{{ hasHistory }}" hint-placeholder-val="{{ false }}">
-     <div style="margin-top:18px;background:rgba(21,25,38,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid #262D40;border-radius:20px;padding:20px 22px;">
+     <div style="{{ historyPanelStyle }}">
       <div style="font:600 11.5px 'Space Grotesk';color:#929BB3;text-transform:uppercase;letter-spacing:.16em;margin-bottom:13px;">Ostatnie wyniki</div>
       <div style="display:flex;flex-direction:column;gap:9px;">
        <sc-for list="{{ historyItems }}" as="h" hint-placeholder-count="3">
@@ -199,7 +206,7 @@ input:focus-visible{outline:none;}
     </div>
     <sc-if value="{{ showProgress }}" hint-placeholder-val="{{ true }}">
      <div style="display:flex;justify-content:space-between;align-items:center;font:600 13px 'Space Grotesk';color:#97A0B5;margin-bottom:8px;"><span>{{ counterLabel }}</span><span style="display:flex;gap:8px;align-items:center;"><sc-if value="{{ showStreak }}" hint-placeholder-val="{{ false }}"><span style="{{ streakStyle }}">{{ streakLabel }}</span></sc-if><span>{{ scoreLabel }}</span></span></div>
-     <div style="height:8px;background:#232938;border-radius:6px;overflow:hidden;margin-bottom:24px;"><div style="{{ progressStyle }}"></div></div>
+     <div style="{{ progressTrackStyle }}"><div style="{{ progressStyle }}"></div></div>
     </sc-if>
     <div style="{{ quizCardStyle }}">
      <div style="{{ typBadgeStyle }}"><span style="font-size:14px;line-height:1;">{{ typIcon }}</span><span>{{ typLabel }}</span></div>
@@ -254,7 +261,7 @@ input:focus-visible{outline:none;}
        <div style="font:700 12.5px 'Space Grotesk';color:#C9CBFF;text-transform:uppercase;letter-spacing:.12em;margin-bottom:11px;">Zapisz swój wynik w rankingu</div>
        <div style="display:flex;gap:9px;flex-wrap:wrap;">
         <input value="{{ endNick }}" onChange="{{ onEndNick }}" maxLength="40" placeholder="Wpisz swój nick…" spellCheck="false" autoComplete="off" style="flex:1 1 160px;min-width:0;padding:13px 15px;border-radius:12px;border:1.5px solid rgba(124,108,255,.55);background:#0E1220;color:#EDF0F7;font:700 16px 'Space Grotesk';outline:none;transition:border-color .18s ease, box-shadow .18s ease;" style-focus="border-color:#9A8DFF;box-shadow:0 0 0 4px rgba(124,108,255,.22);" />
-        <button onClick="{{ onSaveResult }}" style="flex:0 0 auto;padding:13px 20px;border:none;border-radius:12px;background:linear-gradient(135deg,#9A8DFF,#6C5AF5);color:#fff;font:700 14.5px 'Space Grotesk';cursor:pointer;box-shadow:0 12px 26px -14px rgba(124,108,255,.7);transition:transform .18s ease, filter .18s ease;" style-hover="transform:translateY(-2px);filter:brightness(1.06);" style-active="transform:translateY(0) scale(.985);">Zapisz wynik →</button>
+        <button onClick="{{ onSaveResult }}" style="{{ endSaveButtonStyle }}" style-hover="{{ endSaveButtonHoverStyle }}" style-active="{{ endSaveButtonActiveStyle }}">Zapisz wynik →</button>
        </div>
       </div>
      </sc-if>
@@ -330,13 +337,13 @@ input:focus-visible{outline:none;}
     </sc-if>
     <div style="display:flex;flex-direction:column;gap:9px;">
      <sc-for list="{{ flashItems }}" as="it" hint-placeholder-count="6">
-      <div style="background:#151926;border:1px solid #262D40;border-radius:15px;overflow:hidden;">
-       <button onClick="{{ it.onToggle }}" style="{{ it.headStyle }}" style-hover="background:#1A1F30;">
+      <div style="{{ it.cardStyle }}">
+       <button onClick="{{ it.onToggle }}" aria-expanded="{{ it.open }}" style="{{ it.headStyle }}" style-hover="background:#1A1F30;">
         <span style="{{ it.dzialStyle }}">{{ it.dzial }}</span>
         <span style="flex:1;">{{ it.qText }}</span>
         <span style="{{ it.chevStyle }}">{{ it.chevron }}</span>
        </button>
-       <div style="{{ it.bodyStyle }}">
+       <div style="{{ it.bodyStyle }}" aria-hidden="{{ it.bodyHidden }}">
         <div style="display:flex;align-items:flex-start;gap:9px;padding:12px 14px;border-radius:11px;background:rgba(60,203,127,.10);border:1px solid rgba(60,203,127,.32);margin-bottom:12px;">
          <span style="color:#3CCB7F;font-size:15px;line-height:1.5;flex:0 0 auto;">✓</span>
          <span style="color:#B6E9CC;font:600 14.5px/1.5 'Space Grotesk';">{{ it.corrLabel }}</span>
@@ -710,9 +717,21 @@ class Component extends DCLogic {
   modStyle(a){ const m=this.isMobile(); return {flex:'1 1 auto',minWidth:m?'86px':'0',padding:m?'9px 8px':'11px 6px',borderRadius:'11px',border:'none',background:a?'linear-gradient(135deg,#8F82FF,#6C5AF5 62%,#5B7CFF)':'transparent',color:a?'#fff':'#97A0B5',font:(m?'600 12.5px':'600 14px')+' "Space Grotesk"',cursor:'pointer',whiteSpace:'nowrap',transition:'all .18s ease',boxShadow:a?'0 8px 20px -10px rgba(124,108,255,.7)':'none'}; }
   plural(n){ if(n===1)return 'pytanie'; const m=n%10,h=n%100; return (m>=2&&m<=4&&!(h>=12&&h<=14))?'pytania':'pytań'; }
   chipPress(){ return {transform:'translateY(0) scale(.97)'}; }
-  motionStyle(base, delay){
+  withEntry(base, delay, name, duration){
     if(this.reduceMotion()) return base;
-    return Object.assign({},base,{animation:'resultSectionIn .42s cubic-bezier(.2,0,0,1) both',animationDelay:(delay||0)+'ms'});
+    const enter=(name||'surfaceIn')+' '+(duration||'.36s')+' cubic-bezier(.2,0,0,1) both';
+    const out=Object.assign({},base);
+    if(out.animation){
+      out.animation=enter+', '+out.animation;
+      out.animationDelay=(delay||0)+'ms, '+(out.animationDelay||'0s');
+    } else {
+      out.animation=enter;
+      out.animationDelay=(delay||0)+'ms';
+    }
+    return out;
+  }
+  motionStyle(base, delay, name, duration){
+    return this.withEntry(base,delay,name||'resultSectionIn',duration||'.42s');
   }
 
   start(scope,length){
@@ -841,29 +860,40 @@ class Component extends DCLogic {
     const C=this.C(); const s=this.state; const scr=s.screen;
     const base={ isStart:scr==='start', isQuiz:scr==='quiz', isEnd:scr==='end', isFlash:scr==='flash', bgCanvas:this.bgCanvas, qHead:this.qHead };
     if(scr==='start'){
-      const moduleChips=this.modules().map(x=>{ const act=s.module===x[0]; return {label:x[1],style:this.modStyle(act),hover:this.segHover(act),press:this.chipPress(),onClick:()=>this.setModule(x[0])};});
+      const moduleChips=this.modules().map((x,i)=>{ const act=s.module===x[0]; return {label:x[1],style:this.withEntry(this.modStyle(act),80+i*35,'choiceStaggerIn','.28s'),hover:this.segHover(act),press:this.chipPress(),onClick:()=>this.setModule(x[0])};});
       const scopes=this.scopesFor(s.module);
       const catList=scopes.filter(x=>x[0]!=='all');
-      const catChips=catList.map(x=>{ const n=this.filtered(x[0]).length; const act=s.scope===x[0]; const th=this.dzialTheme(x[0]); return {label:x[1],count:n+' '+this.plural(n),icon:th.icon,iconStyle:this.scopeIcon(th),style:this.scopeCard(act,th),countStyle:this.scopeCount(act),hover:this.scopeHover(act,th.color),press:this.chipPress(),onClick:()=>this.setState({scope:x[0],catOpen:false})};});
+      const catChips=catList.map((x,i)=>{ const n=this.filtered(x[0]).length; const act=s.scope===x[0]; const th=this.dzialTheme(x[0]); return {label:x[1],count:n+' '+this.plural(n),icon:th.icon,iconStyle:this.scopeIcon(th),style:this.withEntry(this.scopeCard(act,th),120+i*28,'choiceStaggerIn','.28s'),countStyle:this.scopeCount(act),hover:this.scopeHover(act,th.color),press:this.chipPress(),onClick:()=>this.setState({scope:x[0],catOpen:false})};});
       const allTh=this.dzialTheme('all'); const allN=this.filtered('all').length; const allAct=s.scope==='all';
-      const allChip={label:'Wszystkie',count:allN+' '+this.plural(allN),icon:allTh.icon,iconStyle:this.scopeIcon(allTh),style:this.scopeCard(allAct,allTh),countStyle:this.scopeCount(allAct),hover:this.scopeHover(allAct,allTh.color),press:this.chipPress(),onClick:()=>this.setState({scope:'all',catOpen:false})};
+      const allChip={label:'Wszystkie',count:allN+' '+this.plural(allN),icon:allTh.icon,iconStyle:this.scopeIcon(allTh),style:this.withEntry(this.scopeCard(allAct,allTh),170,'choiceStaggerIn','.3s'),countStyle:this.scopeCount(allAct),hover:this.scopeHover(allAct,allTh.color),press:this.chipPress(),onClick:()=>this.setState({scope:'all',catOpen:false})};
       const gotAct=s.scope==='gotowiec';
       const selCat=!allAct && !gotAct; const catTh=selCat?this.dzialTheme(s.scope):{icon:'🗂️',color:'#9A8DFF',bg:this.hexA('#9A8DFF',.15)};
       const cn=catList.length; const catCountLabel=selCat?(this.filtered(s.scope).length+' '+this.plural(this.filtered(s.scope).length)):(cn+' '+((cn%10>=2&&cn%10<=4&&!(cn%100>=12&&cn%100<=14))?'kategorie':'kategorii'));
-      const catChip={label:selCat?this.dzialLabel(s.scope):'Kategorie',count:catCountLabel,icon:catTh.icon,iconStyle:this.scopeIcon(catTh),style:this.scopeCard(selCat,catTh),countStyle:this.scopeCount(selCat),hover:this.scopeHover(selCat,catTh.color),press:this.chipPress(),onClick:()=>this.setState({catOpen:true})};
+      const catChip={label:selCat?this.dzialLabel(s.scope):'Kategorie',count:catCountLabel,icon:catTh.icon,iconStyle:this.scopeIcon(catTh),style:this.withEntry(this.scopeCard(selCat,catTh),210,'choiceStaggerIn','.3s'),countStyle:this.scopeCount(selCat),hover:this.scopeHover(selCat,catTh.color),press:this.chipPress(),onClick:()=>this.setState({catOpen:true})};
       const gotTh=this.dzialTheme('gotowiec'); const gotN=this.filtered('gotowiec').length;
       const gotGloss='linear-gradient(115deg,transparent 34%,rgba(255,240,205,.34) 48%,transparent 62%)';
       const gotBase='linear-gradient(160deg,'+this.hexA(gotTh.color,gotAct?.38:.20)+','+this.hexA(gotTh.color,gotAct?.13:.05)+')';
       const gotStyle=Object.assign(this.scopeCard(true,gotTh),{background:gotGloss+', '+gotBase,backgroundSize:'230% 100%, 100% 100%',backgroundRepeat:'no-repeat',animation:'sheen 5s ease-in-out infinite',border:'1.5px solid '+this.hexA(gotTh.color,gotAct?1:.7),boxShadow:gotAct?('0 0 0 3px '+this.hexA(gotTh.color,.34)+', 0 16px 40px -14px '+this.hexA(gotTh.color,.65)):('0 12px 30px -16px '+this.hexA(gotTh.color,.5))});
       const gotIcon=Object.assign(this.scopeIcon(gotTh),{background:this.hexA(gotTh.color,gotAct?.32:.15)});
-      const gotChip={label:'Pytania z gotowca',count:gotN+' '+this.plural(gotN),icon:gotTh.icon,iconStyle:gotIcon,style:gotStyle,countStyle:this.scopeCount(true),hover:this.scopeHover(true,gotTh.color),press:this.chipPress(),onClick:()=>this.setState({scope:'gotowiec',catOpen:false})};
+      const gotChip={label:'Pytania z gotowca',count:gotN+' '+this.plural(gotN),icon:gotTh.icon,iconStyle:gotIcon,style:this.withEntry(gotStyle,130,'choiceStaggerIn','.3s'),countStyle:this.scopeCount(true),hover:this.scopeHover(true,gotTh.color),press:this.chipPress(),onClick:()=>this.setState({scope:'gotowiec',catOpen:false})};
       const topChips=[gotChip,allChip,catChip];
       const lens=[['10','10'],['20','20'],['40','40'],['all','Wszystkie']];
-      const lengthChips=lens.map(x=>({label:x[1],style:this.segStyle(s.length===x[0]),hover:this.segHover(s.length===x[0]),press:this.chipPress(),onClick:()=>this.setState({length:x[0]})}));
+      const lengthChips=lens.map((x,i)=>({label:x[1],style:this.withEntry(this.segStyle(s.length===x[0]),260+i*28,'choiceStaggerIn','.24s'),hover:this.segHover(s.length===x[0]),press:this.chipPress(),onClick:()=>this.setState({length:x[0]})}));
       const pool=this.filtered(s.scope).length;
       const hasResume=!!s.resumable && (s.resumable.module||'marketing')===s.module;
       const history=this.loadHistory().filter(h=>(h.module||'marketing')===s.module);
+      const startScreenStyle=this.reduceMotion()?{}:{animation:'qfade .28s ease both'};
+      const startHeroStyle=this.withEntry({textAlign:'center',margin:'14px 0 36px'},20,'surfaceIn','.38s');
+      const moduleSwitchStyle=this.withEntry({display:'flex',flexWrap:'wrap',gap:'5px',background:'#10141F',border:'1px solid #232938',borderRadius:'16px',padding:'5px',marginBottom:'22px'},70,'surfaceIn','.34s');
+      const nickPanelStyle=this.withEntry({background:'linear-gradient(160deg,rgba(124,108,255,.16),rgba(124,108,255,.04))',border:'1px solid rgba(124,108,255,.5)',borderRadius:'20px',padding:'clamp(16px,4.5vw,20px) clamp(16px,4.5vw,22px)',marginBottom:'16px',boxShadow:'0 20px 55px -30px rgba(124,108,255,.65), inset 0 1px 0 rgba(255,255,255,.06)'},130,'surfaceIn','.36s');
+      const startLeaderboardStyle=this.withEntry({marginBottom:'16px',background:'#151926',border:'1px solid #262D40',borderRadius:'18px',padding:'19px 21px'},190,'surfaceIn','.36s');
+      const startShellStyle=this.withEntry({background:'rgba(21,25,38,.72)',backdropFilter:'blur(14px)',WebkitBackdropFilter:'blur(14px)',border:'1px solid rgba(124,108,255,.22)',borderRadius:'26px',padding:'clamp(18px,5vw,28px)',boxShadow:'0 30px 80px -40px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.05)'},250,'surfaceIn','.38s');
+      const historyPanelStyle=this.withEntry({marginTop:'18px',background:'rgba(21,25,38,.72)',backdropFilter:'blur(14px)',WebkitBackdropFilter:'blur(14px)',border:'1px solid #262D40',borderRadius:'20px',padding:'20px 22px'},330,'surfaceIn','.36s');
+      const startButtonStyle=this.withEntry({flex:'1 1 165px',display:'flex',alignItems:'center',justifyContent:'center',gap:'9px',padding:'15px 16px',border:'none',borderRadius:'99px',background:'linear-gradient(115deg,transparent 22%,rgba(255,255,255,.24) 40%,transparent 56%),linear-gradient(135deg,#9A8DFF,#6C5AF5 55%,#5B7CFF)',backgroundSize:'230% 100%,100% 100%',backgroundRepeat:'no-repeat',color:'#fff',font:'700 15px "Space Grotesk"',letterSpacing:'.02em',cursor:'pointer',boxShadow:'0 14px 34px -16px rgba(124,108,255,.7), inset 0 1px 0 rgba(255,255,255,.25)',transition:'transform .18s ease, box-shadow .18s ease, filter .18s ease',animation:'sheen 5.5s ease-in-out infinite'},330,'choiceStaggerIn','.28s');
+      const resumeButtonStyle=this.withEntry({flex:'1 1 150px',padding:'15px 14px',border:'1px solid rgba(124,108,255,.45)',borderRadius:'99px',background:'rgba(124,108,255,.08)',color:'#C3C6FF',font:'600 14px "Space Grotesk"',cursor:'pointer',whiteSpace:'nowrap',transition:'transform .18s ease, background .18s ease, border-color .18s ease'},360,'choiceStaggerIn','.28s');
+      const flashButtonStyle=this.withEntry({flex:'1 1 150px',padding:'15px 14px',border:'1px solid rgba(124,108,255,.4)',borderRadius:'99px',background:'rgba(124,108,255,.06)',color:'#C3C6FF',font:'600 14px "Space Grotesk"',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:'8px',whiteSpace:'nowrap',transition:'transform .18s ease, background .18s ease, border-color .18s ease'},390,'choiceStaggerIn','.28s');
       return Object.assign(base,{
+        startScreenStyle, startHeroStyle, moduleSwitchStyle, nickPanelStyle, startLeaderboardStyle, startShellStyle, historyPanelStyle,
         moduleChips, moduleTitle:this.moduleTitle(),
         topChips, catChips, catOpen:s.catOpen, showTopScopes:!s.catOpen, onCatBack:()=>this.setState({catOpen:false}),
         lengthChips,
@@ -871,6 +901,7 @@ class Component extends DCLogic {
         startLabel:'Rozpocznij quiz',
         onStart:()=>this.start(s.scope,s.length),
         onFlash:()=>this.openFlash(),
+        startButtonStyle, resumeButtonStyle, flashButtonStyle,
         hasResume, onResume:()=>this.resume(), resumeLabel: hasResume?('Kontynuuj ('+(s.resumable.pos+1)+'/'+s.resumable.order.length+')'):'',
         nick:s.nick||'', onNick:(e)=>this.onNickInput(e),
         onClear:()=>this.clearProgress(),
@@ -902,6 +933,9 @@ class Component extends DCLogic {
       const nextActiveStyle=nextDisabled?{}:{transform:'translateY(0) scale(.985)',filter:'brightness(.96)'};
       const feedbackBase=isOpen?{marginTop:'18px',padding:'15px 17px',borderRadius:'13px',background:'rgba(232,199,102,.10)',border:'1px solid rgba(232,199,102,.45)'}:{marginTop:'18px',padding:'15px 17px',borderRadius:'13px',background: ok?C.okBg:C.badBg,border:'1px solid '+(ok?C.ok:C.bad)};
       const feedbackStyle=this.reduceMotion()?feedbackBase:Object.assign({},feedbackBase,{animation:'feedbackIn .24s cubic-bezier(.2,0,0,1) both'});
+      const progressTrackStyle={height:'8px',background:'#232938',borderRadius:'6px',overflow:'hidden',marginBottom:'24px',boxShadow:'inset 0 0 0 1px rgba(255,255,255,.02)'};
+      const progressStyle={height:'100%',width:pct+'%',background:'linear-gradient(90deg,#7C6CFF,#8F82FF 54%,#7CE0FF)',borderRadius:'6px',transition:'width .42s cubic-bezier(.2,0,0,1), box-shadow .22s ease',boxShadow:'0 0 16px -6px rgba(124,108,255,.85)',transformOrigin:'left center'};
+      if(!this.reduceMotion()) progressStyle.animation='progressSettle .42s cubic-bezier(.2,0,0,1)';
       const nextLabel=nextDisabled?('Dalej za '+openWaitLeft+' s'):(isLast?'Zakończ i zobacz wynik':'Następne pytanie');
       return Object.assign(base,{
         onQuit:()=>this.toStart(),
@@ -912,7 +946,7 @@ class Component extends DCLogic {
         dzialBadgeStyle:(function(t){ return {display:'inline-flex',alignItems:'center',gap:'6px',padding:'5px 11px',borderRadius:'8px',background:t.bg,color:t.color,border:'1px solid '+this.hexA(t.color,.35),font:'600 12px "Space Grotesk"'}; }).call(this,this.dzialTheme(q.d)),
         poziomLabel:isOpen?'powtórka':poz.t, poziomBadgeStyle:isOpen?{padding:'5px 11px',borderRadius:'8px',background:'rgba(232,199,102,.16)',color:'#F0D585',font:'600 12px "Space Grotesk"'}:{padding:'5px 11px',borderRadius:'8px',background:poz.bg,color:poz.c,font:'600 12px "Space Grotesk"'},
         counterLabel:'Pytanie '+(s.pos+1)+' / '+total, scoreLabel:'Punkty: '+s.score,
-        progressStyle:{height:'100%',width:pct+'%',background:C.brand,borderRadius:'6px',transition:'width .3s'},
+        progressTrackStyle, progressStyle,
         quizCardStyle,
         typLabel, typIcon, typBadgeStyle, qText:q.q, opts:this.optView(),
         showCheck: q.t==='multi' && !s.answered, onCheck:()=>this.check(),
@@ -932,15 +966,18 @@ class Component extends DCLogic {
       all.forEach(bi=>{ const qq=this.bank()[bi];
         if(query){ const hay=(qq.q+' '+(qq.a||[]).map(a=>a[0]).join(' ')+' '+(qq.e||'')).toLowerCase(); if(hay.indexOf(query)<0) return; }
         matched.push(bi); });
-      const items=matched.map(bi=>{ const qq=this.bank()[bi]; const open=!!s.flashOpen[bi]; const isOpen=qq.t==='open';
+      const items=matched.map((bi,i)=>{ const qq=this.bank()[bi]; const open=!!s.flashOpen[bi]; const isOpen=qq.t==='open';
         const corr=isOpen?[]:qq.a.filter(a=>a[1]===1).map(a=>a[0]);
         const corrLabel=isOpen?(qq.e?qq.e:'Odpowiedź do uzupełnienia (pytanie otwarte)'):((qq.t==='tf'?'Odpowiedź: ':(corr.length>1?'Poprawne: ':'Poprawna odpowiedź: '))+corr.join('   ·   '));
-        const headStyle={display:'flex',alignItems:'center',gap:'11px',width:'100%',textAlign:'left',padding:'14px 15px',border:'none',background:open?'#1A1F30':'transparent',color:'#EDF0F7',font:'600 14.5px/1.45 "Space Grotesk"',cursor:'pointer',transition:'background .15s'};
-        const chevStyle={flex:'0 0 auto',width:'24px',height:'24px',borderRadius:'50%',background:open?C.brand:'#232A3E',color:open?'#fff':'#97A0B5',display:'inline-flex',alignItems:'center',justifyContent:'center',font:'700 17px "Space Grotesk"',lineHeight:'1'};
+        let cardStyle={background:'#151926',border:'1px solid '+(open?'rgba(124,108,255,.45)':'#262D40'),borderRadius:'15px',overflow:'hidden',boxShadow:open?'0 16px 38px -28px rgba(124,108,255,.85)':'none',transition:'border-color .2s ease, box-shadow .2s ease, transform .2s ease'};
+        if(i<12) cardStyle=this.withEntry(cardStyle,Math.min(i,11)*28,'flashCardIn','.26s');
+        const headStyle={display:'flex',alignItems:'center',gap:'11px',width:'100%',textAlign:'left',padding:'14px 15px',border:'none',background:open?'#1A1F30':'transparent',color:'#EDF0F7',font:'600 14.5px/1.45 "Space Grotesk"',cursor:'pointer',transition:'background .18s ease, color .18s ease'};
+        const chevStyle={flex:'0 0 auto',width:'24px',height:'24px',borderRadius:'50%',background:open?C.brand:'#232A3E',color:open?'#fff':'#97A0B5',display:'inline-flex',alignItems:'center',justifyContent:'center',font:'700 17px "Space Grotesk"',lineHeight:'1',transform:open?'rotate(180deg)':'rotate(0deg)',transition:'transform .22s cubic-bezier(.2,0,0,1), background .18s ease, color .18s ease'};
         const th=this.dzialTheme(qq.d);
         const dzialStyle={display:'inline-flex',alignItems:'center',gap:'5px',flex:'0 0 auto',padding:'3px 9px',borderRadius:'7px',background:th.bg,color:th.color,font:'600 10.5px "Space Grotesk"',letterSpacing:'.03em',whiteSpace:'nowrap'};
-        const bodyStyle=open?{display:'block',borderTop:'1px solid #262D40',padding:'14px 15px 16px',animation:'riseIn .22s ease'}:{display:'none'};
-        return { bi, dzial:th.icon+'  '+this.dzialLabel(qq.d)+(isOpen?' · otwarte':''), dzialStyle, qText:qq.q, chevron:open?'−':'+', chevStyle, headStyle, bodyStyle, corrLabel, showExpl:!isOpen, expl:qq.e, onToggle:()=>this.flashToggle(bi) };
+        const bodyStyle={maxHeight:open?'900px':'0',overflow:'hidden',borderTop:open?'1px solid #262D40':'1px solid transparent',padding:open?'14px 15px 16px':'0 15px',opacity:open?1:0,visibility:open?'visible':'hidden',transition:this.reduceMotion()?'none':'max-height .28s cubic-bezier(.2,0,0,1), opacity .2s ease, padding .28s cubic-bezier(.2,0,0,1), border-color .2s ease, visibility 0s '+(open?'0s':'.28s')};
+        if(open && !this.reduceMotion()) bodyStyle.animation='flashBodyIn .24s cubic-bezier(.2,0,0,1) both';
+        return { bi, open, bodyHidden:!open, cardStyle, dzial:th.icon+'  '+this.dzialLabel(qq.d)+(isOpen?' · otwarte':''), dzialStyle, qText:qq.q, chevron:open?'−':'+', chevStyle, headStyle, bodyStyle, corrLabel, showExpl:!isOpen, expl:qq.e, onToggle:()=>this.flashToggle(bi) };
       });
       return Object.assign(base,{
         onFlashExit:()=>this.flashExit(),
@@ -957,7 +994,7 @@ class Component extends DCLogic {
     const count=(s.endCount!=null?s.endCount:pct); const deg=(count*3.6);
     const byD={}; s.results.forEach(r=>{ (byD[r.d]=byD[r.d]||{c:0,t:0}); byD[r.d].t++; if(r.ok)byD[r.d].c++; });
     const bOrder=this.dzialOrder(s.module);
-    const breakdown=bOrder.filter(x=>byD[x[0]]).map(x=>{ const o=byD[x[0]]; const p=Math.round(o.c/o.t*100); const col=this.pctColor(p); return {label:x[1],scoreLabel:o.c+'/'+o.t+' · '+p+'%',pctStyle:{color:col,fontWeight:'700'},barStyle:{height:'100%',width:p+'%',background:col,borderRadius:'5px',transition:'width .4s'}}; });
+    const breakdown=bOrder.filter(x=>byD[x[0]]).map((x,i)=>{ const o=byD[x[0]]; const p=Math.round(o.c/o.t*100); const col=this.pctColor(p); const barStyle={height:'100%',width:p+'%',background:col,borderRadius:'5px',transition:'width .56s cubic-bezier(.2,0,0,1)',transformOrigin:'left center'}; if(!this.reduceMotion()){ barStyle.animation='barIn .52s cubic-bezier(.2,0,0,1) both'; barStyle.animationDelay=(360+i*45)+'ms'; } return {label:x[1],scoreLabel:o.c+'/'+o.t+' · '+p+'%',pctStyle:{color:col,fontWeight:'700'},barStyle}; });
     const recent=this.loadHistory().filter(h=>(h.module||'marketing')===s.module).slice(0,5);
     const sb=this.supabaseClient(); const savedName=this.normalizePlayerName(s.nick);
     const isSaved=!!sb && !!savedName && !!(this._submitted && s.lastSessionId && this._submitted.has(s.lastSessionId));
@@ -967,7 +1004,8 @@ class Component extends DCLogic {
     const endKickerStyle=this.motionStyle({font:'600 12px "Space Grotesk"',letterSpacing:'.18em',textTransform:'uppercase',color:'#8F82FF',marginBottom:'20px'},40);
     const endTitleStyle=this.motionStyle({font:'600 23px "Unbounded",sans-serif',margin:'0 0 10px',color:'#EDF0F7'},120);
     const endMsgStyle=this.motionStyle({color:'#97A0B5',maxWidth:'450px',margin:'0 auto 22px',lineHeight:'1.55'},180);
-    const endSavedStyle=this.motionStyle({maxWidth:'430px',margin:'0 auto 22px',display:'inline-flex',alignItems:'center',gap:'9px',padding:'10px 16px',borderRadius:'12px',background:'rgba(60,203,127,.12)',border:'1px solid rgba(60,203,127,.4)',color:'#7BE0A8',font:'600 13.5px "Space Grotesk"'},230);
+    const endSavedStyle=this.motionStyle({maxWidth:'430px',margin:'0 auto 22px',display:'inline-flex',alignItems:'center',gap:'9px',padding:'10px 16px',borderRadius:'12px',background:'rgba(60,203,127,.12)',border:'1px solid rgba(60,203,127,.4)',color:'#7BE0A8',font:'600 13.5px "Space Grotesk"',boxShadow:'0 12px 34px -24px rgba(60,203,127,.65)'},230);
+    if(!reduceEnd){ endSavedStyle.animation=endSavedStyle.animation+', saveSuccessPulse .56s cubic-bezier(.2,0,0,1) .33s both'; }
     const endSaveStyle=this.motionStyle({maxWidth:'430px',margin:'0 auto 24px',textAlign:'left',background:'linear-gradient(160deg,rgba(124,108,255,.16),rgba(124,108,255,.04))',border:'1px solid rgba(124,108,255,.5)',borderRadius:'16px',padding:'18px 20px',boxShadow:'0 18px 50px -30px rgba(124,108,255,.6)'},230);
     const endTooShortStyle=this.motionStyle({maxWidth:'430px',margin:'0 auto 22px',display:'flex',alignItems:'center',gap:'10px',padding:'12px 16px',borderRadius:'12px',background:'rgba(232,199,102,.10)',border:'1px solid rgba(232,199,102,.4)',color:'#E8C766',font:'600 13px "Space Grotesk"',textAlign:'left'},230);
     const endPanelBase={maxWidth:'430px',margin:'0 auto 26px',textAlign:'left',background:'#151926',border:'1px solid #262D40',borderRadius:'15px',padding:'19px 21px'};
@@ -975,6 +1013,9 @@ class Component extends DCLogic {
     const endRecentStyle=this.motionStyle(endPanelBase,350);
     const endLeaderboardStyle=this.motionStyle(endPanelBase,410);
     const endActionsStyle=this.motionStyle({display:'flex',gap:'10px',justifyContent:'center',flexWrap:'wrap'},470);
+    const endSaveButtonStyle=this.withEntry({flex:'0 0 auto',padding:'13px 20px',border:'none',borderRadius:'12px',background:'linear-gradient(135deg,#9A8DFF,#6C5AF5)',color:'#fff',font:'700 14.5px "Space Grotesk"',cursor:'pointer',boxShadow:'0 12px 26px -14px rgba(124,108,255,.7)',transition:'transform .18s ease, filter .18s ease, box-shadow .18s ease'},300,'choiceStaggerIn','.26s');
+    const endSaveButtonHoverStyle={transform:'translateY(-2px)',filter:'brightness(1.06)',boxShadow:'0 18px 34px -16px rgba(124,108,255,.9)'};
+    const endSaveButtonActiveStyle={transform:'translateY(0) scale(.985)',filter:'brightness(.96)'};
     return Object.assign(base,{
       endHasSb:!!sb, endTooShort:!!sb && tooShort,
       endSaved:isSaved && !tooShort, endNotSaved:!!sb && !isSaved && !tooShort,
@@ -988,6 +1029,7 @@ class Component extends DCLogic {
       endInnerStyle:{width:'160px',height:'160px',borderRadius:'50%',background:'#151926',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',boxShadow:'inset 0 1px 0 rgba(255,255,255,.05)'},
       endNumStyle:{font:'700 40px "Unbounded",sans-serif',color:ring,lineHeight:'1'},
       endKickerStyle, endTitleStyle, endMsgStyle, endSavedStyle, endSaveStyle, endTooShortStyle, endBreakdownStyle, endRecentStyle, endLeaderboardStyle, endActionsStyle,
+      endSaveButtonStyle, endSaveButtonHoverStyle, endSaveButtonActiveStyle,
       endTitle:title, endMsg:msg,
       hasWrong, retryLabel:'Powtórz błędne ('+s.wrongIdx.length+')', onRetryWrong:()=>this.retryWrong(), onRestart:()=>this.toStart()
     }, this.leaderboardVals());
