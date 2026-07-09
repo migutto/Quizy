@@ -1,5 +1,11 @@
+# Sekrety
 .env
 .env.*
 supabase/functions/.env
 supabase/functions/.env.*
 !*.env.example
+
+# Materiały źródłowe i artefakty (niepotrzebne aplikacji — trzymane tylko lokalnie)
+# PDF-y, PPTX, arkusze egzaminów, robocze pliki i wyniki audytów.
+Quiz z marketingu/
+tmp/
