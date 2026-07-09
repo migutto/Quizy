@@ -376,7 +376,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_35E-8urxsuFV4WqxeUfz0Q_VIrJBJNR";
 // Minimalna liczba pytań w sesji, aby wynik liczył się do publicznego rankingu.
 // Krótkie sesje (np. 6/6 = 100%) nie powinny wypierać pełnych sesji z top 10.
 const RANK_MIN_TOTAL = 10;
-const OPEN_NEXT_DELAY_MS = 5000;
+const OPEN_NEXT_DELAY_MS = 3000;
 
 class Component extends DCLogic {
   state = { module:'ekologia', screen:'start', scope:'gotowiec', length:'20', order:[], pos:0, score:0, selected:[], answered:false, wrongIdx:[], resumable:null, streak:0, bestStreak:0, results:[], flashList:[], flashQuery:'', flashOpen:{}, catOpen:false, nick:'', leaderboard:[], lbLoading:false, lastSessionId:null, endCount:0, myPos:null, myHasQ:false, openWaitLeft:0, questionPhase:'' };
