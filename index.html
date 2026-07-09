@@ -80,11 +80,11 @@ button{font-family:inherit;}
 button:focus-visible, a:focus-visible{outline:2px solid #9A8DFF;outline-offset:2px;border-radius:12px;}
 input:focus-visible{outline:none;}
 .ambient-aurora{will-change:transform;}
-.ambient-canvas{opacity:.82;}
+.ambient-canvas{opacity:.40;}
 @media (max-width:600px){
- .ambient-aurora{opacity:.72;animation-duration:42s !important;}
+ .ambient-aurora{opacity:.66;animation-duration:64s !important;}
  .ambient-aurora--third{display:none;}
- .ambient-canvas{opacity:.62;}
+ .ambient-canvas{opacity:.30;}
 }
 @media (prefers-reduced-motion: reduce){
  *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
@@ -99,9 +99,9 @@ input:focus-visible{outline:none;}
 </helmet>
 <div style="min-height:100vh;background:radial-gradient(1100px 560px at 50% -14%, rgba(124,108,255,.20), transparent 60%), radial-gradient(900px 520px at 86% 112%, rgba(72,168,255,.11), transparent 60%), #0A0C11;color:#EDF0F7;font-family:'Space Grotesk',sans-serif;display:flex;justify-content:center;padding:clamp(18px,5vw,44px) clamp(12px,4vw,18px);position:relative;overflow:hidden;">
  <div style="position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;">
-  <div class="ambient-aurora" style="position:absolute;top:-28%;left:-18%;width:72vw;height:72vw;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(124,108,255,.30), transparent 62%);filter:blur(64px);animation:auroraA 24s ease-in-out infinite;"></div>
-  <div class="ambient-aurora" style="position:absolute;bottom:-30%;right:-16%;width:66vw;height:66vw;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(64,176,255,.20), transparent 62%);filter:blur(72px);animation:auroraB 30s ease-in-out infinite;"></div>
-  <div class="ambient-aurora ambient-aurora--third" style="position:absolute;top:30%;right:26%;width:34vw;height:34vw;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(155,110,255,.16), transparent 60%);filter:blur(58px);animation:auroraA 34s ease-in-out infinite reverse;"></div>
+  <div class="ambient-aurora" style="position:absolute;top:-28%;left:-18%;width:72vw;height:72vw;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(124,108,255,.20), transparent 62%);filter:blur(64px);animation:auroraA 44s ease-in-out infinite;"></div>
+  <div class="ambient-aurora" style="position:absolute;bottom:-30%;right:-16%;width:66vw;height:66vw;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(64,176,255,.13), transparent 62%);filter:blur(72px);animation:auroraB 52s ease-in-out infinite;"></div>
+  <div class="ambient-aurora ambient-aurora--third" style="position:absolute;top:30%;right:26%;width:34vw;height:34vw;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(155,110,255,.10), transparent 60%);filter:blur(58px);animation:auroraA 60s ease-in-out infinite reverse;"></div>
  </div>
  <canvas class="ambient-canvas" ref="{{ bgCanvas }}" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none;"></canvas>
  <div style="width:100%;max-width:720px;position:relative;z-index:1;">
@@ -110,7 +110,7 @@ input:focus-visible{outline:none;}
    <div style="{{ startScreenStyle }}">
     <a href="./admin.html" title="Panel Admina" aria-label="Panel Admina" style="position:absolute;top:0;right:0;z-index:6;width:38px;height:38px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;background:linear-gradient(135deg,#9A8DFF,#6C5AF5 60%,#5B7CFF);border:1px solid rgba(255,255,255,.16);box-shadow:0 8px 22px -8px rgba(124,108,255,.9), inset 0 1px 0 rgba(255,255,255,.28);transition:transform .16s ease, box-shadow .16s ease;" style-hover="transform:translateY(-1px) scale(1.07);box-shadow:0 13px 28px -8px rgba(124,108,255,1)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></a>
     <div style="{{ startHeroStyle }}">
-     <h1 style="font:700 clamp(30px,8.5vw,44px)/1.15 'Unbounded',sans-serif;margin:0;letter-spacing:-.015em;color:#EDF0F7;">Quiz<br><span style="background:linear-gradient(90deg,#9A8DFF,#C9CBFF 34%,#7CE0FF 58%,#9A8DFF 82%,#C9CBFF);background-size:220% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:titleShimmer 7s linear infinite;">{{ moduleTitle }}</span></h1>
+     <h1 style="font:700 clamp(30px,8.5vw,44px)/1.15 'Unbounded',sans-serif;margin:0;letter-spacing:-.015em;color:#EDF0F7;">Quiz<br><span style="background:linear-gradient(92deg,#9A8DFF,#7CE0FF 72%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">{{ moduleTitle }}</span></h1>
     </div>
     <div style="{{ moduleSwitchStyle }}">
      <sc-for list="{{ moduleChips }}" as="m" hint-placeholder-count="2">
@@ -876,9 +876,8 @@ class Component extends DCLogic {
       const cn=catList.length; const catCountLabel=selCat?(this.filtered(s.scope).length+' '+this.plural(this.filtered(s.scope).length)):(cn+' '+((cn%10>=2&&cn%10<=4&&!(cn%100>=12&&cn%100<=14))?'kategorie':'kategorii'));
       const catChip={label:selCat?this.dzialLabel(s.scope):'Kategorie',count:catCountLabel,icon:catTh.icon,iconStyle:this.scopeIcon(catTh),style:this.withEntry(this.scopeCard(selCat,catTh),210,'choiceStaggerIn','.3s'),countStyle:this.scopeCount(selCat),hover:this.scopeHover(selCat,catTh.color),press:this.chipPress(),onClick:()=>this.setState({catOpen:true})};
       const gotTh=this.dzialTheme('gotowiec'); const gotN=this.filtered('gotowiec').length;
-      const gotGloss='linear-gradient(115deg,transparent 34%,rgba(255,240,205,.34) 48%,transparent 62%)';
-      const gotBase='linear-gradient(160deg,'+this.hexA(gotTh.color,gotAct?.38:.20)+','+this.hexA(gotTh.color,gotAct?.13:.05)+')';
-      const gotStyle=Object.assign(this.scopeCard(true,gotTh),{background:gotGloss+', '+gotBase,backgroundSize:'230% 100%, 100% 100%',backgroundRepeat:'no-repeat',animation:'sheen 5s ease-in-out infinite',border:'1.5px solid '+this.hexA(gotTh.color,gotAct?1:.7),boxShadow:gotAct?('0 0 0 3px '+this.hexA(gotTh.color,.34)+', 0 16px 40px -14px '+this.hexA(gotTh.color,.65)):('0 12px 30px -16px '+this.hexA(gotTh.color,.5))});
+      const gotBase='linear-gradient(160deg,'+this.hexA(gotTh.color,gotAct?.30:.18)+','+this.hexA(gotTh.color,gotAct?.10:.05)+')';
+      const gotStyle=Object.assign(this.scopeCard(true,gotTh),{background:gotBase,border:'1.5px solid '+this.hexA(gotTh.color,gotAct?.9:.55),boxShadow:'0 12px 30px -16px '+this.hexA(gotTh.color,gotAct?.55:.4)});
       const gotIcon=Object.assign(this.scopeIcon(gotTh),{background:this.hexA(gotTh.color,gotAct?.32:.15)});
       const gotChip={label:'Pytania z gotowca',count:gotN+' '+this.plural(gotN),icon:gotTh.icon,iconStyle:gotIcon,style:this.withEntry(gotStyle,130,'choiceStaggerIn','.3s'),countStyle:this.scopeCount(true),hover:this.scopeHover(true,gotTh.color),press:this.chipPress(),onClick:()=>this.setState({scope:'gotowiec',catOpen:false})};
       const topChips=[gotChip,allChip,catChip];
@@ -894,7 +893,7 @@ class Component extends DCLogic {
       const startLeaderboardStyle=this.withEntry({marginBottom:'16px',background:'#151926',border:'1px solid #262D40',borderRadius:'18px',padding:'19px 21px'},190,'surfaceIn','.36s');
       const startShellStyle=this.withEntry({background:'rgba(21,25,38,.72)',backdropFilter:'blur(14px)',WebkitBackdropFilter:'blur(14px)',border:'1px solid rgba(124,108,255,.22)',borderRadius:'26px',padding:'clamp(18px,5vw,28px)',boxShadow:'0 30px 80px -40px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.05)'},250,'surfaceIn','.38s');
       const historyPanelStyle=this.withEntry({marginTop:'18px',background:'rgba(21,25,38,.72)',backdropFilter:'blur(14px)',WebkitBackdropFilter:'blur(14px)',border:'1px solid #262D40',borderRadius:'20px',padding:'20px 22px'},330,'surfaceIn','.36s');
-      const startButtonStyle=this.withEntry({flex:'1 1 165px',display:'flex',alignItems:'center',justifyContent:'center',gap:'9px',padding:'15px 16px',border:'none',borderRadius:'99px',background:'linear-gradient(115deg,transparent 22%,rgba(255,255,255,.24) 40%,transparent 56%),linear-gradient(135deg,#9A8DFF,#6C5AF5 55%,#5B7CFF)',backgroundSize:'230% 100%,100% 100%',backgroundRepeat:'no-repeat',color:'#fff',font:'700 15px "Space Grotesk"',letterSpacing:'.02em',cursor:'pointer',boxShadow:'0 14px 34px -16px rgba(124,108,255,.7), inset 0 1px 0 rgba(255,255,255,.25)',transition:'transform .18s ease, box-shadow .18s ease, filter .18s ease',animation:'sheen 5.5s ease-in-out infinite'},330,'choiceStaggerIn','.28s');
+      const startButtonStyle=this.withEntry({flex:'1 1 165px',display:'flex',alignItems:'center',justifyContent:'center',gap:'9px',padding:'15px 16px',border:'none',borderRadius:'99px',background:'linear-gradient(115deg,transparent 26%,rgba(255,255,255,.15) 44%,transparent 60%),linear-gradient(135deg,#9A8DFF,#6C5AF5 55%,#5B7CFF)',backgroundSize:'230% 100%,100% 100%',backgroundRepeat:'no-repeat',color:'#fff',font:'700 15px "Space Grotesk"',letterSpacing:'.02em',cursor:'pointer',boxShadow:'0 14px 34px -16px rgba(124,108,255,.7), inset 0 1px 0 rgba(255,255,255,.25)',transition:'transform .18s ease, box-shadow .18s ease, filter .18s ease',animation:'sheen 7s ease-in-out infinite'},330,'choiceStaggerIn','.28s');
       const resumeButtonStyle=this.withEntry({flex:'1 1 150px',padding:'15px 14px',border:'1px solid rgba(124,108,255,.45)',borderRadius:'99px',background:'rgba(124,108,255,.08)',color:'#C3C6FF',font:'600 14px "Space Grotesk"',cursor:'pointer',whiteSpace:'nowrap',transition:'transform .18s ease, background .18s ease, border-color .18s ease'},360,'choiceStaggerIn','.28s');
       const flashButtonStyle=this.withEntry({flex:'1 1 150px',padding:'15px 14px',border:'1px solid rgba(124,108,255,.4)',borderRadius:'99px',background:'rgba(124,108,255,.06)',color:'#C3C6FF',font:'600 14px "Space Grotesk"',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:'8px',whiteSpace:'nowrap',transition:'transform .18s ease, background .18s ease, border-color .18s ease'},390,'choiceStaggerIn','.28s');
       return Object.assign(base,{

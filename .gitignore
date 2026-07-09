@@ -9,3 +9,8 @@ supabase/functions/.env.*
 # PDF-y, PPTX, arkusze egzaminów, robocze pliki i wyniki audytów.
 Quiz z marketingu/
 tmp/
+
+# Agent Skills (instalowane lokalnie, nie wersjonowane)
+.agents/
+.claude/
+skills-lock.json
