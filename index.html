@@ -52,6 +52,14 @@ body{margin:0;-webkit-font-smoothing:antialiased;}
 @keyframes qfade{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
 @keyframes popIn{0%{transform:scale(1);}40%{transform:scale(1.035);}100%{transform:scale(1);}}
 @keyframes shakeX{0%,100%{transform:translateX(0);}20%{transform:translateX(-5px);}40%{transform:translateX(5px);}60%{transform:translateX(-3px);}80%{transform:translateX(3px);}}
+@keyframes answerPick{0%{transform:scale(.992);opacity:.94;}100%{transform:scale(1);opacity:1;}}
+@keyframes answerCorrect{0%{transform:scale(.992);box-shadow:0 0 0 0 rgba(60,203,127,0);}55%{transform:scale(1.012);box-shadow:0 0 0 4px rgba(60,203,127,.16);}100%{transform:scale(1);box-shadow:0 0 0 0 rgba(60,203,127,0);}}
+@keyframes answerWrong{0%,100%{transform:translateX(0);}22%{transform:translateX(-5px);}44%{transform:translateX(4px);}66%{transform:translateX(-3px);}84%{transform:translateX(2px);}}
+@keyframes feedbackIn{from{opacity:0;transform:translateY(8px) scale(.99);}to{opacity:1;transform:none;}}
+@keyframes questionOut{from{opacity:1;transform:translateY(0) scale(1);}to{opacity:0;transform:translateY(-8px) scale(.992);}}
+@keyframes questionIn{from{opacity:0;transform:translateY(12px) scale(.992);}to{opacity:1;transform:none;}}
+@keyframes resultRingIn{from{opacity:0;transform:translateY(12px) scale(.965);}to{opacity:1;transform:none;}}
+@keyframes resultSectionIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
 @keyframes livePulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.45;transform:scale(.78);}}
 @keyframes nudgeY{0%,100%{transform:translateY(0);}50%{transform:translateY(3px);}}
 @keyframes riseIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
@@ -64,16 +72,26 @@ body{margin:0;-webkit-font-smoothing:antialiased;}
 button{font-family:inherit;}
 button:focus-visible, a:focus-visible{outline:2px solid #9A8DFF;outline-offset:2px;border-radius:12px;}
 input:focus-visible{outline:none;}
-@media (prefers-reduced-motion: reduce){*{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}}
+.ambient-aurora{will-change:transform;}
+.ambient-canvas{opacity:.82;}
+@media (max-width:600px){
+ .ambient-aurora{opacity:.62;animation-duration:42s !important;}
+ .ambient-aurora--third{display:none;}
+ .ambient-canvas{opacity:.46;}
+}
+@media (prefers-reduced-motion: reduce){
+ *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
+ .ambient-aurora,.ambient-canvas{display:none !important;}
+}
 </style>
 </helmet>
 <div style="min-height:100vh;background:radial-gradient(1100px 560px at 50% -14%, rgba(124,108,255,.20), transparent 60%), radial-gradient(900px 520px at 86% 112%, rgba(72,168,255,.11), transparent 60%), #0A0C11;color:#EDF0F7;font-family:'Space Grotesk',sans-serif;display:flex;justify-content:center;padding:clamp(18px,5vw,44px) clamp(12px,4vw,18px);position:relative;overflow:hidden;">
  <div style="position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;">
-  <div style="position:absolute;top:-28%;left:-18%;width:72vw;height:72vw;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(124,108,255,.30), transparent 62%);filter:blur(64px);animation:auroraA 24s ease-in-out infinite;"></div>
-  <div style="position:absolute;bottom:-30%;right:-16%;width:66vw;height:66vw;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(64,176,255,.20), transparent 62%);filter:blur(72px);animation:auroraB 30s ease-in-out infinite;"></div>
-  <div style="position:absolute;top:30%;right:26%;width:34vw;height:34vw;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(155,110,255,.16), transparent 60%);filter:blur(58px);animation:auroraA 34s ease-in-out infinite reverse;"></div>
+  <div class="ambient-aurora" style="position:absolute;top:-28%;left:-18%;width:72vw;height:72vw;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(124,108,255,.30), transparent 62%);filter:blur(64px);animation:auroraA 24s ease-in-out infinite;"></div>
+  <div class="ambient-aurora" style="position:absolute;bottom:-30%;right:-16%;width:66vw;height:66vw;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(64,176,255,.20), transparent 62%);filter:blur(72px);animation:auroraB 30s ease-in-out infinite;"></div>
+  <div class="ambient-aurora ambient-aurora--third" style="position:absolute;top:30%;right:26%;width:34vw;height:34vw;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(155,110,255,.16), transparent 60%);filter:blur(58px);animation:auroraA 34s ease-in-out infinite reverse;"></div>
  </div>
- <canvas ref="{{ bgCanvas }}" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none;"></canvas>
+ <canvas class="ambient-canvas" ref="{{ bgCanvas }}" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none;"></canvas>
  <div style="width:100%;max-width:720px;position:relative;z-index:1;">
 
   <sc-if value="{{ isStart }}" hint-placeholder-val="{{ true }}">
@@ -183,7 +201,7 @@ input:focus-visible{outline:none;}
      <div style="display:flex;justify-content:space-between;align-items:center;font:600 13px 'Space Grotesk';color:#97A0B5;margin-bottom:8px;"><span>{{ counterLabel }}</span><span style="display:flex;gap:8px;align-items:center;"><sc-if value="{{ showStreak }}" hint-placeholder-val="{{ false }}"><span style="{{ streakStyle }}">{{ streakLabel }}</span></sc-if><span>{{ scoreLabel }}</span></span></div>
      <div style="height:8px;background:#232938;border-radius:6px;overflow:hidden;margin-bottom:24px;"><div style="{{ progressStyle }}"></div></div>
     </sc-if>
-    <div style="background:#151926;border:1px solid #262D40;border-radius:22px;padding:clamp(18px,4.5vw,26px) clamp(18px,4.5vw,26px) clamp(18px,4vw,24px);box-shadow:0 22px 44px -34px rgba(0,0,0,.85);">
+    <div style="{{ quizCardStyle }}">
      <div style="{{ typBadgeStyle }}"><span style="font-size:14px;line-height:1;">{{ typIcon }}</span><span>{{ typLabel }}</span></div>
      <h2 ref="{{ qHead }}" tabIndex="-1" style="font:600 21px/1.5 'Space Grotesk',sans-serif;margin:0 0 20px;color:#EDF0F7;outline:none;">{{ qText }}</h2>
      <div style="display:flex;flex-direction:column;gap:10px;">
@@ -218,21 +236,21 @@ input:focus-visible{outline:none;}
 
   <sc-if value="{{ isEnd }}" hint-placeholder-val="{{ false }}">
    <div style="text-align:center;animation:qfade .4s ease;padding-top:16px;">
-    <div style="font:600 12px 'Space Grotesk';letter-spacing:.18em;text-transform:uppercase;color:#8F82FF;margin-bottom:20px;">Wynik sesji</div>
+    <div style="{{ endKickerStyle }}">Wynik sesji</div>
     <div style="{{ endRingStyle }}">
      <div style="{{ endInnerStyle }}">
       <div style="{{ endNumStyle }}">{{ endPct }}</div>
       <div style="font-size:13px;color:#97A0B5;margin-top:6px;">{{ endScoreLabel }}</div>
      </div>
     </div>
-    <h2 style="font:600 23px 'Unbounded',sans-serif;margin:0 0 10px;color:#EDF0F7;">{{ endTitle }}</h2>
-    <p style="color:#97A0B5;max-width:450px;margin:0 auto 22px;line-height:1.55;">{{ endMsg }}</p>
+    <h2 style="{{ endTitleStyle }}">{{ endTitle }}</h2>
+    <p style="{{ endMsgStyle }}">{{ endMsg }}</p>
     <sc-if value="{{ endHasSb }}" hint-placeholder-val="{{ false }}">
      <sc-if value="{{ endSaved }}" hint-placeholder-val="{{ true }}">
-      <div style="max-width:430px;margin:0 auto 22px;display:inline-flex;align-items:center;gap:9px;padding:10px 16px;border-radius:12px;background:rgba(60,203,127,.12);border:1px solid rgba(60,203,127,.4);color:#7BE0A8;font:600 13.5px 'Space Grotesk';"><span style="font-size:15px;">✓</span><span>{{ endSavedLabel }}</span></div>
+      <div style="{{ endSavedStyle }}"><span style="font-size:15px;">✓</span><span>{{ endSavedLabel }}</span></div>
      </sc-if>
      <sc-if value="{{ endNotSaved }}" hint-placeholder-val="{{ false }}">
-      <div style="max-width:430px;margin:0 auto 24px;text-align:left;background:linear-gradient(160deg,rgba(124,108,255,.16),rgba(124,108,255,.04));border:1px solid rgba(124,108,255,.5);border-radius:16px;padding:18px 20px;box-shadow:0 18px 50px -30px rgba(124,108,255,.6);">
+      <div style="{{ endSaveStyle }}">
        <div style="font:700 12.5px 'Space Grotesk';color:#C9CBFF;text-transform:uppercase;letter-spacing:.12em;margin-bottom:11px;">Zapisz swój wynik w rankingu</div>
        <div style="display:flex;gap:9px;flex-wrap:wrap;">
         <input value="{{ endNick }}" onChange="{{ onEndNick }}" maxLength="40" placeholder="Wpisz swój nick…" spellCheck="false" autoComplete="off" style="flex:1 1 160px;min-width:0;padding:13px 15px;border-radius:12px;border:1.5px solid rgba(124,108,255,.55);background:#0E1220;color:#EDF0F7;font:700 16px 'Space Grotesk';outline:none;transition:border-color .18s ease, box-shadow .18s ease;" style-focus="border-color:#9A8DFF;box-shadow:0 0 0 4px rgba(124,108,255,.22);" />
@@ -241,11 +259,11 @@ input:focus-visible{outline:none;}
       </div>
      </sc-if>
      <sc-if value="{{ endTooShort }}" hint-placeholder-val="{{ false }}">
-      <div style="max-width:430px;margin:0 auto 22px;display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:12px;background:rgba(232,199,102,.10);border:1px solid rgba(232,199,102,.4);color:#E8C766;font:600 13px 'Space Grotesk';text-align:left;"><span style="font-size:15px;flex:0 0 auto;">ⓘ</span><span>{{ endTooShortLabel }}</span></div>
+      <div style="{{ endTooShortStyle }}"><span style="font-size:15px;flex:0 0 auto;">ⓘ</span><span>{{ endTooShortLabel }}</span></div>
      </sc-if>
     </sc-if>
     <sc-if value="{{ hasBreakdown }}" hint-placeholder-val="{{ false }}">
-     <div style="max-width:430px;margin:0 auto 26px;text-align:left;background:#151926;border:1px solid #262D40;border-radius:15px;padding:19px 21px;">
+     <div style="{{ endBreakdownStyle }}">
       <div style="font:600 12px 'Space Grotesk';letter-spacing:.1em;text-transform:uppercase;color:#929BB3;margin-bottom:15px;">Wyniki według działów</div>
       <sc-for list="{{ breakdown }}" as="b" hint-placeholder-count="3">
        <div style="margin-bottom:13px;">
@@ -256,7 +274,7 @@ input:focus-visible{outline:none;}
      </div>
     </sc-if>
     <sc-if value="{{ hasRecent }}" hint-placeholder-val="{{ false }}">
-     <div style="max-width:430px;margin:0 auto 26px;text-align:left;background:#151926;border:1px solid #262D40;border-radius:15px;padding:19px 21px;">
+     <div style="{{ endRecentStyle }}">
       <div style="font:600 12px 'Space Grotesk';letter-spacing:.1em;text-transform:uppercase;color:#929BB3;margin-bottom:13px;">Ostatnie wyniki</div>
       <div style="display:flex;flex-direction:column;gap:9px;">
        <sc-for list="{{ recentItems }}" as="h" hint-placeholder-count="3">
@@ -272,7 +290,7 @@ input:focus-visible{outline:none;}
      </div>
     </sc-if>
     <sc-if value="{{ hasLeaderboard }}" hint-placeholder-val="{{ false }}">
-     <div style="max-width:430px;margin:0 auto 26px;text-align:left;background:#151926;border:1px solid #262D40;border-radius:15px;padding:19px 21px;">
+     <div style="{{ endLeaderboardStyle }}">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;">
        <div style="font:600 12px 'Space Grotesk';letter-spacing:.1em;text-transform:uppercase;color:#929BB3;">Ranking — top 10</div>
        <span style="font:600 10.5px 'Space Grotesk';letter-spacing:.08em;text-transform:uppercase;color:#3CCB7F;display:flex;align-items:center;gap:6px;"><span style="width:7px;height:7px;border-radius:50%;background:#3CCB7F;display:inline-block;box-shadow:0 0 8px #3CCB7F;animation:livePulse 1.6s ease-in-out infinite;"></span>Live</span>
@@ -290,7 +308,7 @@ input:focus-visible{outline:none;}
       <sc-if value="{{ hasMyHint }}" hint-placeholder-val="{{ false }}"><div style="margin-top:11px;padding-top:11px;border-top:1px solid #262D40;font:500 12px 'Space Grotesk';color:#929BB3;">{{ myHint }}</div></sc-if>
      </div>
     </sc-if>
-    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+    <div style="{{ endActionsStyle }}">
      <sc-if value="{{ hasWrong }}" hint-placeholder-val="{{ false }}"><button onClick="{{ onRetryWrong }}" style="padding:14px 22px;border:none;border-radius:13px;background:linear-gradient(135deg,#8F82FF,#6C5AF5 62%,#5B7CFF);color:#fff;font:700 15px 'Space Grotesk';cursor:pointer;box-shadow:0 12px 26px -14px rgba(124,108,255,.6);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;" style-hover="transform:translateY(-2px);box-shadow:0 18px 38px -14px rgba(124,108,255,.85);filter:brightness(1.07);" style-active="transform:translateY(0) scale(.985);filter:brightness(.96);">{{ retryLabel }}</button></sc-if>
      <button onClick="{{ onRestart }}" style="padding:14px 22px;border:1.5px solid #7C6CFF;border-radius:13px;background:#1A1F30;color:#C3C6FF;font:700 15px 'Space Grotesk';cursor:pointer;transition:transform .18s ease, background .18s ease, border-color .18s ease;" style-hover="background:#232A4A;border-color:#8F82FF;transform:translateY(-2px);" style-active="transform:translateY(0) scale(.985);">Do menu</button>
     </div>
@@ -349,7 +367,7 @@ const RANK_MIN_TOTAL = 10;
 const OPEN_NEXT_DELAY_MS = 5000;
 
 class Component extends DCLogic {
-  state = { module:'ekologia', screen:'start', scope:'gotowiec', length:'20', order:[], pos:0, score:0, selected:[], answered:false, wrongIdx:[], resumable:null, streak:0, bestStreak:0, results:[], flashList:[], flashQuery:'', flashOpen:{}, catOpen:false, nick:'', leaderboard:[], lbLoading:false, lastSessionId:null, endCount:0, myPos:null, myHasQ:false, openWaitLeft:0 };
+  state = { module:'ekologia', screen:'start', scope:'gotowiec', length:'20', order:[], pos:0, score:0, selected:[], answered:false, wrongIdx:[], resumable:null, streak:0, bestStreak:0, results:[], flashList:[], flashQuery:'', flashOpen:{}, catOpen:false, nick:'', leaderboard:[], lbLoading:false, lastSessionId:null, endCount:0, myPos:null, myHasQ:false, openWaitLeft:0, questionPhase:'' };
   bgCanvas = React.createRef();
   qHead = React.createRef();
 
@@ -366,6 +384,7 @@ class Component extends DCLogic {
     if(this._onKey) window.removeEventListener('keydown',this._onKey);
     if(this._onVw){ window.removeEventListener('resize',this._onVw); clearTimeout(this._vwT); }
     clearTimeout(this._posT);
+    clearTimeout(this._questionPhaseT);
     this.clearOpenGate(false);
     if(this._raf) cancelAnimationFrame(this._raf);
     if(this._countRaf) cancelAnimationFrame(this._countRaf);
@@ -374,6 +393,7 @@ class Component extends DCLogic {
   }
 
   isMobile(){ return typeof window!=='undefined' && window.innerWidth<=600; }
+  reduceMotion(){ return typeof window!=='undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
 
   // ---- Supabase / leaderboard ----------------------------------------------
   // Klucz publishable/anon jest projektowany jako publiczny; dostęp ogranicza RLS.
@@ -592,20 +612,24 @@ class Component extends DCLogic {
   }
 
   startParticles(){
+    if(this.reduceMotion()) return;
     const c=this.bgCanvas&&this.bgCanvas.current; if(!c||this._raf) return;
     const ctx=c.getContext('2d'); const DPR=Math.min(window.devicePixelRatio||1,2); let W=0,H=0;
     const resize=()=>{ W=window.innerWidth; H=window.innerHeight; c.width=W*DPR; c.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0); };
     resize(); this._onResize=resize; window.addEventListener('resize',resize);
-    const N=Math.max(35,Math.min(85,Math.round(W*H/18000)));
-    const P=[]; for(let i=0;i<N;i++){ P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.32,vy:(Math.random()-.5)*.32,r:Math.random()*1.6+.6,tw:Math.random()*6.283}); }
-    const LINK=130;
+    const mob=this.isMobile();
+    const N=Math.max(mob?18:35,Math.min(mob?42:85,Math.round(W*H/(mob?26000:18000))));
+    const vel=mob ? .18 : .32;
+    const P=[]; for(let i=0;i<N;i++){ P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*vel,vy:(Math.random()-.5)*vel,r:Math.random()*1.6+.6,tw:Math.random()*6.283}); }
+    const LINK=mob?95:130;
+    const linkAlpha=mob ? .085 : .13, dotBase=mob ? .22 : .32, dotAmp=mob ? .16 : .22, twStep=mob ? .012 : .018;
     const step=()=>{
       ctx.clearRect(0,0,W,H);
-      for(const p of P){ p.x+=p.vx; p.y+=p.vy; p.tw+=.018; if(p.x<-20)p.x=W+20; if(p.x>W+20)p.x=-20; if(p.y<-20)p.y=H+20; if(p.y>H+20)p.y=-20; }
+      for(const p of P){ p.x+=p.vx; p.y+=p.vy; p.tw+=twStep; if(p.x<-20)p.x=W+20; if(p.x>W+20)p.x=-20; if(p.y<-20)p.y=H+20; if(p.y>H+20)p.y=-20; }
       ctx.lineWidth=1;
       for(let i=0;i<P.length;i++){ for(let j=i+1;j<P.length;j++){ const a=P[i],b=P[j],dx=a.x-b.x,dy=a.y-b.y,d2=dx*dx+dy*dy;
-        if(d2<LINK*LINK){ const al=(1-Math.sqrt(d2)/LINK)*.13; ctx.strokeStyle='rgba(140,130,255,'+al.toFixed(3)+')'; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); } } }
-      for(const p of P){ const al=.32+Math.sin(p.tw)*.22; ctx.fillStyle='rgba(160,150,255,'+al.toFixed(3)+')'; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.283); ctx.fill(); }
+        if(d2<LINK*LINK){ const al=(1-Math.sqrt(d2)/LINK)*linkAlpha; ctx.strokeStyle='rgba(140,130,255,'+al.toFixed(3)+')'; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); } } }
+      for(const p of P){ const al=dotBase+Math.sin(p.tw)*dotAmp; ctx.fillStyle='rgba(160,150,255,'+al.toFixed(3)+')'; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.283); ctx.fill(); }
       this._raf=requestAnimationFrame(step);
     };
     this._raf=requestAnimationFrame(step);
@@ -686,18 +710,23 @@ class Component extends DCLogic {
   modStyle(a){ const m=this.isMobile(); return {flex:'1 1 auto',minWidth:m?'86px':'0',padding:m?'9px 8px':'11px 6px',borderRadius:'11px',border:'none',background:a?'linear-gradient(135deg,#8F82FF,#6C5AF5 62%,#5B7CFF)':'transparent',color:a?'#fff':'#97A0B5',font:(m?'600 12.5px':'600 14px')+' "Space Grotesk"',cursor:'pointer',whiteSpace:'nowrap',transition:'all .18s ease',boxShadow:a?'0 8px 20px -10px rgba(124,108,255,.7)':'none'}; }
   plural(n){ if(n===1)return 'pytanie'; const m=n%10,h=n%100; return (m>=2&&m<=4&&!(h>=12&&h<=14))?'pytania':'pytań'; }
   chipPress(){ return {transform:'translateY(0) scale(.97)'}; }
+  motionStyle(base, delay){
+    if(this.reduceMotion()) return base;
+    return Object.assign({},base,{animation:'resultSectionIn .42s cubic-bezier(.2,0,0,1) both',animationDelay:(delay||0)+'ms'});
+  }
 
   start(scope,length){
     this.clearOpenGate(false);
+    clearTimeout(this._questionPhaseT); this._questionPhaseT=null;
     let idx=this.shuffle(this.filtered(scope));
     if(length!=='all'){ idx=idx.slice(0,parseInt(length,10)); }
     const firstQ=this.bank()[idx[0]];
     this._optOrder=this.optOrderFor(firstQ);
     const firstOpen=!!(firstQ&&firstQ.t==='open');
-    this.setState({screen:'quiz',scope,length,order:idx,pos:0,score:0,selected:[],answered:firstOpen,wrongIdx:[],streak:0,bestStreak:0,results:[],openWaitLeft:0}, ()=>{ this.save(); this.armOpenGate(firstQ); try{window.scrollTo(0,0);}catch(e){} });
+    this.setState({screen:'quiz',scope,length,order:idx,pos:0,score:0,selected:[],answered:firstOpen,wrongIdx:[],streak:0,bestStreak:0,results:[],openWaitLeft:0,questionPhase:''}, ()=>{ this.save(); this.armOpenGate(firstQ); try{window.scrollTo(0,0);}catch(e){} });
     this.trackQuizEvent('quiz_start', { scope:scope, session_length:String(length) });
   }
-  resume(){ const s=this.state.resumable; if(!s)return; const mod=s.module||'marketing'; this.clearOpenGate(false); this.setState({module:mod}, ()=>{ const q=this.bank()[s.order[s.pos]]; this._optOrder=this.optOrderFor(q); this.setState({screen:'quiz',scope:s.scope,length:s.length,order:s.order,pos:s.pos,score:s.score,selected:[],answered:((q||{}).t==='open'),wrongIdx:s.wrongIdx||[],streak:0,bestStreak:0,results:[],openWaitLeft:0},()=>this.armOpenGate(q)); }); }
+  resume(){ const s=this.state.resumable; if(!s)return; const mod=s.module||'marketing'; this.clearOpenGate(false); clearTimeout(this._questionPhaseT); this._questionPhaseT=null; this.setState({module:mod}, ()=>{ const q=this.bank()[s.order[s.pos]]; this._optOrder=this.optOrderFor(q); this.setState({screen:'quiz',scope:s.scope,length:s.length,order:s.order,pos:s.pos,score:s.score,selected:[],answered:((q||{}).t==='open'),wrongIdx:s.wrongIdx||[],streak:0,bestStreak:0,results:[],openWaitLeft:0,questionPhase:''},()=>this.armOpenGate(q)); }); }
   save(){ const {order,pos,score,scope,length,wrongIdx,module}=this.state; try{ localStorage.setItem('quizmkt_session',JSON.stringify({order,pos,score,scope,length,wrongIdx,module})); }catch(e){} }
 
   curQ(){ return this.bank()[this.state.order[this.state.pos]]; }
@@ -714,7 +743,23 @@ class Component extends DCLogic {
   wasCorrect(){ const q=this.curQ(); const sel=this.state.selected; if(q.t==='multi'){ let ok=true; q.a.forEach((o,i)=>{ const s=o[1]===1; const h=sel.indexOf(i)>=0; if(s!==h)ok=false; }); return ok; } return sel.length>0 && q.a[sel[0]][1]===1; }
 
   reveal(){ if(this.state.answered) return; const q=this.curQ(); if(q.t!=='open') return; this.setState({answered:true}); }
-  next(){ if(this.openNextBlocked()) return; const np=this.state.pos+1; if(np>=this.state.order.length){ this.finish(); return; } const nq=this.bank()[this.state.order[np]]; this._optOrder=this.optOrderFor(nq); this.setState({pos:np,selected:[],answered:!!(nq&&nq.t==='open'),openWaitLeft:0}, ()=>{ this.save(); this.focusQ(); this.armOpenGate(nq); }); }
+  next(){
+    if(this.openNextBlocked() || this.state.questionPhase==='leaving') return;
+    const np=this.state.pos+1;
+    if(np>=this.state.order.length){ this.finish(); return; }
+    const reduce=this.reduceMotion();
+    const run=()=>{
+      const nq=this.bank()[this.state.order[np]];
+      this._optOrder=this.optOrderFor(nq);
+      this.setState({pos:np,selected:[],answered:!!(nq&&nq.t==='open'),openWaitLeft:0,questionPhase:reduce?'':'entering'}, ()=>{
+        this.save(); this.focusQ(); this.armOpenGate(nq);
+        if(!reduce){ clearTimeout(this._questionPhaseT); this._questionPhaseT=setTimeout(()=>this.setState({questionPhase:''}),280); }
+      });
+    };
+    clearTimeout(this._questionPhaseT);
+    if(reduce){ run(); return; }
+    this.setState({questionPhase:'leaving'}, ()=>{ this._questionPhaseT=setTimeout(run,120); });
+  }
 
   finish(){ this.clearOpenGate(false); const total=this.state.order.filter(i=>this.bank()[i].t!=='open').length; const pct= total>0?Math.round(this.state.score/total*100):0; const results=this.state.results;
     try{ const prev=JSON.parse(localStorage.getItem('quizmkt_best')||'null'); const best=(prev&&prev.pct>pct)?prev:{pct,score:this.state.score,total}; localStorage.setItem('quizmkt_best',JSON.stringify(best)); localStorage.setItem('quizmkt_last',JSON.stringify({pct,score:this.state.score,total}));
@@ -724,7 +769,8 @@ class Component extends DCLogic {
     try{ const h=this.loadHistory(); h.unshift({id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),createdAt:new Date().toISOString(),mode:'study',module:this.state.module,scope:this.state.scope,length:this.state.length,score:this.state.score,total,pct,bestStreak:this.state.bestStreak}); localStorage.setItem('quizmkt_history',JSON.stringify(h.slice(0,20))); }catch(e){}
     const sid=Date.now().toString(36)+Math.random().toString(36).slice(2,7);
     this.trackQuizEvent('quiz_complete', { score:this.state.score, total:total, scope:this.state.scope, session_length:String(this.state.length), module:this.state.module||'marketing', player_name:this.state.nick });
-    this.setState({screen:'end',resumable:null,lastSessionId:sid,endCount:0}, ()=>{
+    clearTimeout(this._questionPhaseT); this._questionPhaseT=null;
+    this.setState({screen:'end',resumable:null,lastSessionId:sid,endCount:0,questionPhase:''}, ()=>{
       this.animateEndRing(pct);
       Promise.resolve(this.submitScore(sid)).then(()=>this.loadLeaderboard());
     }); }
@@ -733,7 +779,7 @@ class Component extends DCLogic {
   animateEndRing(target){
     if(this._countRaf) cancelAnimationFrame(this._countRaf);
     target=Math.max(0,Math.min(100,target||0));
-    const reduce=(typeof window!=='undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    const reduce=this.reduceMotion();
     if(reduce){ this.setState({endCount:target}); return; }
     const dur=900, t0=(typeof performance!=='undefined'?performance.now():Date.now());
     const step=(now)=>{ const p=Math.min(1,((now||Date.now())-t0)/dur); const eased=1-Math.pow(1-p,3);
@@ -742,8 +788,8 @@ class Component extends DCLogic {
     this._countRaf=requestAnimationFrame(step);
   }
 
-  retryWrong(){ this.clearOpenGate(false); const order=this.shuffle(this.state.wrongIdx.slice()); if(!order.length){ this.toStart(); return; } const q=this.bank()[order[0]]; this._optOrder=this.optOrderFor(q); this.setState({screen:'quiz',order,pos:0,score:0,selected:[],answered:!!(q&&q.t==='open'),wrongIdx:[],streak:0,bestStreak:0,results:[],openWaitLeft:0},()=>this.armOpenGate(q)); this.trackQuizEvent('quiz_start', { scope:this.state.scope, session_length:String(order.length) }); }
-  toStart(){ this.clearOpenGate(false); this.setState({screen:'start', catOpen:false, openWaitLeft:0}, ()=>{ try{window.scrollTo(0,0);}catch(e){} }); }
+  retryWrong(){ this.clearOpenGate(false); clearTimeout(this._questionPhaseT); this._questionPhaseT=null; const order=this.shuffle(this.state.wrongIdx.slice()); if(!order.length){ this.toStart(); return; } const q=this.bank()[order[0]]; this._optOrder=this.optOrderFor(q); this.setState({screen:'quiz',order,pos:0,score:0,selected:[],answered:!!(q&&q.t==='open'),wrongIdx:[],streak:0,bestStreak:0,results:[],openWaitLeft:0,questionPhase:''},()=>this.armOpenGate(q)); this.trackQuizEvent('quiz_start', { scope:this.state.scope, session_length:String(order.length) }); }
+  toStart(){ this.clearOpenGate(false); clearTimeout(this._questionPhaseT); this._questionPhaseT=null; this.setState({screen:'start', catOpen:false, openWaitLeft:0, questionPhase:''}, ()=>{ try{window.scrollTo(0,0);}catch(e){} }); }
   focusQ(){ try{ const el=this.qHead && this.qHead.current; if(el && typeof el.focus==='function') el.focus(); }catch(e){} }
   // ---- Tryb fiszek: lista pytań (harmonijki) + wyszukiwarka ----------------
   openFlash(){ const list=this.filtered(this.state.scope); if(!list.length) return; this.clearOpenGate(false); this.setState({screen:'flash', flashList:list, flashQuery:'', flashOpen:{}, openWaitLeft:0}, ()=>{ try{window.scrollTo(0,0);}catch(e){} }); }
@@ -772,6 +818,7 @@ class Component extends DCLogic {
   optView(){
     const C=this.C(); const q=this.curQ(); const order=this._optOrder&&this._optOrder.length?this._optOrder:q.a.map((_,i)=>i);
     const ans=this.state.answered; const sel=this.state.selected; const isMulti=q.t==='multi'; const letters=['A','B','C','D','E','F','G'];
+    const motionOk=!this.reduceMotion();
     return order.map((oi,pos)=>{
       const o=q.a[oi]; const chosen=sel.indexOf(oi)>=0; const correct=o[1]===1;
       const checkbox=isMulti&&!ans;
@@ -779,11 +826,13 @@ class Component extends DCLogic {
       const mrad=checkbox?'8px':'50%';
       if(!ans){ if(chosen){ bd=C.brand; bg='rgba(124,108,255,.10)'; col=C.ink; mbg=C.brand; mcol='#fff'; mbd='none'; } }
       else { if(correct){ bd=C.ok; bg=C.okBg; col=C.ink; mbg=C.ok; mcol='#0E1A13'; mbd='none'; mark='✓'; } else if(chosen){ bd=C.bad; bg=C.badBg; mbg=C.bad; mcol='#2A1113'; mbd='none'; mark='✗'; col='#8B94A9'; } else { col='#6E7891'; bd='#222738'; mcol='#5A6480'; mbd='1.5px solid #333B52'; } }
-      const style={display:'flex',alignItems:'center',gap:'13px',width:'100%',textAlign:'left',padding:'15px 16px',borderRadius:'13px',border:'1.5px solid '+bd,background:bg,color:col,font:'500 15.5px/1.45 "Space Grotesk"',cursor:(ans&&!isMulti)?'default':'pointer',transition:'border-color .16s ease, background .16s ease, color .16s ease'};
-      if(ans && correct) style.animation='popIn .32s ease'; else if(ans && chosen && !correct) style.animation='shakeX .35s ease';
+      const style={display:'flex',alignItems:'center',gap:'13px',width:'100%',textAlign:'left',padding:'15px 16px',borderRadius:'13px',border:'1.5px solid '+bd,background:bg,color:col,font:'500 15.5px/1.45 "Space Grotesk"',cursor:(ans&&!isMulti)?'default':'pointer',transition:'border-color .16s ease, background .16s ease, color .16s ease, transform .16s ease, box-shadow .16s ease'};
+      if(!ans && chosen){ style.boxShadow='0 0 0 3px rgba(124,108,255,.12)'; if(motionOk) style.animation='answerPick .18s cubic-bezier(.2,0,0,1)'; }
+      if(ans && correct){ if(motionOk) style.animation='answerCorrect .34s cubic-bezier(.2,0,0,1)'; }
+      else if(ans && chosen && !correct){ if(motionOk) style.animation='answerWrong .34s ease-in-out'; }
       const markStyle={flex:'0 0 auto',width:'28px',height:'28px',borderRadius:mrad,background:mbg,color:mcol,border:mbd,boxSizing:'border-box',display:'flex',alignItems:'center',justifyContent:'center',font:'700 13.5px "Space Grotesk"',transition:'border-color .16s ease, color .16s ease, background .16s ease'};
       const canHover=!ans||isMulti&&!ans; const hover=canHover?{borderColor:C.brand,background:'rgba(124,108,255,.07)',color:C.ink}:{};
-      const press=canHover?{background:'rgba(124,108,255,.14)'}:{};
+      const press=canHover?{background:'rgba(124,108,255,.14)',transform:'scale(.992)'}:{};
       return {text:o[0],mark,style,markStyle,hover,press,onClick:()=>this.pick(oi)};
     });
   }
@@ -840,13 +889,19 @@ class Component extends DCLogic {
         : Object.assign({},typBadgeBase,{background:'rgba(124,108,255,.12)',border:'1px solid rgba(124,108,255,.30)',color:'#B7ADFF',font:'600 11.5px "Space Grotesk"'});
       const kbdHint=isMulti?'Klawisze 1–'+q.a.length+' zaznaczają odpowiedzi · Enter sprawdza':'Klawisze 1–'+q.a.length+' wybierają odpowiedź · Enter przechodzi dalej';
       const st=s.streak; const streakStyle={padding:'2px 10px',borderRadius:'20px',font:'700 12px "Space Grotesk"',background: st>=5?'#2E2A18':'#142A1F',color: st>=5?'#F5D97B':'#3CCB7F'};
+      if(st>=2 && !this.reduceMotion()) streakStyle.animation='feedbackIn .22s cubic-bezier(.2,0,0,1)';
       const qLinks=this.questionLinks(q);
       const openWaitLeft=s.openWaitLeft||0;
       const nextDisabled=isOpen&&openWaitLeft>0;
+      const quizCardStyle={background:'#151926',border:'1px solid #262D40',borderRadius:'22px',padding:'clamp(18px,4.5vw,26px) clamp(18px,4.5vw,26px) clamp(18px,4vw,24px)',boxShadow:'0 22px 44px -34px rgba(0,0,0,.85)'};
+      if(!this.reduceMotion() && s.questionPhase==='leaving'){ quizCardStyle.animation='questionOut .12s cubic-bezier(.3,0,1,1) both'; quizCardStyle.pointerEvents='none'; quizCardStyle.willChange='transform, opacity'; }
+      else if(!this.reduceMotion() && s.questionPhase==='entering'){ quizCardStyle.animation='questionIn .28s cubic-bezier(.2,0,0,1) both'; quizCardStyle.willChange='transform, opacity'; }
       const nextBaseStyle={marginTop:'16px',width:'100%',padding:'15px',border:'none',borderRadius:'13px',background:'linear-gradient(135deg,#8F82FF,#6C5AF5 62%,#5B7CFF)',color:'#fff',font:'700 15px "Space Grotesk"',cursor:'pointer',boxShadow:'0 12px 26px -14px rgba(124,108,255,.6)',transition:'transform .18s ease, box-shadow .18s ease, filter .18s ease, opacity .18s ease, background .18s ease'};
       const nextButtonStyle=nextDisabled?Object.assign({},nextBaseStyle,{background:'#30364A',color:'#97A0B5',cursor:'not-allowed',boxShadow:'none',opacity:.86}):nextBaseStyle;
       const nextHoverStyle=nextDisabled?{}:{transform:'translateY(-2px)',boxShadow:'0 18px 38px -14px rgba(124,108,255,.85)',filter:'brightness(1.07)'};
       const nextActiveStyle=nextDisabled?{}:{transform:'translateY(0) scale(.985)',filter:'brightness(.96)'};
+      const feedbackBase=isOpen?{marginTop:'18px',padding:'15px 17px',borderRadius:'13px',background:'rgba(232,199,102,.10)',border:'1px solid rgba(232,199,102,.45)'}:{marginTop:'18px',padding:'15px 17px',borderRadius:'13px',background: ok?C.okBg:C.badBg,border:'1px solid '+(ok?C.ok:C.bad)};
+      const feedbackStyle=this.reduceMotion()?feedbackBase:Object.assign({},feedbackBase,{animation:'feedbackIn .24s cubic-bezier(.2,0,0,1) both'});
       const nextLabel=nextDisabled?('Dalej za '+openWaitLeft+' s'):(isLast?'Zakończ i zobacz wynik':'Następne pytanie');
       return Object.assign(base,{
         onQuit:()=>this.toStart(),
@@ -858,12 +913,13 @@ class Component extends DCLogic {
         poziomLabel:isOpen?'powtórka':poz.t, poziomBadgeStyle:isOpen?{padding:'5px 11px',borderRadius:'8px',background:'rgba(232,199,102,.16)',color:'#F0D585',font:'600 12px "Space Grotesk"'}:{padding:'5px 11px',borderRadius:'8px',background:poz.bg,color:poz.c,font:'600 12px "Space Grotesk"'},
         counterLabel:'Pytanie '+(s.pos+1)+' / '+total, scoreLabel:'Punkty: '+s.score,
         progressStyle:{height:'100%',width:pct+'%',background:C.brand,borderRadius:'6px',transition:'width .3s'},
+        quizCardStyle,
         typLabel, typIcon, typBadgeStyle, qText:q.q, opts:this.optView(),
         showCheck: q.t==='multi' && !s.answered, onCheck:()=>this.check(),
         checkLabel: 'Sprawdź odpowiedź'+(s.selected.length? ' · zaznaczono '+s.selected.length : ''),
         showReveal: isOpen && !s.answered, onReveal:()=>this.reveal(),
         answered:s.answered, showExpl: isOpen?true:(this.props.showExplanations!==false),
-        feedbackStyle: isOpen?{marginTop:'18px',padding:'15px 17px',borderRadius:'13px',background:'rgba(232,199,102,.10)',border:'1px solid rgba(232,199,102,.45)'}:{marginTop:'18px',padding:'15px 17px',borderRadius:'13px',background: ok?C.okBg:C.badBg,border:'1px solid '+(ok?C.ok:C.bad)},
+        feedbackStyle,
         feedbackTitleStyle: isOpen?{font:'700 15px "Space Grotesk"',margin:'0 0 6px',color:'#F0D585'}:{font:'700 15px "Space Grotesk"',margin:'0 0 6px',color: ok?C.ok:C.bad},
         feedbackTitle: isOpen?'Odpowiedź':(ok?'Dobrze!':'Niepoprawnie'), explanation:q.e,
         hasLink:qLinks.length>0, qLinks,
@@ -906,6 +962,19 @@ class Component extends DCLogic {
     const sb=this.supabaseClient(); const savedName=this.normalizePlayerName(s.nick);
     const isSaved=!!sb && !!savedName && !!(this._submitted && s.lastSessionId && this._submitted.has(s.lastSessionId));
     const tooShort=total>0 && total<RANK_MIN_TOTAL;
+    const reduceEnd=this.reduceMotion();
+    const endRingStyle={width:'184px',height:'184px',margin:'0 auto 24px',borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:'conic-gradient('+ring+' '+deg+'deg, #232938 '+deg+'deg)',boxShadow:'0 28px 56px -36px rgba(0,0,0,.85)',animation:reduceEnd?'none':'resultRingIn .48s cubic-bezier(.2,0,0,1) both, ringGlow 2.8s ease-in-out .48s infinite'};
+    const endKickerStyle=this.motionStyle({font:'600 12px "Space Grotesk"',letterSpacing:'.18em',textTransform:'uppercase',color:'#8F82FF',marginBottom:'20px'},40);
+    const endTitleStyle=this.motionStyle({font:'600 23px "Unbounded",sans-serif',margin:'0 0 10px',color:'#EDF0F7'},120);
+    const endMsgStyle=this.motionStyle({color:'#97A0B5',maxWidth:'450px',margin:'0 auto 22px',lineHeight:'1.55'},180);
+    const endSavedStyle=this.motionStyle({maxWidth:'430px',margin:'0 auto 22px',display:'inline-flex',alignItems:'center',gap:'9px',padding:'10px 16px',borderRadius:'12px',background:'rgba(60,203,127,.12)',border:'1px solid rgba(60,203,127,.4)',color:'#7BE0A8',font:'600 13.5px "Space Grotesk"'},230);
+    const endSaveStyle=this.motionStyle({maxWidth:'430px',margin:'0 auto 24px',textAlign:'left',background:'linear-gradient(160deg,rgba(124,108,255,.16),rgba(124,108,255,.04))',border:'1px solid rgba(124,108,255,.5)',borderRadius:'16px',padding:'18px 20px',boxShadow:'0 18px 50px -30px rgba(124,108,255,.6)'},230);
+    const endTooShortStyle=this.motionStyle({maxWidth:'430px',margin:'0 auto 22px',display:'flex',alignItems:'center',gap:'10px',padding:'12px 16px',borderRadius:'12px',background:'rgba(232,199,102,.10)',border:'1px solid rgba(232,199,102,.4)',color:'#E8C766',font:'600 13px "Space Grotesk"',textAlign:'left'},230);
+    const endPanelBase={maxWidth:'430px',margin:'0 auto 26px',textAlign:'left',background:'#151926',border:'1px solid #262D40',borderRadius:'15px',padding:'19px 21px'};
+    const endBreakdownStyle=this.motionStyle(endPanelBase,290);
+    const endRecentStyle=this.motionStyle(endPanelBase,350);
+    const endLeaderboardStyle=this.motionStyle(endPanelBase,410);
+    const endActionsStyle=this.motionStyle({display:'flex',gap:'10px',justifyContent:'center',flexWrap:'wrap'},470);
     return Object.assign(base,{
       endHasSb:!!sb, endTooShort:!!sb && tooShort,
       endSaved:isSaved && !tooShort, endNotSaved:!!sb && !isSaved && !tooShort,
@@ -915,9 +984,10 @@ class Component extends DCLogic {
       hasRecent:recent.length>0, recentItems:recent.map(h=>this.histView(h)),
       hasBreakdown: breakdown.length>0, breakdown,
       endPct:count+'%', endScoreLabel:score+' / '+total+' poprawnych',
-      endRingStyle:{width:'184px',height:'184px',margin:'0 auto 24px',borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:'conic-gradient('+ring+' '+deg+'deg, #232938 '+deg+'deg)',boxShadow:'0 28px 56px -36px rgba(0,0,0,.85)',animation:'ringGlow 2.8s ease-in-out infinite'},
+      endRingStyle,
       endInnerStyle:{width:'160px',height:'160px',borderRadius:'50%',background:'#151926',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',boxShadow:'inset 0 1px 0 rgba(255,255,255,.05)'},
       endNumStyle:{font:'700 40px "Unbounded",sans-serif',color:ring,lineHeight:'1'},
+      endKickerStyle, endTitleStyle, endMsgStyle, endSavedStyle, endSaveStyle, endTooShortStyle, endBreakdownStyle, endRecentStyle, endLeaderboardStyle, endActionsStyle,
       endTitle:title, endMsg:msg,
       hasWrong, retryLabel:'Powtórz błędne ('+s.wrongIdx.length+')', onRetryWrong:()=>this.retryWrong(), onRestart:()=>this.toStart()
     }, this.leaderboardVals());
