@@ -29,8 +29,11 @@
      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
   .sub{color:var(--mut);font-size:13px}
   .btn{cursor:pointer;border:1px solid var(--line);background:var(--panel2);color:var(--txt);
-       font:600 13px 'Space Grotesk';padding:9px 15px;border-radius:10px;transition:.15s}
+       font:600 13px 'Space Grotesk';padding:11px 16px;min-height:44px;border-radius:10px;transition:.15s;
+       display:inline-flex;align-items:center;justify-content:center;gap:6px}
   .btn:hover{border-color:var(--vio);background:#1b2136}
+  .btn:focus-visible,a:focus-visible,#gate input:focus-visible{outline:2px solid var(--vio);outline-offset:2px}
+  @media (max-width:640px){ .card table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap} }
   .btn.primary{background:linear-gradient(135deg,#8F82FF,#6C5AF5 60%,#5B7CFF);border:none;color:#fff}
   .btn.danger{border-color:#5a2b2b;background:#221417;color:#ffb4b4}
   .btn.danger:hover{border-color:var(--bad);background:#2c1a1c}
@@ -69,7 +72,7 @@
 <body>
 <div id="gate">
   <div class="box">
-    <div style="font:700 20px 'Space Grotesk'">🔒 Panel administratora</div>
+    <div style="font:700 20px 'Space Grotesk'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:7px"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Panel administratora</div>
     <div class="muted" style="font-size:13px;margin-top:6px">Zaloguj sie kontem admina</div>
     <input id="gemail" type="email" placeholder="email" autocomplete="username">
     <input id="gpass" type="password" placeholder="haslo" autocomplete="current-password">
