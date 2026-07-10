@@ -154,29 +154,22 @@ input:focus-visible{outline:none;}
     </div>
     <sc-if value="{{ hasLeaderboard }}" hint-placeholder-val="{{ false }}">
      <div style="{{ startLeaderboardStyle }}">
-      <button onClick="{{ onToggleRank }}" aria-expanded="{{ rankOpen }}" style="{{ accordHeadStyle }}">
-       <span style="display:flex;align-items:center;gap:10px;min-width:0;">
-        <span style="font:600 12px 'Space Grotesk';letter-spacing:.1em;text-transform:uppercase;color:#929BB3;">Ranking — top 5</span>
-        <span style="font:600 10.5px 'Space Grotesk';letter-spacing:.08em;text-transform:uppercase;color:#3CCB7F;display:flex;align-items:center;gap:6px;"><span style="width:7px;height:7px;border-radius:50%;background:#3CCB7F;display:inline-block;box-shadow:0 0 8px #3CCB7F;animation:livePulse 1.6s ease-in-out infinite;"></span>Live</span>
-       </span>
-       <span style="{{ rankChevStyle }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="m6 9 6 6 6-6"/></svg></span>
-      </button>
-      <sc-if value="{{ rankOpen }}" hint-placeholder-val="{{ true }}">
-       <div style="margin-top:13px;">
-        <sc-if value="{{ lbHasRows }}" hint-placeholder-val="{{ true }}">
-         <div style="display:flex;flex-direction:column;gap:2px;">
-          <sc-for list="{{ startLbRows }}" as="r" hint-placeholder-count="5">
-           <div style="{{ r.rowStyle }}"><span style="{{ r.rankStyle }}">{{ r.rank }}</span><span style="{{ r.nameStyle }}">{{ r.name }}</span><span style="{{ r.scopeStyle }}">{{ r.scopeLabel }}</span><span style="{{ r.scoreStyle }}">{{ r.scoreLabel }}</span><span style="{{ r.pctStyle }}">{{ r.pct }}</span><span style="{{ r.dateStyle }}">{{ r.dateLabel }}</span></div>
-          </sc-for>
-         </div>
-         <sc-if value="{{ hasMoreLb }}" hint-placeholder-val="{{ true }}"><button onClick="{{ onToggleLbMore }}" style="{{ lbMoreBtnStyle }}">{{ lbMoreLabel }}</button></sc-if>
-        </sc-if>
-        <sc-if value="{{ lbLoading }}" hint-placeholder-val="{{ false }}"><div style="font:500 13px 'Space Grotesk';color:#8D96B0;padding:6px 2px;">Ładowanie rankingu…</div></sc-if>
-        <sc-if value="{{ lbEmpty }}" hint-placeholder-val="{{ false }}"><div style="font:500 13px 'Space Grotesk';color:#8D96B0;padding:6px 2px;">Brak wyników — bądź pierwszy na liście!</div></sc-if>
-        <sc-if value="{{ hasMyPos }}" hint-placeholder-val="{{ false }}"><div style="margin-top:11px;padding-top:11px;border-top:1px solid #262D40;display:flex;align-items:center;gap:8px;font:700 13px 'Space Grotesk';color:#C3C6FF;"><span style="width:6px;height:6px;border-radius:50%;background:#9A8DFF;display:inline-block;box-shadow:0 0 8px #9A8DFF;"></span>{{ myPosLabel }}</div></sc-if>
-        <sc-if value="{{ hasMyHint }}" hint-placeholder-val="{{ false }}"><div style="margin-top:11px;padding-top:11px;border-top:1px solid #262D40;font:500 12px 'Space Grotesk';color:#929BB3;">{{ myHint }}</div></sc-if>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px;">
+       <div style="font:600 12px 'Space Grotesk';letter-spacing:.1em;text-transform:uppercase;color:#929BB3;">Ranking — top 5</div>
+       <span style="font:600 10.5px 'Space Grotesk';letter-spacing:.08em;text-transform:uppercase;color:#3CCB7F;display:flex;align-items:center;gap:6px;"><span style="width:7px;height:7px;border-radius:50%;background:#3CCB7F;display:inline-block;box-shadow:0 0 8px #3CCB7F;animation:livePulse 1.6s ease-in-out infinite;"></span>Live</span>
+      </div>
+      <sc-if value="{{ lbHasRows }}" hint-placeholder-val="{{ true }}">
+       <div style="display:flex;flex-direction:column;gap:2px;">
+        <sc-for list="{{ startLbRows }}" as="r" hint-placeholder-count="5">
+         <div style="{{ r.rowStyle }}"><span style="{{ r.rankStyle }}">{{ r.rank }}</span><span style="{{ r.nameStyle }}">{{ r.name }}</span><span style="{{ r.scopeStyle }}">{{ r.scopeLabel }}</span><span style="{{ r.scoreStyle }}">{{ r.scoreLabel }}</span><span style="{{ r.pctStyle }}">{{ r.pct }}</span><span style="{{ r.dateStyle }}">{{ r.dateLabel }}</span></div>
+        </sc-for>
        </div>
+       <sc-if value="{{ hasMoreLb }}" hint-placeholder-val="{{ true }}"><button onClick="{{ onToggleLbMore }}" style="{{ lbMoreBtnStyle }}">{{ lbMoreLabel }}</button></sc-if>
       </sc-if>
+      <sc-if value="{{ lbLoading }}" hint-placeholder-val="{{ false }}"><div style="font:500 13px 'Space Grotesk';color:#8D96B0;padding:6px 2px;">Ładowanie rankingu…</div></sc-if>
+      <sc-if value="{{ lbEmpty }}" hint-placeholder-val="{{ false }}"><div style="font:500 13px 'Space Grotesk';color:#8D96B0;padding:6px 2px;">Brak wyników — bądź pierwszy na liście!</div></sc-if>
+      <sc-if value="{{ hasMyPos }}" hint-placeholder-val="{{ false }}"><div style="margin-top:11px;padding-top:11px;border-top:1px solid #262D40;display:flex;align-items:center;gap:8px;font:700 13px 'Space Grotesk';color:#C3C6FF;"><span style="width:6px;height:6px;border-radius:50%;background:#9A8DFF;display:inline-block;box-shadow:0 0 8px #9A8DFF;"></span>{{ myPosLabel }}</div></sc-if>
+      <sc-if value="{{ hasMyHint }}" hint-placeholder-val="{{ false }}"><div style="margin-top:11px;padding-top:11px;border-top:1px solid #262D40;font:500 12px 'Space Grotesk';color:#929BB3;">{{ myHint }}</div></sc-if>
      </div>
     </sc-if>
     <sc-if value="{{ hasHistory }}" hint-placeholder-val="{{ false }}">
@@ -382,7 +375,7 @@ const RANK_MIN_TOTAL = 10;
 const OPEN_NEXT_DELAY_MS = 3000;
 
 class Component extends DCLogic {
-  state = { module:'ekologia', screen:'start', scope:'gotowiec', length:'20', order:[], pos:0, score:0, selected:[], answered:false, wrongIdx:[], resumable:null, streak:0, bestStreak:0, results:[], flashList:[], flashQuery:'', flashOpen:{}, catOpen:false, rankOpen:true, recentOpen:false, lbExpanded:false, nick:'', leaderboard:[], lbLoading:false, lastSessionId:null, endCount:0, myPos:null, myHasQ:false, openWaitLeft:0, questionPhase:'' };
+  state = { module:'ekologia', screen:'start', scope:'gotowiec', length:'20', order:[], pos:0, score:0, selected:[], answered:false, wrongIdx:[], resumable:null, streak:0, bestStreak:0, results:[], flashList:[], flashQuery:'', flashOpen:{}, catOpen:false, recentOpen:false, lbExpanded:false, nick:'', leaderboard:[], lbLoading:false, lastSessionId:null, endCount:0, myPos:null, myHasQ:false, openWaitLeft:0, questionPhase:'' };
   bgCanvas = React.createRef();
   qHead = React.createRef();
 
@@ -953,7 +946,7 @@ class Component extends DCLogic {
         nick:s.nick||'', onNick:(e)=>this.onNickInput(e),
         onClear:()=>this.clearProgress(),
         hasHistory:history.length>0, recentOpen:!!s.recentOpen, onToggleRecent:()=>this.setState({recentOpen:!this.state.recentOpen}), recentCount:history.length, recentItems3, recentChevStyle:this.chevStyle(!!s.recentOpen), onClearHistory:()=>this.clearHistory(),
-        accordHeadStyle:this.accordHead(), rankOpen:s.rankOpen, onToggleRank:()=>this.setState({rankOpen:!this.state.rankOpen}), rankChevStyle:this.chevStyle(s.rankOpen), startLbRows, hasMoreLb, lbExpanded:!!s.lbExpanded, onToggleLbMore:()=>this.setState({lbExpanded:!this.state.lbExpanded}), lbMoreLabel:(s.lbExpanded?'Zwiń ↑':'Pokaż top 20 ↓'), lbMoreBtnStyle:{marginTop:'12px',width:'100%',padding:'9px',background:'rgba(124,108,255,.07)',border:'1px solid rgba(124,108,255,.28)',borderRadius:'10px',color:'#B7ADFF',font:'600 12.5px "Space Grotesk"',cursor:'pointer',minHeight:'40px'}
+        accordHeadStyle:this.accordHead(), startLbRows, hasMoreLb, lbExpanded:!!s.lbExpanded, onToggleLbMore:()=>this.setState({lbExpanded:!this.state.lbExpanded}), lbMoreLabel:(s.lbExpanded?'Zwiń ↑':'Pokaż top 20 ↓'), lbMoreBtnStyle:{marginTop:'12px',width:'100%',padding:'9px',background:'rgba(124,108,255,.07)',border:'1px solid rgba(124,108,255,.28)',borderRadius:'10px',color:'#B7ADFF',font:'600 12.5px "Space Grotesk"',cursor:'pointer',minHeight:'40px'}
       }, this.leaderboardVals());
     }
     if(scr==='quiz'){
