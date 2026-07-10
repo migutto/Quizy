@@ -115,25 +115,6 @@ input:focus-visible{outline:none;}
      <input value="{{ nick }}" onChange="{{ onNick }}" aria-label="Twój nick" maxLength="40" placeholder="Wpisz swój nick…" spellCheck="false" autoComplete="off" style="width:100%;padding:15px 16px;border-radius:14px;border:1.5px solid rgba(124,108,255,.55);background:#0E1220;color:#EDF0F7;font:700 16px 'Space Grotesk';outline:none;transition:border-color .18s ease, box-shadow .18s ease;" style-focus="border-color:#9A8DFF;box-shadow:0 0 0 4px rgba(124,108,255,.22);" />
      <div style="margin-top:11px;font:500 13px 'Space Grotesk';color:#A6ABCB;display:flex;align-items:center;gap:7px;">Wpisz nick, jeśli chcesz aby Twój wynik trafił do rankingu <span style="color:#9A8DFF;font-weight:700;display:inline-block;animation:nudgeY 1.8s ease-in-out infinite;">↓</span></div>
     </div>
-    <sc-if value="{{ hasLeaderboard }}" hint-placeholder-val="{{ false }}">
-     <div style="{{ startLeaderboardStyle }}">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;">
-       <div style="font:600 12px 'Space Grotesk';letter-spacing:.1em;text-transform:uppercase;color:#929BB3;">Ranking — top 10</div>
-       <span style="font:600 10.5px 'Space Grotesk';letter-spacing:.08em;text-transform:uppercase;color:#3CCB7F;display:flex;align-items:center;gap:6px;"><span style="width:7px;height:7px;border-radius:50%;background:#3CCB7F;display:inline-block;box-shadow:0 0 8px #3CCB7F;animation:livePulse 1.6s ease-in-out infinite;"></span>Live</span>
-      </div>
-      <sc-if value="{{ lbHasRows }}" hint-placeholder-val="{{ true }}">
-       <div style="display:flex;flex-direction:column;gap:2px;">
-        <sc-for list="{{ leaderboard }}" as="r" hint-placeholder-count="5">
-         <div style="{{ r.rowStyle }}"><span style="{{ r.rankStyle }}">{{ r.rank }}</span><span style="{{ r.nameStyle }}">{{ r.name }}</span><span style="{{ r.scopeStyle }}">{{ r.scopeLabel }}</span><span style="{{ r.scoreStyle }}">{{ r.scoreLabel }}</span><span style="{{ r.pctStyle }}">{{ r.pct }}</span><span style="{{ r.dateStyle }}">{{ r.dateLabel }}</span></div>
-        </sc-for>
-       </div>
-      </sc-if>
-      <sc-if value="{{ lbLoading }}" hint-placeholder-val="{{ false }}"><div style="font:500 13px 'Space Grotesk';color:#8D96B0;padding:6px 2px;">Ładowanie rankingu…</div></sc-if>
-      <sc-if value="{{ lbEmpty }}" hint-placeholder-val="{{ false }}"><div style="font:500 13px 'Space Grotesk';color:#8D96B0;padding:6px 2px;">Brak wyników — bądź pierwszy na liście!</div></sc-if>
-      <sc-if value="{{ hasMyPos }}" hint-placeholder-val="{{ false }}"><div style="margin-top:11px;padding-top:11px;border-top:1px solid #262D40;display:flex;align-items:center;gap:8px;font:700 13px 'Space Grotesk';color:#C3C6FF;"><span style="width:6px;height:6px;border-radius:50%;background:#9A8DFF;display:inline-block;box-shadow:0 0 8px #9A8DFF;"></span>{{ myPosLabel }}</div></sc-if>
-      <sc-if value="{{ hasMyHint }}" hint-placeholder-val="{{ false }}"><div style="margin-top:11px;padding-top:11px;border-top:1px solid #262D40;font:500 12px 'Space Grotesk';color:#929BB3;">{{ myHint }}</div></sc-if>
-     </div>
-    </sc-if>
     <div style="{{ startShellStyle }}">
      <sc-if value="{{ showTopScopes }}" hint-placeholder-val="{{ true }}">
       <div style="font:600 11.5px 'Space Grotesk';color:#929BB3;text-transform:uppercase;letter-spacing:.16em;margin-bottom:13px;">Zakres materiału</div>
@@ -171,6 +152,25 @@ input:focus-visible{outline:none;}
       <button onClick="{{ onFlash }}" style="{{ flashButtonStyle }}" style-hover="background:rgba(124,108,255,.15);border-color:#8F82FF;transform:translateY(-2px);" style-active="transform:translateY(0) scale(.985);"><span style="font-size:16px;display:inline-flex;align-items:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></span>Przeglądaj pytania</button>
      </div>
     </div>
+    <sc-if value="{{ hasLeaderboard }}" hint-placeholder-val="{{ false }}">
+     <div style="{{ startLeaderboardStyle }}">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;">
+       <div style="font:600 12px 'Space Grotesk';letter-spacing:.1em;text-transform:uppercase;color:#929BB3;">Ranking — top 10</div>
+       <span style="font:600 10.5px 'Space Grotesk';letter-spacing:.08em;text-transform:uppercase;color:#3CCB7F;display:flex;align-items:center;gap:6px;"><span style="width:7px;height:7px;border-radius:50%;background:#3CCB7F;display:inline-block;box-shadow:0 0 8px #3CCB7F;animation:livePulse 1.6s ease-in-out infinite;"></span>Live</span>
+      </div>
+      <sc-if value="{{ lbHasRows }}" hint-placeholder-val="{{ true }}">
+       <div style="display:flex;flex-direction:column;gap:2px;">
+        <sc-for list="{{ leaderboard }}" as="r" hint-placeholder-count="5">
+         <div style="{{ r.rowStyle }}"><span style="{{ r.rankStyle }}">{{ r.rank }}</span><span style="{{ r.nameStyle }}">{{ r.name }}</span><span style="{{ r.scopeStyle }}">{{ r.scopeLabel }}</span><span style="{{ r.scoreStyle }}">{{ r.scoreLabel }}</span><span style="{{ r.pctStyle }}">{{ r.pct }}</span><span style="{{ r.dateStyle }}">{{ r.dateLabel }}</span></div>
+        </sc-for>
+       </div>
+      </sc-if>
+      <sc-if value="{{ lbLoading }}" hint-placeholder-val="{{ false }}"><div style="font:500 13px 'Space Grotesk';color:#8D96B0;padding:6px 2px;">Ładowanie rankingu…</div></sc-if>
+      <sc-if value="{{ lbEmpty }}" hint-placeholder-val="{{ false }}"><div style="font:500 13px 'Space Grotesk';color:#8D96B0;padding:6px 2px;">Brak wyników — bądź pierwszy na liście!</div></sc-if>
+      <sc-if value="{{ hasMyPos }}" hint-placeholder-val="{{ false }}"><div style="margin-top:11px;padding-top:11px;border-top:1px solid #262D40;display:flex;align-items:center;gap:8px;font:700 13px 'Space Grotesk';color:#C3C6FF;"><span style="width:6px;height:6px;border-radius:50%;background:#9A8DFF;display:inline-block;box-shadow:0 0 8px #9A8DFF;"></span>{{ myPosLabel }}</div></sc-if>
+      <sc-if value="{{ hasMyHint }}" hint-placeholder-val="{{ false }}"><div style="margin-top:11px;padding-top:11px;border-top:1px solid #262D40;font:500 12px 'Space Grotesk';color:#929BB3;">{{ myHint }}</div></sc-if>
+     </div>
+    </sc-if>
     <sc-if value="{{ hasHistory }}" hint-placeholder-val="{{ false }}">
      <div style="{{ historyPanelStyle }}">
       <div style="font:600 11.5px 'Space Grotesk';color:#929BB3;text-transform:uppercase;letter-spacing:.16em;margin-bottom:13px;">Ostatnie wyniki</div>
