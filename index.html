@@ -928,7 +928,7 @@ class Component extends DCLogic {
       const lbAll=this.lbRows();
       const startLbRows=lbAll.slice(0, s.lbExpanded?20:5);
       const hasMoreLb=lbAll.length>5;
-      const recentItems3=history.slice(0,3).map(h=>this.histView(h));
+      const recentItems3=history.map(h=>this.histView(h));
       const startScreenStyle=this.reduceMotion()?{}:{animation:'qfade .28s ease both'};
       const startHeroStyle=this.withEntry({textAlign:'center',margin:'14px 0 36px'},20,'surfaceIn','.38s');
       const moduleSwitchStyle=this.withEntry({display:'flex',flexWrap:'wrap',gap:'5px',background:'#10141F',border:'1px solid #232938',borderRadius:'16px',padding:'5px',marginBottom:'22px'},70,'surfaceIn','.34s');
