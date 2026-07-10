@@ -154,37 +154,50 @@ input:focus-visible{outline:none;}
     </div>
     <sc-if value="{{ hasLeaderboard }}" hint-placeholder-val="{{ false }}">
      <div style="{{ startLeaderboardStyle }}">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;">
-       <div style="font:600 12px 'Space Grotesk';letter-spacing:.1em;text-transform:uppercase;color:#929BB3;">Ranking — top 10</div>
-       <span style="font:600 10.5px 'Space Grotesk';letter-spacing:.08em;text-transform:uppercase;color:#3CCB7F;display:flex;align-items:center;gap:6px;"><span style="width:7px;height:7px;border-radius:50%;background:#3CCB7F;display:inline-block;box-shadow:0 0 8px #3CCB7F;animation:livePulse 1.6s ease-in-out infinite;"></span>Live</span>
-      </div>
-      <sc-if value="{{ lbHasRows }}" hint-placeholder-val="{{ true }}">
-       <div style="display:flex;flex-direction:column;gap:2px;">
-        <sc-for list="{{ leaderboard }}" as="r" hint-placeholder-count="5">
-         <div style="{{ r.rowStyle }}"><span style="{{ r.rankStyle }}">{{ r.rank }}</span><span style="{{ r.nameStyle }}">{{ r.name }}</span><span style="{{ r.scopeStyle }}">{{ r.scopeLabel }}</span><span style="{{ r.scoreStyle }}">{{ r.scoreLabel }}</span><span style="{{ r.pctStyle }}">{{ r.pct }}</span><span style="{{ r.dateStyle }}">{{ r.dateLabel }}</span></div>
-        </sc-for>
+      <button onClick="{{ onToggleRank }}" aria-expanded="{{ rankOpen }}" style="{{ accordHeadStyle }}">
+       <span style="display:flex;align-items:center;gap:10px;min-width:0;">
+        <span style="font:600 12px 'Space Grotesk';letter-spacing:.1em;text-transform:uppercase;color:#929BB3;">Ranking — top 5</span>
+        <span style="font:600 10.5px 'Space Grotesk';letter-spacing:.08em;text-transform:uppercase;color:#3CCB7F;display:flex;align-items:center;gap:6px;"><span style="width:7px;height:7px;border-radius:50%;background:#3CCB7F;display:inline-block;box-shadow:0 0 8px #3CCB7F;animation:livePulse 1.6s ease-in-out infinite;"></span>Live</span>
+       </span>
+       <span style="{{ rankChevStyle }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <sc-if value="{{ rankOpen }}" hint-placeholder-val="{{ true }}">
+       <div style="margin-top:13px;">
+        <sc-if value="{{ lbHasRows }}" hint-placeholder-val="{{ true }}">
+         <div style="display:flex;flex-direction:column;gap:2px;">
+          <sc-for list="{{ startLbRows }}" as="r" hint-placeholder-count="5">
+           <div style="{{ r.rowStyle }}"><span style="{{ r.rankStyle }}">{{ r.rank }}</span><span style="{{ r.nameStyle }}">{{ r.name }}</span><span style="{{ r.scopeStyle }}">{{ r.scopeLabel }}</span><span style="{{ r.scoreStyle }}">{{ r.scoreLabel }}</span><span style="{{ r.pctStyle }}">{{ r.pct }}</span><span style="{{ r.dateStyle }}">{{ r.dateLabel }}</span></div>
+          </sc-for>
+         </div>
+         <sc-if value="{{ hasMoreLb }}" hint-placeholder-val="{{ true }}"><button onClick="{{ onToggleLbMore }}" style="{{ lbMoreBtnStyle }}">{{ lbMoreLabel }}</button></sc-if>
+        </sc-if>
+        <sc-if value="{{ lbLoading }}" hint-placeholder-val="{{ false }}"><div style="font:500 13px 'Space Grotesk';color:#8D96B0;padding:6px 2px;">Ładowanie rankingu…</div></sc-if>
+        <sc-if value="{{ lbEmpty }}" hint-placeholder-val="{{ false }}"><div style="font:500 13px 'Space Grotesk';color:#8D96B0;padding:6px 2px;">Brak wyników — bądź pierwszy na liście!</div></sc-if>
+        <sc-if value="{{ hasMyPos }}" hint-placeholder-val="{{ false }}"><div style="margin-top:11px;padding-top:11px;border-top:1px solid #262D40;display:flex;align-items:center;gap:8px;font:700 13px 'Space Grotesk';color:#C3C6FF;"><span style="width:6px;height:6px;border-radius:50%;background:#9A8DFF;display:inline-block;box-shadow:0 0 8px #9A8DFF;"></span>{{ myPosLabel }}</div></sc-if>
+        <sc-if value="{{ hasMyHint }}" hint-placeholder-val="{{ false }}"><div style="margin-top:11px;padding-top:11px;border-top:1px solid #262D40;font:500 12px 'Space Grotesk';color:#929BB3;">{{ myHint }}</div></sc-if>
        </div>
       </sc-if>
-      <sc-if value="{{ lbLoading }}" hint-placeholder-val="{{ false }}"><div style="font:500 13px 'Space Grotesk';color:#8D96B0;padding:6px 2px;">Ładowanie rankingu…</div></sc-if>
-      <sc-if value="{{ lbEmpty }}" hint-placeholder-val="{{ false }}"><div style="font:500 13px 'Space Grotesk';color:#8D96B0;padding:6px 2px;">Brak wyników — bądź pierwszy na liście!</div></sc-if>
-      <sc-if value="{{ hasMyPos }}" hint-placeholder-val="{{ false }}"><div style="margin-top:11px;padding-top:11px;border-top:1px solid #262D40;display:flex;align-items:center;gap:8px;font:700 13px 'Space Grotesk';color:#C3C6FF;"><span style="width:6px;height:6px;border-radius:50%;background:#9A8DFF;display:inline-block;box-shadow:0 0 8px #9A8DFF;"></span>{{ myPosLabel }}</div></sc-if>
-      <sc-if value="{{ hasMyHint }}" hint-placeholder-val="{{ false }}"><div style="margin-top:11px;padding-top:11px;border-top:1px solid #262D40;font:500 12px 'Space Grotesk';color:#929BB3;">{{ myHint }}</div></sc-if>
      </div>
     </sc-if>
     <sc-if value="{{ hasHistory }}" hint-placeholder-val="{{ false }}">
      <div style="{{ historyPanelStyle }}">
-      <div style="font:600 11.5px 'Space Grotesk';color:#929BB3;text-transform:uppercase;letter-spacing:.16em;margin-bottom:13px;">Ostatnie wyniki</div>
-      <div style="display:flex;flex-direction:column;gap:9px;">
-       <sc-for list="{{ historyItems }}" as="h" hint-placeholder-count="3">
-        <div style="{{ h.rowStyle }}">
-         <span style="{{ h.dateStyle }}">{{ h.dateLabel }}</span>
-         <span style="{{ h.modeStyle }}">{{ h.modeLabel }}</span>
-         <span style="{{ h.scopeStyle }}">{{ h.scopeLabel }}</span>
-         <span style="{{ h.scoreStyle }}">{{ h.scoreLabel }}</span>
-         <span style="{{ h.pctStyle }}">{{ h.pctLabel }}</span>
-        </div>
-       </sc-for>
-      </div>
+      <button onClick="{{ onToggleRecent }}" aria-expanded="{{ recentOpen }}" style="{{ accordHeadStyle }}">
+       <span style="font:600 11.5px 'Space Grotesk';color:#929BB3;text-transform:uppercase;letter-spacing:.16em;">Ostatnie wyniki · {{ recentCount }}</span>
+       <span style="{{ recentChevStyle }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <sc-if value="{{ recentOpen }}" hint-placeholder-val="{{ false }}">
+       <div style="display:flex;flex-direction:column;gap:9px;margin-top:13px;">
+        <sc-for list="{{ recentItems3 }}" as="h" hint-placeholder-count="3">
+         <div style="{{ h.rowStyle }}">
+          <span style="{{ h.dateStyle }}">{{ h.dateLabel }}</span>
+          <span style="{{ h.modeStyle }}">{{ h.modeLabel }}</span>
+          <span style="{{ h.scopeStyle }}">{{ h.scopeLabel }}</span>
+          <span style="{{ h.scoreStyle }}">{{ h.scoreLabel }}</span>
+          <span style="{{ h.pctStyle }}">{{ h.pctLabel }}</span>
+         </div>
+        </sc-for>
+       </div>
+      </sc-if>
      </div>
     </sc-if>
    </div>
@@ -369,7 +382,7 @@ const RANK_MIN_TOTAL = 10;
 const OPEN_NEXT_DELAY_MS = 3000;
 
 class Component extends DCLogic {
-  state = { module:'ekologia', screen:'start', scope:'gotowiec', length:'20', order:[], pos:0, score:0, selected:[], answered:false, wrongIdx:[], resumable:null, streak:0, bestStreak:0, results:[], flashList:[], flashQuery:'', flashOpen:{}, catOpen:false, nick:'', leaderboard:[], lbLoading:false, lastSessionId:null, endCount:0, myPos:null, myHasQ:false, openWaitLeft:0, questionPhase:'' };
+  state = { module:'ekologia', screen:'start', scope:'gotowiec', length:'20', order:[], pos:0, score:0, selected:[], answered:false, wrongIdx:[], resumable:null, streak:0, bestStreak:0, results:[], flashList:[], flashQuery:'', flashOpen:{}, catOpen:false, rankOpen:true, recentOpen:false, lbExpanded:false, nick:'', leaderboard:[], lbLoading:false, lastSessionId:null, endCount:0, myPos:null, myHasQ:false, openWaitLeft:0, questionPhase:'' };
   bgCanvas = React.createRef();
   qHead = React.createRef();
 
@@ -483,7 +496,7 @@ class Component extends DCLogic {
         .order('percent',{ ascending:false })
         .order('score',{ ascending:false })
         .order('created_at',{ ascending:true })
-        .limit(10);
+        .limit(20);
       if(error) throw error;
       this.setState({ leaderboard: Array.isArray(data)?data:[], lbLoading:false });
       this.loadMyPosition();
@@ -602,7 +615,7 @@ class Component extends DCLogic {
     const hasPos=this.state.myPos!=null;
     return {
       hasLeaderboard: !!sb,
-      leaderboard: rows,
+      leaderboard: rows.slice(0,10),
       lbHasRows: rows.length>0,
       lbLoading: !!this.state.lbLoading && rows.length===0,
       lbEmpty: !!sb && !this.state.lbLoading && rows.length===0,
@@ -746,6 +759,8 @@ class Component extends DCLogic {
   modStyle(a){ const m=this.isMobile(); return {flex:'1 1 auto',minWidth:m?'86px':'0',padding:m?'9px 8px':'11px 6px',minHeight:'44px',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:'11px',border:'none',background:a?'linear-gradient(135deg,#8F82FF,#6C5AF5 62%,#5B7CFF)':'transparent',color:a?'#fff':'#97A0B5',font:(m?'600 12.5px':'600 14px')+' "Space Grotesk"',cursor:'pointer',whiteSpace:'nowrap',transition:'all .18s ease',boxShadow:a?'0 8px 20px -10px rgba(124,108,255,.7)':'none'}; }
   plural(n){ if(n===1)return 'pytanie'; const m=n%10,h=n%100; return (m>=2&&m<=4&&!(h>=12&&h<=14))?'pytania':'pytań'; }
   chipPress(){ return {transform:'translateY(0) scale(.97)'}; }
+  accordHead(){ return {display:'flex',alignItems:'center',justifyContent:'space-between',gap:'10px',width:'100%',minHeight:'44px',background:'none',border:'none',padding:'0',margin:'0',cursor:'pointer',textAlign:'left',fontFamily:'inherit'}; }
+  chevStyle(open){ return {display:'inline-flex',flex:'0 0 auto',color:'#929BB3',transition:this.reduceMotion()?'none':'transform .2s ease',transform:open?'rotate(180deg)':'rotate(0deg)'}; }
   withEntry(base, delay, name, duration){
     if(this.reduceMotion()) return base;
     const enter=(name||'surfaceIn')+' '+(duration||'.36s')+' cubic-bezier(.2,0,0,1) both';
@@ -910,6 +925,10 @@ class Component extends DCLogic {
       const pool=this.filtered(s.scope).length;
       const hasResume=!!s.resumable && (s.resumable.module||'marketing')===s.module;
       const history=this.loadHistory().filter(h=>(h.module||'marketing')===s.module);
+      const lbAll=this.lbRows();
+      const startLbRows=lbAll.slice(0, s.lbExpanded?20:5);
+      const hasMoreLb=lbAll.length>5;
+      const recentItems3=history.slice(0,3).map(h=>this.histView(h));
       const startScreenStyle=this.reduceMotion()?{}:{animation:'qfade .28s ease both'};
       const startHeroStyle=this.withEntry({textAlign:'center',margin:'14px 0 36px'},20,'surfaceIn','.38s');
       const moduleSwitchStyle=this.withEntry({display:'flex',flexWrap:'wrap',gap:'5px',background:'#10141F',border:'1px solid #232938',borderRadius:'16px',padding:'5px',marginBottom:'22px'},70,'surfaceIn','.34s');
@@ -933,7 +952,8 @@ class Component extends DCLogic {
         hasResume, onResume:()=>this.resume(), resumeLabel: hasResume?('Kontynuuj ('+(s.resumable.pos+1)+'/'+s.resumable.order.length+')'):'',
         nick:s.nick||'', onNick:(e)=>this.onNickInput(e),
         onClear:()=>this.clearProgress(),
-        hasHistory:history.length>0, historyItems:history.map(h=>this.histView(h)), onClearHistory:()=>this.clearHistory()
+        hasHistory:history.length>0, recentOpen:!!s.recentOpen, onToggleRecent:()=>this.setState({recentOpen:!this.state.recentOpen}), recentCount:history.length, recentItems3, recentChevStyle:this.chevStyle(!!s.recentOpen), onClearHistory:()=>this.clearHistory(),
+        accordHeadStyle:this.accordHead(), rankOpen:s.rankOpen, onToggleRank:()=>this.setState({rankOpen:!this.state.rankOpen}), rankChevStyle:this.chevStyle(s.rankOpen), startLbRows, hasMoreLb, lbExpanded:!!s.lbExpanded, onToggleLbMore:()=>this.setState({lbExpanded:!this.state.lbExpanded}), lbMoreLabel:(s.lbExpanded?'Zwiń ↑':'Pokaż top 20 ↓'), lbMoreBtnStyle:{marginTop:'12px',width:'100%',padding:'9px',background:'rgba(124,108,255,.07)',border:'1px solid rgba(124,108,255,.28)',borderRadius:'10px',color:'#B7ADFF',font:'600 12.5px "Space Grotesk"',cursor:'pointer',minHeight:'40px'}
       }, this.leaderboardVals());
     }
     if(scr==='quiz'){
@@ -1967,7 +1987,7 @@ class Component extends DCLogic {
      {d:'gotowiec',p:2,t:'single',q:'Głównym podmiotem odpowiedzialnym za krajową gospodarkę wodną jest:',a:[['Państwowe Gospodarstwo Wodne Wody Polskie',1],['Krajowy Zarząd Gospodarki Wodnej',0],['Państwowy Nadzór Gospodarki Wodnej',0],['Krajowy Związek Wodny',0]],e:'Krajową gospodarką wodną zarządza Państwowe Gospodarstwo Wodne Wody Polskie.'},
      {d:'gotowiec',p:2,t:'single',q:'Przestrzeń preferowana przez osobnika, która zaspokaja wszystkie potrzeby życiowe i jest aktywnie broniona, to:',a:[['Rewir',1],['Zbiór',0],['Areał',0],['Siedlisko',0]],e:'Aktywnie broniona przestrzeń zaspokajająca potrzeby życiowe to rewir (terytorium).'},
      {d:'gotowiec',p:2,t:'single',q:'Liczba osobników należących do danej populacji to:',a:[['Liczebność',1],['Zagęszczenie',0],['Zbiór',0],['Dynamika',0]],e:'Liczba osobników populacji to jej liczebność; liczebność na jednostkę powierzchni to zagęszczenie.'},
-     {d:'gotowiec',p:2,t:'single',q:'Nadzoru nad wszelkimi działaniami związanymi z organizacją gospodarki odpadami w Polsce nie sprawuje:',a:[['Ministerstwo Zdrowia',1],['Ministerstwo Klimatu i Środowiska',0],['Ministerstwo Gospodarki',0],['Ministerstwo Infrastruktury',0]],e:'Zgodnie z kluczem egzaminacyjnym gospodarką odpadami nie zajmuje się Ministerstwo Zdrowia.'},
+     {d:'gotowiec',p:2,t:'single',q:'Nadzoru nad wszelkimi działaniami związanymi z organizacją gospodarki odpadami w Polsce nie sprawuje:',a:[['Ministerstwo Zdrowia',0],['Ministerstwo Klimatu i Środowiska',0],['Ministerstwo Gospodarki',0],['Ministerstwo Infrastruktury',1]],e:'Zgodnie z kluczem (wykład W5–W6, s. 64) nadzoru nad organizacją gospodarki odpadami w Polsce nie sprawuje Ministerstwo Infrastruktury.'},
      {d:'gotowiec',p:2,t:'single',q:'Standardy techniczne w zakresie usuwania odpadów, a także ich utylizacji i przetwarzania, wyznacza:',a:[['Ministerstwo Klimatu i Środowiska',1],['Ministerstwo Gospodarki',0],['Ministerstwo Zdrowia',0],['Ministerstwo Infrastruktury',0]],e:'Standardy techniczne usuwania, utylizacji i przetwarzania odpadów wyznacza Ministerstwo Klimatu i Środowiska.'},
      {d:'gotowiec',p:2,t:'single',q:'Szybkość wzrostu populacji jest uwarunkowana:',a:[['Dynamiką rozrodczości i śmiertelności',1],['Dynamiką zagęszczenia',0],['Dynamiką liczebności',0],['Zmiennością zagęszczenia',0]],e:'Tempo wzrostu populacji wynika z bilansu rozrodczości i śmiertelności (oraz migracji).'},
      {d:'gotowiec',p:2,t:'single',q:'Ekologia nie jest:',a:[['Ścisłą nauką przyrodniczą, w której zjawiska losowe odgrywają marginalną rolę',1],['Dyscypliną naukową poznającą zależności między organizmami a szeroko rozumianym środowiskiem ich życia',0],['Nauką zakładającą, że każdy osobnik podlega licznym ograniczeniom fizycznym i ewolucyjnym wyznaczającym możliwy zakres jego zmienności',0]],e:'W ekologii zjawiska losowe (stochastyczne) odgrywają istotną rolę, więc twierdzenie o ich marginalnym znaczeniu jest błędne.'},
@@ -2010,7 +2030,7 @@ class Component extends DCLogic {
      {d:'gotowiec',p:2,t:'single',q:'Wśród interakcji międzypopulacyjnych oddziaływaniem obojętnym jest:',a:[['Neutralizm',1],['Mensalizm',0],['Komensalizm',0],['Mutualizm',0]],e:'Neutralizm (0/0) to oddziaływanie obojętne — populacje nie wpływają na siebie.'},
      {d:'gotowiec',p:2,t:'single',q:'Rywalizacja o miejsce, przestrzeń życiową i pokarm, powodująca ograniczenie liczby obu gatunków, jest charakterystyczna dla:',a:[['Konkurencji',1],['Protokooperacji',0],['Mutualizmu',0],['Amensalizmu',0]],e:'Wzajemne ograniczanie liczebności przez rywalizację o zasoby to konkurencja (−/−).'},
      {d:'gotowiec',p:2,t:'single',q:'Woda:',a:[['Wszystkie odpowiedzi są poprawne',1],['Jest jednym z głównych składników środowiska naturalnego, niezbędnym do życia ludzi, roślin i zwierząt',0],['Występuje w trzech stanach skupienia (ciecz, lód, para wodna)',0],['Jest w ciągłym, zamkniętym obiegu w przyrodzie między oceanami, powierzchnią Ziemi i atmosferą',0]],e:'Wszystkie stwierdzenia o wodzie są prawdziwe.'},
-     {d:'gotowiec',p:2,t:'single',q:'Przestrzeń zajmowana przez populację to:',a:[['Areał',1],['Siedlisko',0],['Rewir',0],['Zbiór',0]],e:'Areał to obszar zajmowany przez populację (lub osobnika).'},
+     {d:'gotowiec',p:2,t:'single',q:'Przestrzeń zajmowana przez populację to:',a:[['Siedlisko',1],['Areał',0],['Rewir',0],['Zbiór',0]],e:'Przestrzeń zajmowana przez populację to siedlisko; areał przypada pojedynczemu osobnikowi (wykład W1–W2, s. 20).'},
      {d:'gotowiec',p:2,t:'single',q:'Właściwość populacji nie jest określana poprzez jej:',a:[['Siedlisko',1],['Liczebność',0],['Zagęszczenie',0],['Rozrodczość',0]],e:'Właściwości populacji to m.in. liczebność, zagęszczenie, rozrodczość — siedlisko opisuje środowisko, nie samą populację.'},
      {d:'gotowiec',p:2,t:'single',q:'Taka wielkość danej populacji, która mogłaby w danym środowisku utrzymać się w nieskończoność, to:',a:[['Pojemność środowiska',1],['Pojemność populacji',0],['Pojemność zagęszczenia',0],['Pojemność terytorium',0]],e:'Maksymalna liczebność, jaką środowisko może trwale utrzymać, to pojemność środowiska (K).'},
      {d:'gotowiec',p:2,t:'single',q:'Brak pokarmu, tlenu, zbyt niska lub wysoka wartość pH to przyczyny środowiskowe warunkujące:',a:[['Śmiertelność',1],['Rozrodczość',0],['Żywotność',0],['Zagęszczenie',0]],e:'Niekorzystne warunki środowiskowe (brak pokarmu, tlenu, złe pH) zwiększają śmiertelność.'},
